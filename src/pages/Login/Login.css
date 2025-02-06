@@ -1,52 +1,83 @@
-*{
-    margin: 0;
-    padding: 0;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&family=Oswald:wght@100;400;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
 }
-.corpoLogin{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+.montserrat-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  font-optical-sizing: auto;
 }
-.tituloLogin{
-    background-color: #A7D0FF;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100vw;
-    height: 30vh;
-    color: #F5FBEF;
-    font-size: x-large;
-    font-family: "Odor Mean Chey";
+
+.corpoLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.areaLogin{
-    background-color: #445C77;
-    width: 100vw;
-    height: 70vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #F5FBEF;
+
+.oswald {
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
 }
-.areasDeRegistro{
-    width: 70vw;
-    height: 30vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+
+.tituloLogin {
+  background-color: #73a0d3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  height: 30vh;
+  color: #f5fbef;
+  font-size: x-large;
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  margin: auto;
 }
-.areasDeRegistro input{
-    margin: auto;
-    height: 25%;
-    width: 100%;
-    background-color: #F5FBEF;
+.areaLogin {
+  background-color: #445c77;
+  width: 100vw;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  color: #f5fbef;
+}
+
+.areasDeRegistro {
+  width: 70vw;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.areasDeRegistro input {
+  margin: auto;
+  height: 25%;
+  width: 100%;
+  background-color: #f5fbef;
+  border-radius: 20px;
+  border-color: transparent;
+  font-size: larger;
+}
+
+.areasDeRegistro label {
+  font-size: x-large;
+}
+
+.logo {
+  height: 70%;
+}
+
+.acessoAoSite{
+    background-color: #E4572E;
+    color: #f5fbef;
+    border: none;
     border-radius: 20px;
-    border-color: transparent;
+    height: 10%;
+    width: 40%;
     font-size: larger;
-}
-.areasDeRegistro label{
-    font-size: x-large;
-}
-.logo{
-    height: 70%;
 }
