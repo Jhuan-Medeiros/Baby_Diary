@@ -1,0 +1,52 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.corpoLogin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.tituloLogin{
+    background-color: #A7D0FF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 30vh;
+    color: #F5FBEF;
+    font-size: x-large;
+    font-family: "Odor Mean Chey";
+}
+.areaLogin{
+    background-color: #445C77;
+    width: 100vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #F5FBEF;
+}
+.areasDeRegistro{
+    width: 70vw;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.areasDeRegistro input{
+    margin: auto;
+    height: 25%;
+    width: 100%;
+    background-color: #F5FBEF;
+    border-radius: 20px;
+    border-color: transparent;
+    font-size: larger;
+}
+.areasDeRegistro label{
+    font-size: x-large;
+}
+.logo{
+    height: 70%;
+}
