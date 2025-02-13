@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "../Login/Login.css";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff 
+  
+} from "lucide-react";
 
 const Login = () => {
   const [isShow, setIsShow] = useState(false);
@@ -17,13 +19,13 @@ const Login = () => {
       <div className="areaLogin">
         <div className="areasDeRegistro">
           <label htmlFor="rg">CPF:</label>
-          <input type="text" id="rg" />
+          <input type="text" id="rg" />  
           <label htmlFor="senha">Senha:</label>
           <div className="senhaInput">
             <input type={isShow ? "text": "password"} id="senha" />
             <button onClick={mostrarSenha} type="button" id="loginButton">
-              {!isShow && <Eye color="black" size={60} />}
-              {isShow && <EyeOff color="black" size={60} />}
+              {isShow && <Eye color="black" size={40} />}
+              {!isShow && <EyeOff color="black" size={40} />}
             </button>
           </div>
           <Link to="/recuperarSenha" className="linkRedirecionamento">
