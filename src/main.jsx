@@ -3,17 +3,17 @@ import { createRoot } from 'react-dom/client'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 import Login from './pages/Login/Login'
-import { Home } from './pages/Home/Home';
+import { Home } from './pages/Home/Home.jsx';
 import { Perfil } from './pages/Perfil/Perfil';
 
 
 const router = createBrowserRouter([{
-  path: '/',
+  path: '/home',
   element: <Login />,
 },
 {
-  path: '/home',
-  element: <Home/>,
+  path: '/',
+  element: <Home />, //mudei
 },
 {
   path: '/perfil',
