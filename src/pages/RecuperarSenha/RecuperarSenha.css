@@ -1,5 +1,5 @@
 .corpoRecuperarSenha {
-  height: 100 vh;
+  height: 100vh;
   width: 100vw;
 }
 .tituloRecuperarSenha {
@@ -13,12 +13,7 @@
   color: #f5fbef;
   font-size: x-large;
   font-family: "Oswald", sans-serif;
-  font-weight: 700;
   margin: auto;
-}
-.logoRecuperar {
-  height: 70%;
-  margin: 2vw;
 }
 .areaRecuperarSenha {
   background-color: #445c77;
@@ -27,30 +22,39 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
-.textoRecuperarSenha input {
-  height: 8vh;
-  width: 80vw;
-  background-color: #f5fbef;
-  border-radius: 20px;
-  border-color: transparent;
-  font-size: larger;
+.logoRecuperar {
+  height: 70%;
+  margin: 2vw;
 }
 
 .textoRecuperarSenha {
   display: flex;
   height: 50%;
+  width: 70vw;
   flex-direction: column;
   color: #f5fbef;
   font-family: "Montserrat", serif;
   font-size: x-large;
-  justify-content: space-evenly;
-  margin-left: 10%;
+  justify-content: space-around;
 }
 
-.avisoRecuperarSenha{
-    font-size: small;
-    width: 70%;
+
+.textoRecuperarSenha input {
+  height: 7.5vh;
+  width: 68vw;
+  background-color: #f5fbef;
+  border-radius: 20px;
+  border-color: transparent;
+  font-size: larger;
+  justify-content: center;
+  display: flex;
+}
+
+
+
+.avisoRecuperarSenha {
+  font-size: small;
+  width: 70%;
 }

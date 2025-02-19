@@ -94,7 +94,7 @@
   color: #f5fbef;
   border: none;
   border-radius: 20px;
-  height: 10%;
+  height: 8vh;
   width: 40%;
   font-size: larger;
 }
@@ -103,7 +103,7 @@
   font-family: "Montserrat", sans-serif;
   font-weight: 300;
   width: fit-content;
-  font-optical-sizing: auto;
+  font-size: medium;
   color: #f5fbef;
 }
 
