@@ -1,39 +1,95 @@
-import React from 'react'
-import "../Home/Home.css"
+import React, { useState } from 'react';
+import "../Home/Home.css";
 
 export const Home = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  
+  const updateCalendar = (date) => {
+    const currentYear = date.getFullYear();
+    const currentMonth = date.getMonth();
+
+    // Primeiro e último dia do mês
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+    const totalDays = lastDay.getDate();
+    const firstDayIndex = firstDay.getDay();
+    const lastDayIndex = lastDay.getDay();
+
+    // Atualiza o mês e o ano
+    const monthYearString = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+    let datesHTML = '';
+
+    // Preenche com os dias do mês anterior
+    let prevDates = '';
+    for (let i = firstDayIndex; i > 0; i--) {
+      const prevDate = new Date(currentYear, currentMonth, 1 - i);
+      prevDates += `<div class="date inactive">${prevDate.getDate()}</div>`;
+    }
+
+    // Preenche os dias do mês atual
+    let currentDates = '';
+    for (let i = 1; i <= totalDays; i++) {
+      const currentDay = new Date(currentYear, currentMonth, i);
+      const activeClass = currentDay.toDateString() === new Date().toDateString() ? 'active' : '';
+      currentDates += `<div class="date ${activeClass}">${i}</div>`;
+    }
+
+    // Preenche com os dias do próximo mês
+    let nextDates = '';
+    for (let i = 1; i <= 7 - lastDayIndex - 1; i++) {
+      const nextDate = new Date(currentYear, currentMonth + 1, i);
+      nextDates += `<div class="date inactive">${nextDate.getDate()}</div>`;
+    }
+
+    return {
+      monthYearString,
+      datesHTML: prevDates + currentDates + nextDates
+    };
+  };
+
+  const handlePrevMonth = () => {
+    setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
+  };
+
+  const { monthYearString, datesHTML } = updateCalendar(currentDate);
+
   return (
     <>
       <div className="navbar">
         <nav>
           <strong>
-            <div class="nav-item">
-              <a href="" id="homeSelection" class="icon-link">
-                <div class="icons-abaixo">
+            <div className="nav-item">
+              <a href="" id="homeSelection" className="icon-link">
+                <div className="icons-abaixo">
                   <img src="src/assets/img/homeAzul.png" alt="homeAzul" id="homeAzul" />
                   Home
                 </div>
               </a>
-              <a href="" class="icon-link">
-                <div class="icons-abaixo">
+              <a href="" className="icon-link">
+                <div className="icons-abaixo">
                   <img src="src/assets/img/turmas.png" alt="turmas" id="turmas" />
                   Turmas
                 </div>
               </a>
-              <a href="" class="icon-link">
-                <div class="icons-abaixo">
+              <a href="" className="icon-link">
+                <div className="icons-abaixo">
                   <img src="src/assets/img/perfil.png" alt="perfil" id="perfil" />
                   Perfil
                 </div>
               </a>
-              <a href="" class="icon-link">
-                <div class="icons-abaixo">
+              <a href="" className="icon-link">
+                <div className="icons-abaixo">
                   <img src="src/assets/img/mensagens.png" alt="mensagens" id="mensagens" />
                   Chat
                 </div>
               </a>
-              <a href="" class="icon-link">
-                <div class="icons-abaixo">
+              <a href="" className="icon-link">
+                <div className="icons-abaixo">
                   <img src="src/assets/img/config.png" alt="config" id="config" />
                   Configuração
                 </div>
@@ -43,12 +99,12 @@ export const Home = () => {
         </nav>
       </div>
 
-      <div class="notifacaçao">
+      <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
         <hr />
-        <div class="alinhamento-noti">
+        <div className="alinhamento-noti">
           <img src="src/assets/img/logo.png" alt="logo" id="logo" />
-          <div class="letras-coluna">
+          <div className="letras-coluna">
             <p>EMEI Meu Anjo</p>
             <p id="data">3 de março 2025</p>
           </div>
@@ -56,46 +112,45 @@ export const Home = () => {
         <p id="aviso-msg">Amanhã não teremos aula devido ao feriado de Carnaval.</p>
       </div>
 
-      <div class="chat-inicial">
-        <div class="alinhamento-chat">
+      <div className="chat-inicial">
+        <div className="alinhamento-chat">
           <img src="src/assets/img/perfil-chat.png" alt="perfil-chat" id="perfil-chat" />
-          <div class="letras-coluna2">
+          <div className="letras-coluna2">
             <h2>Professor Cururu</h2>
             <p id="info-chat">Filho com problema intestinal</p>
           </div>
         </div>
       </div>
 
-      <div class="rotina-inicial">
-        <div class="alinhamento-rotina">
+      <div className="rotina-inicial">
+        <div className="alinhamento-rotina">
           <img src="src/assets/img/rotina.png" alt="rotina" id="rotina" />
           <h1 id="letras-coluna3">Rotina</h1>
         </div>
       </div>
 
-      <div class="container-calendario">
-        <div class="calendario-inicial">
-          <div class="cabeçalho-calendario">
-            <button id="prevBtn">←</button>
-            <div class="mesAno" id="mesAno">
-              <button id="nextBtnx">→</button>
+      <div className="container-calendario">
+        <div className="calendario-inicial">
+          <div className="cabeçalho-calendario">
+            <button onClick={handlePrevMonth}>←</button>
+            <div className="mesAno" id="mesAno">
+              <span>{monthYearString}</span>
             </div>
+            <button onClick={handleNextMonth}>→</button>
           </div>
 
-          <div class="dias">
-            <div class="dia">Seg</div>
-            <div class="dia">Ter</div>
-            <div class="dia">Qua</div>
-            <div class="dia">Qui</div>
-            <div class="dia">Sex</div>
-            <div class="dia">Sab</div>
-            <div class="dia">Dom</div>
+          <div className="dias">
+            <div className="dia">Seg</div>
+            <div className="dia">Ter</div>
+            <div className="dia">Qua</div>
+            <div className="dia">Qui</div>
+            <div className="dia">Sex</div>
+            <div className="dia">Sab</div>
+            <div className="dia">Dom</div>
           </div>
-          <div class="datas" id="datas"></div>
+          <div className="datas" id="datas" dangerouslySetInnerHTML={{ __html: datesHTML }} />
         </div>
       </div>
-
     </>
-
-  )
-}
+  );
+};
