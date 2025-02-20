@@ -25,6 +25,9 @@ body {
   margin: 0 40px;
 }
 
+.navbar a.active{
+  color: white;
+}
 #homeSelection {
   color: #73A0D3;
 }

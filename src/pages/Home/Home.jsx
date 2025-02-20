@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "../Home/Home.css";
+import NavbarProfessores from '../../components/navbarProfessores.jsx';
 
 export const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -59,46 +60,8 @@ export const Home = () => {
   const { monthYearString, datesHTML } = updateCalendar(currentDate);
 
   return (
-    <>
-      <div className="navbar">
-        <nav>
-          <strong>
-            <div className="nav-item">
-              <a href="" id="homeSelection" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/homeAzul.png" alt="homeAzul" id="homeAzul" />
-                  Home
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/turmas.png" alt="turmas" id="turmas" />
-                  Turmas
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/perfil.png" alt="perfil" id="perfil" />
-                  Perfil
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/mensagens.png" alt="mensagens" id="mensagens" />
-                  Chat
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/config.png" alt="config" id="config" />
-                  Configuração
-                </div>
-              </a>
-            </div>
-          </strong>
-        </nav>
-      </div>
-
+    <div>
+   
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
         <hr />
@@ -151,6 +114,7 @@ export const Home = () => {
           <div className="datas" id="datas" dangerouslySetInnerHTML={{ __html: datesHTML }} />
         </div>
       </div>
-    </>
+      <NavbarProfessores></NavbarProfessores>
+    </div>
   );
 };

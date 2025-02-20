@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import "../Login/Login.css";
-import { Link } from "react-router-dom";
-import { Eye, EyeOff 
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Home 
   
 } from "lucide-react";
+ 
 
 const Login = () => {
   const [isShow, setIsShow] = useState(false);
+  
+  const navigate = useNavigate();
 
   const mostrarSenha = () => setIsShow(!isShow);
 
@@ -32,7 +35,7 @@ const Login = () => {
             Esqueceu a senha
           </Link>
         </div>
-        <button className="acessoAoSite">Entrar</button>
+        <button className="acessoAoSite" >Entrar</button>
       </div>
     </div>
   );
