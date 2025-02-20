@@ -5,6 +5,7 @@ export const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   
   const updateCalendar = (date) => {
+    
     const currentYear = date.getFullYear();
     const currentMonth = date.getMonth();
 
@@ -15,14 +16,17 @@ export const Home = () => {
     const firstDayIndex = firstDay.getDay();
     const lastDayIndex = lastDay.getDay();
 
+    // Ajustando para que a semana comece na segunda-feira
+    const adjustedFirstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // Se domingo (0), muda para 6 (último dia da semana)
+
     // Atualiza o mês e o ano
-    const monthYearString = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+    const monthYearString = date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
 
     let datesHTML = '';
 
     // Preenche com os dias do mês anterior
     let prevDates = '';
-    for (let i = firstDayIndex; i > 0; i--) {
+    for (let i = adjustedFirstDayIndex; i > 0; i--) {
       const prevDate = new Date(currentYear, currentMonth, 1 - i);
       prevDates += `<div class="date inactive">${prevDate.getDate()}</div>`;
     }
