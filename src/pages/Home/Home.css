@@ -152,6 +152,10 @@ body {
   font-size: 40px;
 }
 
+#rotina-style {
+  text-decoration: none;
+}
+
 #rotina {
   width: 110px;
   height: 100px;
@@ -163,6 +167,104 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/*calendario-alinhamento*/
+.container-calendario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.calendario-inicial {
+  width: 600px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  font-size: 20px;
+  background-color: #F5FBEF;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.cabeçalho-calendario {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.mesAno {
+  text-align: center;
+  font-weight: 600;
+  width: 300px;
+}
+
+.cabeçalho-calendario button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: #F5FBEF;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.dias {
+  display: grid;
+  grid-template-columns: repeat(7,1fr);
+}
+
+.dia {
+  text-align: center;
+  padding: 5px;
+  color: #999FA6;
+  font-weight: 500;
+}
+
+.datas {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  margin: auto;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  transition: 0.4s;
+}
+
+.date:hover {
+  background: #4978AE;
+  color: #F5FBEF;
+}
+
+.date:active {
+  
+  background-color: #445C77;
+}
+
+.date.inactive:hover {
+  color: #F5FBEF;
+  background: #999FA6;
+}
+
+.date.inactive {
+  color: #737679;
 }
 
 /*tablet*/
@@ -197,6 +299,10 @@ body {
   #rotina {
     width: 100px;
     height: 90px;
+  }
+
+  .calendario-inicial {
+    width: 550px;
   }
 
   #homeAzul,
@@ -254,6 +360,24 @@ body {
   #letras-coluna3 {
     font-size: 25px;
   }
+
+  .calendario-inicial {
+    width: 333px;
+  }
+
+  .datas {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+
+  .calendario-inicial {
+    width: 333px;
+  }
+
+  .datas {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
 
   #homeAzul,
   #turmas,
