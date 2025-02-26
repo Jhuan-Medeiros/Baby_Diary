@@ -6,9 +6,10 @@
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 5vh;
 }
-.tituloTurmas{
-    color: #f5fbef;
+.tituloTurmas {
+  color: #f5fbef;
 }
 .listaDeTurmas {
   background-color: #445c77;
@@ -43,11 +44,11 @@
   font-size: 1.5vh;
 }
 
-.botaoCriarTurma{
-    background-color: #445c77;
-    height: 6vh;
-    width: 35vw;
-    color: #f5fbef;
-    border: none;
-    border-radius: 20px;
+.botaoCriarTurma {
+  background-color: #445c77;
+  height: 6vh;
+  width: 35vw;
+  color: #f5fbef;
+  border: none;
+  border-radius: 20px;
 }
