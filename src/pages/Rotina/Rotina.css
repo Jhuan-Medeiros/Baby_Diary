@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  body {
+    background-color: #73A0D3;
+    padding-bottom: 80px;
+  }
+
+  #cor-titsub {
+    color: #f5fbef;
+  }
+
+.titulo {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.subtitulo {
+  display: flex;
+    margin-top: 20px;
+ 
+}
