@@ -3,35 +3,35 @@ import "../Home/Home.css";
 
 export const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  
+
   const updateCalendar = (date) => {
-    
+
     const currentYear = date.getFullYear();
     const currentMonth = date.getMonth();
 
-    // Primeiro e último dia do mês
+    // primeiro e último dia do mês
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
     const totalDays = lastDay.getDate();
     const firstDayIndex = firstDay.getDay();
     const lastDayIndex = lastDay.getDay();
 
-    // Ajustando para que a semana comece na segunda-feira
-    const adjustedFirstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // Se domingo (0), muda para 6 (último dia da semana)
+    // ajusta para que a semana comece na segunda-feira
+    const adjustedFirstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // se domingo (0), muda para 6 (último dia da semana)
 
-    // Atualiza o mês e o ano
+    // atualiza o mês e o ano
     const monthYearString = date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
 
     let datesHTML = '';
 
-    // Preenche com os dias do mês anterior
+    // preenche com os dias do mês anterior
     let prevDates = '';
     for (let i = adjustedFirstDayIndex; i > 0; i--) {
       const prevDate = new Date(currentYear, currentMonth, 1 - i);
       prevDates += `<div class="date inactive">${prevDate.getDate()}</div>`;
     }
 
-    // Preenche os dias do mês atual
+    // preenche os dias do mês atual
     let currentDates = '';
     for (let i = 1; i <= totalDays; i++) {
       const currentDay = new Date(currentYear, currentMonth, i);
@@ -39,7 +39,7 @@ export const Home = () => {
       currentDates += `<div class="date ${activeClass}">${i}</div>`;
     }
 
-    // Preenche com os dias do próximo mês
+    // preenche com os dias do próximo mês
     let nextDates = '';
     for (let i = 1; i <= 7 - lastDayIndex - 1; i++) {
       const nextDate = new Date(currentYear, currentMonth + 1, i);
@@ -127,15 +127,17 @@ export const Home = () => {
       </div>
 
       <div className="rotina-inicial">
-        <div className="alinhamento-rotina">
-          <img src="src/assets/img/rotina.png" alt="rotina" id="rotina" />
-          <h1 id="letras-coluna3">Rotina</h1>
-        </div>
+        <a id="rotina-style" href="rotina">
+          <div className="alinhamento-rotina">
+            <img src="src/assets/img/rotina.png" alt="rotina" id="rotina" />
+            <h1 id="letras-coluna3">Rotina</h1>
+          </div>
+        </a>
       </div>
 
       <div className="container-calendario">
         <div className="calendario-inicial">
-          <div className="cabeçalho-calendario">
+          <div className="cabeçalho-calendario">  
             <button onClick={handlePrevMonth}>←</button>
             <div className="mesAno" id="mesAno">
               <span>{monthYearString}</span>

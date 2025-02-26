@@ -138,6 +138,10 @@ body {
   font-size: 40px;
 }
 
+#rotina-style {
+  text-decoration: none;
+}
+
 #rotina {
   width: 110px;
   height: 100px;
