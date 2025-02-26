@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "../Login/Login.css";
+import { Link } from "react-router-dom";
+import { Eye, EyeOff 
+  
+} from "lucide-react";
 
 const Login = () => {
+  const [isShow, setIsShow] = useState(false);
+
+  const mostrarSenha = () => setIsShow(!isShow);
+
   return (
     <div className="corpoLogin">
-
       <div className="tituloLogin">
         <img src="src\assets\img\logo.png" alt="logo" className="logo" />
         <h1 className="tituloSite">Baby Diary</h1>
@@ -12,10 +19,18 @@ const Login = () => {
       <div className="areaLogin">
         <div className="areasDeRegistro">
           <label htmlFor="rg">CPF:</label>
-          <input type="text" id="rg" />
+          <input type="text" id="rg" />  
           <label htmlFor="senha">Senha:</label>
-          <input type="text" id="senha" />
-          <p>Esqueci a senha</p>
+          <div className="senhaInput">
+            <input type={isShow ? "text": "password"} id="senha" />
+            <button onClick={mostrarSenha} type="button" id="loginButton">
+              {isShow && <Eye color="black" size={40} />}
+              {!isShow && <EyeOff color="black" size={40} />}
+            </button>
+          </div>
+          <Link to="/recuperarSenha" className="linkRedirecionamento">
+            Esqueceu a senha
+          </Link>
         </div>
         <button className="acessoAoSite">Entrar</button>
       </div>

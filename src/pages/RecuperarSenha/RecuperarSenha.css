@@ -1,0 +1,60 @@
+.corpoRecuperarSenha {
+  height: 100vh;
+  width: 100vw;
+}
+.tituloRecuperarSenha {
+  background-color: #73a0d3;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 20vh;
+  color: #f5fbef;
+  font-size: x-large;
+  font-family: "Oswald", sans-serif;
+  margin: auto;
+}
+.areaRecuperarSenha {
+  background-color: #445c77;
+  width: 100vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.logoRecuperar {
+  height: 70%;
+  margin: 2vw;
+}
+
+.textoRecuperarSenha {
+  display: flex;
+  height: 50%;
+  width: 70vw;
+  flex-direction: column;
+  color: #f5fbef;
+  font-family: "Montserrat", serif;
+  font-size: x-large;
+  justify-content: space-around;
+}
+
+
+.textoRecuperarSenha input {
+  height: 7.5vh;
+  width: 68vw;
+  background-color: #f5fbef;
+  border-radius: 20px;
+  border-color: transparent;
+  font-size: larger;
+  justify-content: center;
+  display: flex;
+}
+
+
+
+.avisoRecuperarSenha {
+  font-size: small;
+  width: 70%;
+}
