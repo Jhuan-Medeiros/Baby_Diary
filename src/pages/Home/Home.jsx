@@ -64,7 +64,7 @@ export const Home = () => {
   const { monthYearString, datesHTML } = updateCalendar(currentDate);
 
   return (
-    <div>
+    <div className='corpoHome'>
    
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>

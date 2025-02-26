@@ -17,6 +17,10 @@ body {
   text-align: center;
 }
 
+.corpoHome{
+  padding-bottom: 10vh;
+}
+
 /*estilização*/
 .navbar a {
   color: #333;
@@ -73,7 +77,8 @@ body {
 
 #avisos {
   color: #f5fbef;
-  margin-left: 10px;
+  margin-left: 5vw;
+  padding-top: 2vh;
 }
 
 #data {
@@ -178,7 +183,7 @@ body {
 }
 
 .calendario-inicial {
-  width: 600px;
+  width: 100%;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -188,7 +193,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
-
+z
 .cabeçalho-calendario {
   display: flex;
   justify-content: space-between;
@@ -229,9 +234,10 @@ body {
 
 .datas {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  grid-template-columns: repeat(7, calc(100% / 7 - 2px));
+  gap: 2px;
 }
+
 
 .date {
   display: flex;
@@ -362,21 +368,19 @@ body {
   }
 
   .calendario-inicial {
-    width: 333px;
+    width: 403px;
   }
-
-  .datas {
-    grid-template-columns: repeat(5, 1fr);
-  }
-  
 
   .calendario-inicial {
     width: 333px;
   }
 
   .datas {
-    grid-template-columns: repeat(5, 1fr);
+    display: grid;
+    grid-template-columns: repeat(7, calc(100% / 7 - 2px));
+    gap: 2px;
   }
+  
   
 
   #homeAzul,
