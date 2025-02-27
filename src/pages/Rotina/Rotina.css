@@ -108,4 +108,17 @@ input[type="radio"] {
   width: 100px;
   height: 50px;
   border-radius: 10px;
+  font-size: 15px;
+}
+
+@media screen and (max-width: 600px) {
+
+  .radio-evacuacao {
+    font-size: 12px;
+  }
+
+  #observacoes {
+    width: 300px;
+  }
+
 }
