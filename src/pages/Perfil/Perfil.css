@@ -1,3 +1,8 @@
+
+.areaPerfil h1 {
+  margin-bottom: 1vw;
+}
+
 .areaPerfil {
   display: flex;
   flex-direction: column;
@@ -8,23 +13,25 @@
   margin: 0 auto;
 }
 
+
 .fotoAluno {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 15vw; 
-  height: 15vw; 
+  width: 10vw; 
+  height: 10vw; 
   border-radius: 50%; 
-  margin-bottom: 1.5vw;
+  margin-bottom: 1vw;
   overflow: hidden; 
 }
+
 
 .fotoAluno img {
   width: 100%; 
   height: 100%; 
   object-fit: cover; 
-
 }
+
 
 .perfilInfo p {
   display: flex;
@@ -33,10 +40,11 @@
   margin: 6px;
 }
 
+
 .container {
   background-color: #445C77;
-  width: 100vw;
-  height: 75vh;
+  width: 60vh;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,21 +52,41 @@
   color: #F5FBEF;
   font-family: "Montserrat", sans-serif;
   margin: 0 auto;
+  border-radius: 15px;
+  padding: 2vh;
 }
+
 
 .dadosAluno {
   height: fit-content;
   margin: 10px;
   display: flex;
   justify-content: space-around;
-  width: 70%;
+  width: fit-content;
   padding: 5vw;
   background-color: #4978AE;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+
+.tituloDados {
+  color: #ff5733; 
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 0.5vw;
+  padding: 1.5vw;
+}
+
+
 @media (max-width: 768px) {
+
+  .fotoAluno img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+  }
+
   .fotoAluno {
     width: 30vw;
     height: 30vw; 
@@ -66,16 +94,58 @@
 
   .container {
     min-height: 60vh;
-    width: 80%;
-    height: 100%; 
-    padding: 5vw; 
+    width: fit-content;
+    height: fit-content; 
+    padding: 3vh;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   }
+
 
   .dadosAluno {
     flex-direction: column; 
     align-items: center; 
     width: 90%; 
     height: min-content;
+    padding: 4vw; 
+  }
 
+
+  .tituloDados {
+    font-size: 20px; 
+    text-align: center;
+    margin: 0.5vw;
+    padding: 1.5vw;
+  }
+
+
+
+  .perfilInfo p {
+    font-size: 14px; 
+    margin: 8px 0;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .tituloDados {
+    font-size: 18px; 
+  }
+
+
+  .fotoAluno {
+    width: 40vw; 
+    height: 40vw;
+  }
+
+
+  .dadosAluno {
+    padding: 3vw;
+  }
+
+
+  .perfilInfo p {
+    font-size: 12px; 
   }
 }
