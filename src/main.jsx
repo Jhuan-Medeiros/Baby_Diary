@@ -3,9 +3,10 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ProtectedLayout from "./components/ProtectedLayout";
-import Login from './pages/Login/Login'
-import { Home } from './pages/Home/Home';
-import { Perfil } from './pages/Perfil/Perfil';
+import Login from "./pages/Login/Login";
+import { Home } from "./pages/Home/Home";
+import { Perfil } from "./pages/Perfil/Perfil";
+import { RecuperarSenha } from "./pages/RecuperarSenha/RecuperarSenha";
 
 import { Rotina } from "./pages/Rotina/Rotina";
 import { Turmas } from "./pages/Turmas/Turmas";

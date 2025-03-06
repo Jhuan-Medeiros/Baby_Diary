@@ -3,6 +3,13 @@ import '../Config/Config.css'
 
 export const Config = () => {
   return (
-    <div>Config</div>
+    <div className='corpoConfig'>
+      <div className='botoes'>
+      <button>Notificações</button>
+      <button>Preferência de tema</button>
+      <button>Feedback de aplicativo</button>
+      <button>Contato da escola</button>
+      </div>
+    </div>
   )
 }

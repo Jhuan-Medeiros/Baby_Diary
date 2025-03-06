@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../Rotina/Rotina.css";
 
-const Rotina = () => {
+export const Rotina = () => {
     const [selected, setSelected] = useState({});
     const [evacuacao, setEvacuacao] = useState("");
 
@@ -108,5 +108,3 @@ const Rotina = () => {
         </>
     );
 };
-
-export default Rotina;
