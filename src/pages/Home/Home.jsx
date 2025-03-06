@@ -1,33 +1,38 @@
 import React, { useState } from 'react';
 import "../Home/Home.css";
+import NavbarProfessores from '../../components/navbarProfessores.jsx';
 
 export const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  
+
   const updateCalendar = (date) => {
+
     const currentYear = date.getFullYear();
     const currentMonth = date.getMonth();
 
-    // Primeiro e último dia do mês
+    // primeiro e último dia do mês
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
     const totalDays = lastDay.getDate();
     const firstDayIndex = firstDay.getDay();
     const lastDayIndex = lastDay.getDay();
 
-    // Atualiza o mês e o ano
-    const monthYearString = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+    // ajusta para que a semana comece na segunda-feira
+    const adjustedFirstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // se domingo (0), muda para 6 (último dia da semana)
+
+    // atualiza o mês e o ano
+    const monthYearString = date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
 
     let datesHTML = '';
 
-    // Preenche com os dias do mês anterior
+    // preenche com os dias do mês anterior
     let prevDates = '';
-    for (let i = firstDayIndex; i > 0; i--) {
+    for (let i = adjustedFirstDayIndex; i > 0; i--) {
       const prevDate = new Date(currentYear, currentMonth, 1 - i);
       prevDates += `<div class="date inactive">${prevDate.getDate()}</div>`;
     }
 
-    // Preenche os dias do mês atual
+    // preenche os dias do mês atual
     let currentDates = '';
     for (let i = 1; i <= totalDays; i++) {
       const currentDay = new Date(currentYear, currentMonth, i);
@@ -35,7 +40,7 @@ export const Home = () => {
       currentDates += `<div class="date ${activeClass}">${i}</div>`;
     }
 
-    // Preenche com os dias do próximo mês
+    // preenche com os dias do próximo mês
     let nextDates = '';
     for (let i = 1; i <= 7 - lastDayIndex - 1; i++) {
       const nextDate = new Date(currentYear, currentMonth + 1, i);
@@ -59,46 +64,8 @@ export const Home = () => {
   const { monthYearString, datesHTML } = updateCalendar(currentDate);
 
   return (
-    <>
-      <div className="navbar">
-        <nav>
-          <strong>
-            <div className="nav-item">
-              <a href="" id="homeSelection" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/homeAzul.png" alt="homeAzul" id="homeAzul" />
-                  Home
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/turmas.png" alt="turmas" id="turmas" />
-                  Turmas
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/perfil.png" alt="perfil" id="perfil" />
-                  Perfil
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/mensagens.png" alt="mensagens" id="mensagens" />
-                  Chat
-                </div>
-              </a>
-              <a href="" className="icon-link">
-                <div className="icons-abaixo">
-                  <img src="src/assets/img/config.png" alt="config" id="config" />
-                  Configuração
-                </div>
-              </a>
-            </div>
-          </strong>
-        </nav>
-      </div>
-
+    <div className='corpoHome'>
+   
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
         <hr />
@@ -123,15 +90,17 @@ export const Home = () => {
       </div>
 
       <div className="rotina-inicial">
-        <div className="alinhamento-rotina">
-          <img src="src/assets/img/rotina.png" alt="rotina" id="rotina" />
-          <h1 id="letras-coluna3">Rotina</h1>
-        </div>
+        <a id="rotina-style" href="rotina">
+          <div className="alinhamento-rotina">
+            <img src="src/assets/img/rotina.png" alt="rotina" id="rotina" />
+            <h1 id="letras-coluna3">Rotina</h1>
+          </div>
+        </a>
       </div>
 
       <div className="container-calendario">
         <div className="calendario-inicial">
-          <div className="cabeçalho-calendario">
+          <div className="cabeçalho-calendario">  
             <button onClick={handlePrevMonth}>←</button>
             <div className="mesAno" id="mesAno">
               <span>{monthYearString}</span>
@@ -151,6 +120,7 @@ export const Home = () => {
           <div className="datas" id="datas" dangerouslySetInnerHTML={{ __html: datesHTML }} />
         </div>
       </div>
-    </>
+      <NavbarProfessores></NavbarProfessores>
+    </div>
   );
 };

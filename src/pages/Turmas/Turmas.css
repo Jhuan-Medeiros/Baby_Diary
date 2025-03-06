@@ -1,0 +1,54 @@
+.corpoTurmas {
+  background-color: #73a0d3;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 5vh;
+}
+.tituloTurmas {
+  color: #f5fbef;
+}
+.listaDeTurmas {
+  background-color: #445c77;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 20px;
+  width: 70%;
+  height: 65%;
+}
+
+.listaDeTurmas button {
+  background-color: #445c77;
+  color: #f5fbef;
+  border: none;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5%;
+  padding-right: 5%;
+  font-weight: 300;
+  font-size: large;
+}
+
+.listaDeTurmas button::after {
+  display: flex;
+  content: "▶"; /* Setinha */
+  color: #f5fbef;
+  font-size: 1.5vh;
+}
+
+.botaoCriarTurma {
+  background-color: #445c77;
+  height: 6vh;
+  width: 35vw;
+  color: #f5fbef;
+  border: none;
+  border-radius: 20px;
+}
