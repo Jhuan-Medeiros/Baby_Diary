@@ -56,6 +56,10 @@
   flex-direction: column;
 }
 
+.areasDeRegistro input{
+  outline: none;
+}
+
 .senhaInput {
   margin: auto;
   display: flex;
@@ -64,6 +68,27 @@
   background-color: #f5fbef;
   border-radius: 20px;
   font-size: larger;
+}
+
+.senhaInput input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: larger;
+}
+
+.senhaInput button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 20px;
+  margin-right: 1%;
 }
 
 #senha{
@@ -107,9 +132,3 @@
   color: #f5fbef;
 }
 
-.senhaInput button {
-  background-color: #f5fbef;
-  border: none;
-  border-radius: 20px;
-  margin-right: 1%;
-}

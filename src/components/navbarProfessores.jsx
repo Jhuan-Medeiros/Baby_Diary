@@ -70,15 +70,15 @@ function NavbarProfessores() {
             </Link>
 
             <Link
-              to="/chat"
+              to="/listaChat"
               className={`icon-link ${
-                location.pathname === "/chat" ? "active" : ""
+                location.pathname === "/listaChat" ? "active" : ""
               }`}
             >
               <div className="icons-abaixo">
                 <img
                   src={
-                    location.pathname === "/chat"
+                    location.pathname === "/listaChat"
                       ? "src/assets/img/mensagensAzul.png"
                       : "src/assets/img/mensagens.png"
                   }
@@ -90,9 +90,9 @@ function NavbarProfessores() {
             </Link>
 
             <Link
-              to="/configuracao"
+              to="/config"
               className={`icon-link ${
-                location.pathname === "/configuracao" ? "active" : ""
+                location.pathname === "/config" ? "active" : ""
               }`}
             >
               <div className="icons-abaixo">

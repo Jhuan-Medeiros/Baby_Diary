@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import "../Login/Login.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Home 
-  
-} from "lucide-react";
+import { Eye, EyeOff, Home } from "lucide-react";
  
 
 const Login = () => {
@@ -21,8 +19,8 @@ const Login = () => {
       </div>
       <div className="areaLogin">
         <div className="areasDeRegistro">
-          <label htmlFor="rg">CPF:</label>
-          <input type="text" id="rg" />  
+          <label htmlFor="cpf">CPF:</label>
+          <input type="text" id="cpf" />  
           <label htmlFor="senha">Senha:</label>
           <div className="senhaInput">
             <input type={isShow ? "text": "password"} id="senha" />
