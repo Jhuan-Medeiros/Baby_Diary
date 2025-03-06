@@ -161,6 +161,10 @@ body {
   text-decoration: none;
 }
 
+#rotina-style {
+  text-decoration: none;
+}
+
 #rotina {
   width: 110px;
   height: 100px;
@@ -305,6 +309,10 @@ z
   #rotina {
     width: 100px;
     height: 90px;
+  }
+
+  .calendario-inicial {
+    width: 550px;
   }
 
   .calendario-inicial {
