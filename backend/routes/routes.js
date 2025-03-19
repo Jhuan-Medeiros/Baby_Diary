@@ -5,7 +5,7 @@ const usuariosController = require("../controllers/usuarios");
 const tiposUsuariosController = require("../controllers/tipos_usuarios");
 
 routes.post('/login', usuariosController.login);
-routes.post('/usuarios', usuariosController.createUsuario);
+routes.post('/usuario/criar', usuariosController.createUsuario);
 
 routes.get('/usuarios/:cpf', usuariosController.getUsersByCpf);
 routes.get('/usuarios', usuariosController.getAllUsers);
@@ -21,3 +21,9 @@ routes.get('/tiposusuarios', tiposUsuariosController.getTiposUsuarios);
 
 routes.delete('/tiposusuarios/:id_tipo', tiposUsuariosController.deleteTiposUsuarios);
 
+routes.get("/", (req, res) => {
+    res.json({ message: "teste bem sucedido" });
+  });
+  
+
+  module.exports = routes;

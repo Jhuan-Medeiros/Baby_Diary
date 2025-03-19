@@ -11,10 +11,10 @@ usuarios.sync();
 
 
 const app = express();
+app.use("/babydiary", routes);
 
 app.use(cookieParser());
-
 app.use(cors());
 app.use(express.json());
 
-app.listen(3001, console.log("servidor rodando na porta 3001"));
+app.listen(3011, console.log("servidor rodando na porta 3001"));
