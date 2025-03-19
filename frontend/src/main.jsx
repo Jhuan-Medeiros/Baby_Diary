@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import { Home } from "./pages/Home/Home";
 import { Perfil } from "./pages/Perfil/Perfil";
 import { RecuperarSenha } from "./pages/RecuperarSenha/RecuperarSenha";
+
 import { Rotina } from "./pages/Rotina/Rotina";
 import { Turmas } from "./pages/Turmas/Turmas";
 import { ListaChat } from "./pages/ListaChat/ListaChat";

@@ -6,6 +6,10 @@
   font-family: "Montserrat", sans-serif;
 }
 
+body{
+  height: 0;
+}
+
 .montserrat-text {
   font-family: "Montserrat", sans-serif;
   font-weight: 100;
