@@ -402,6 +402,38 @@ z
   }
 }
 
+@media screen and (max-width: 400px) {
+  .navbar {
+    height: 75px; /* Mantém a altura fixa */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .navbar a {
+    font-size: 12px; /* Ajusta o tamanho da fonte */
+    margin: 0 7px; /* Garante espaçamento uniforme */
+  }
+
+  #homeAzul,
+  #turmas,
+  #perfil,
+  #mensagens,
+  #config {
+    width: 35px; /* Mantém os ícones visíveis */
+    height: 35px;
+  }
+
+  .corpoHome {
+    padding-bottom: 10vh;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+}
+
+
 /*calendario-alinhamento*/
 .container-calendario {
   display: flex;
