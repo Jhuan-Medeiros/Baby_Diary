@@ -12,6 +12,7 @@ import { Rotina } from "./pages/Rotina/Rotina";
 import { Turmas } from "./pages/Turmas/Turmas";
 import { ListaChat } from "./pages/ListaChat/ListaChat";
 import { Config } from "./pages/Config/Config";
+import { CriarUsuario } from "./pages/CriarUsuario/CriarUsuario";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       { path: "/turmas", element: <Turmas /> },
       { path: "/listaChat", element: <ListaChat/> },
       { path: "/config", element: <Config/>},
+      { path: "/criarUsuario", element: <CriarUsuario/>}
     ],
   },
   {

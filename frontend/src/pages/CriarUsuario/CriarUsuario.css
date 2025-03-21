@@ -1,0 +1,14 @@
+.areasDeRegistroUsuario input{
+    display: flex;
+    width: 90vw;
+}
+
+.senhaReg{
+    width: 90vw;
+}
+
+.usuarioPermissao{
+    display: flex;
+    flex-direction: column;
+    
+}
