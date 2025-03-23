@@ -47,8 +47,8 @@ export const CriarUsuario = () => {
   return (
     <div className="corpoCriarUsuario">
       <div className="formularios">
-        <h2>Criar Usuário</h2>
         <div className="areasDeRegistroUsuario">
+          <h2 className="tituloCriarUsuario">Criar Usuário</h2>
           <input
             type="text"
             id="cpf"
@@ -66,7 +66,6 @@ export const CriarUsuario = () => {
           <input
             type="password"
             id="senha"
-            className="senhaReg"
             placeholder="Senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
@@ -81,6 +80,7 @@ export const CriarUsuario = () => {
 
           <div className="usuarioPermissao">
             <label>
+              Admin
               <input
                 type="radio"
                 name="permissao"
@@ -88,10 +88,10 @@ export const CriarUsuario = () => {
                 checked={permissao === "admin"}
                 onChange={() => setPermissao("admin")}
               />
-              Admin
             </label>
 
             <label>
+              Usuário
               <input
                 type="radio"
                 name="permissao"
@@ -99,7 +99,17 @@ export const CriarUsuario = () => {
                 checked={permissao === "usuario"}
                 onChange={() => setPermissao("usuario")}
               />
-              Usuário
+            </label>
+
+            <label>
+              Professor
+              <input
+                type="radio"
+                name="permissao"
+                value="professor"
+                checked={permissao === "professor"}
+                onChange={() => setPermissao("professor")}
+              />
             </label>
           </div>
         </div>
@@ -117,7 +127,6 @@ export const CriarUsuario = () => {
     </div>
   );
 };
-
 
 //1111111
 //123123

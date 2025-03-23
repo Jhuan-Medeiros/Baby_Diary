@@ -1,14 +1,69 @@
 .areasDeRegistroUsuario input{
     display: flex;
-    width: 90vw;
 }
 
-.senhaReg{
-    width: 90vw;
-}
 
 .usuarioPermissao{
     display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.usuarioPermissao label {
+    margin-right: 10px; 
+    display: flex;
     flex-direction: column;
-    
+    justify-content: center;
+    align-items: center;
+}
+
+.corpoCriarUsuario{
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.formularios{
+    display: flex;
+    flex-direction: column;
+    height: 60%;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 20px; 
+    width: 85vw; 
+    padding: 0 5vw;
+}
+
+.formularios h2{
+    color: #f5fbef;
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 10%;
+    justify-content: center;
+    display: flex;
+}
+
+.formularios input[type="text"]{
+    width: 80vw;
+    height: 10%;
+    border-radius: 20px;
+    border-color: transparent;
+    background-color: #f5fbef;
+    font-size: 20px;
+    outline: none;
+    margin-bottom: 6%;
+}
+
+.formularios input[type="password"]{
+    width: 80vw;
+    height: 10%;
+    border-radius: 20px;
+    border-color: transparent;
+    background-color: #f5fbef;
+    font-size: 20px;
+    outline: none;
+    margin-bottom: 6%;
 }
