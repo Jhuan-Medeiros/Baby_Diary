@@ -13,6 +13,8 @@ const tipos_usuarios = database.define('tipos_usuarios', {
         type: Sequelize.STRING,
         AllowNUll: false
     },
-});
+}, {
+    timestamps: false, // Desativa createdAt e updatedAt
+  });
 
 module.exports = tipos_usuarios

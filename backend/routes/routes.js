@@ -3,6 +3,7 @@ const routes = express.Router();
 
 const usuariosController = require("../controllers/usuarios");
 const tiposUsuariosController = require("../controllers/tipos_usuarios");
+const calendarioController = require('../controllers/calendario')
 
 routes.post('/login', usuariosController.login);
 routes.post('/usuario/criar', usuariosController.createUsuario);
@@ -20,6 +21,13 @@ routes.post('/tiposusuarios', tiposUsuariosController.createTiposUsuarios);
 routes.get('/tiposusuarios', tiposUsuariosController.getTiposUsuarios);
 
 routes.delete('/tiposusuarios/:id_tipo', tiposUsuariosController.deleteTiposUsuarios);
+
+
+routes.post('/calendario', calendarioController.createCalendario);
+
+routes.get('/calendario', calendarioController.getCalendario);
+
+routes.delete('/calendario/:id_calendario', calendarioController.deleteCalendario);
 
 routes.get("/", (req, res) => {
     res.json({ message: "teste bem sucedido" });

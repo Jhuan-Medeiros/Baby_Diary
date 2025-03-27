@@ -28,64 +28,99 @@ exports.createUsuario = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-    try {
-        const { cpf, senha } = req.body;
-        const usuario = await Usuarios.findOne({ where: { cpf } })
-        const verificarSenha = bcrypt.compare(senha, usuario.senha)
-        if (usuario.cpf == cpf && verificarSenha) {
-            return res.send({ user: usuario })
-        }
-        return res.status(404).send('Usuario not found');
-    } catch (error) {
-        return res.status(500).send(error)
+  try {
+    const { cpf, senha } = req.body;
+    console.log(req.body);
+
+    const usuario = await Usuarios.findOne({ where: { cpf } });
+
+    if (!usuario) {
+      return res
+        .status(404)
+        .send({ sucesso: false, mensagem: "Usuário não encontrado" });
     }
-}
+
+    console.log(usuario);
+
+    const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+
+    if (senhaCorreta) {
+      return res.status(200).send({
+        sucesso: true,
+        usuario: {
+          id: usuario.id,
+          cpf: usuario.cpf,
+        },
+      });
+    } else {
+      return res
+        .status(401)
+        .send({ sucesso: false, mensagem: "Senha incorreta" });
+    }
+  } catch (error) {
+    console.error("Erro no login:", error);
+    return res
+      .status(500)
+      .send({ sucesso: false, mensagem: "Erro interno do servidor" });
+  }
+};
+
 
 exports.getUsersByCpf = async (req, res) => {
-    try {
-        const encontrarUsuario = await Usuarios.findByPk(req.params.cpf, { include: tipos_usuarios });
-        if (!encontrarUsuario) {
-            return res.status(404).send('Usuario not found');
-        }
+  try {
+    const encontrarUsuario = await Usuarios.findByPk(req.params.cpf, {
+      include: tipos_usuarios,
+    });
+    if (!encontrarUsuario) {
+      return res.status(404).send("Usuario not found");
+    }
 
-        return res.send(encontrarUsuario);
-    } catch (error) {
-        return res.status(500).send('Internal Server Error');
-    }
-}
+    return res.send(encontrarUsuario);
+  } catch (error) {
+    return res.status(500).send("Internal Server Error");
+  }
+};
+
+
 exports.deleteUsuario = async (req, res) => {
-    try {
-        const encontrarUsuario = await Usuarios.findOne({ where: { cpf: req.params.cpf } })
-        await encontrarUsuario.destroy();
-        return res.send('usuario deletado')
-    } catch (err) {
-        return res.send('aqui deu erro mn se liga', err)
-    }
-}
+  try {
+
+    const encontrarUsuario = await Usuarios.findOne({
+      where: { cpf: req.params.cpf },
+    });
+
+    await encontrarUsuario.destroy();
+    return res.send("usuario deletado");
+    
+  } catch (err) {
+    return res.send("aqui deu erro mn se liga", err);
+  }
+};
 
 exports.updateUsuario = async (req, res) => {
-    const Cpf = req.params.cpf
-    const CpfUsuario = await Usuarios.findOne({ where: { cpf: Cpf } })
+  const Cpf = req.params.cpf;
+  const CpfUsuario = await Usuarios.findOne({ where: { cpf: Cpf } });
 
-    if (CpfUsuario) {
-        try {
-            const [Updates] = await Usuarios.update(req.body, { where: { cpf: req.params.cpf } }) // verifica se tem alguma alteração
-            return res.send({ message: 'Usuario foi atualizado ;P', })
-
-        } catch (error) {
-            return res.send('deu erro aqui meu mano ==> ', error)
-
-        }
+  if (CpfUsuario) {
+    try {
+      const [Updates] = await Usuarios.update(req.body, {
+        where: { cpf: req.params.cpf },
+      }); // verifica se tem alguma alteração
+      return res.send({ message: "Usuario foi atualizado ;P" });
+    } catch (error) {
+      return res.send("deu erro aqui meu mano ==> ", error);
     }
-    return res.send('usuario not found!!!')
-}
-
+  }
+  return res.send("usuario not found!!!");
+};
 
 exports.getAllUsers = async (req, res) => {
-    try {
-        const encontrarUsuario = await Usuarios.findAll({ include: {model: tipos_usuarios} });
-        return res.send(encontrarUsuario);
-    } catch (error) {
-        return res.status(500).send('Internal Server Error');
-    }
-}
+  try {
+    const encontrarUsuario = await Usuarios.findAll({
+      include: { model: tipos_usuarios },
+    });
+    return res.send(encontrarUsuario);
+  } catch (error) {
+    return res.status(500).send("Internal Server Error");
+  }
+};

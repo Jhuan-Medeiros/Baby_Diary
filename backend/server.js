@@ -1,20 +1,29 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
 const usuarios = require("./models/usuarios");
 const tipos_usuarios = require("./models/tipos_usuarios");
+const calendario = require("./models/calendario")
 const routes = require("./routes/routes");
-const cookieParser = require('cookie-parser')
 
+const app = express();
+
+// Configuração do CORS para permitir requisições do frontend
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Permite apenas o frontend acessar a API
+    credentials: true, // Permite cookies e headers personalizados
+  })
+);
+
+app.use(express.json());
+app.use(cookieParser());
 
 tipos_usuarios.sync();
 usuarios.sync();
+calendario.sync();
 
-
-const app = express();
 app.use("/babydiary", routes);
 
-app.use(cookieParser());
-app.use(cors());
-app.use(express.json());
-
-app.listen(3011, console.log("servidor rodando na porta 3001"));
+app.listen(3011, () => console.log("Servidor rodando na porta 3011"));

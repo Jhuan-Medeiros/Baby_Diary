@@ -35,7 +35,8 @@ const usuarios = database.define("usuarios", {
         type: Sequelize.STRING,
         AllowNUll: false,
     }
-});
+}, {
+  });
 
 tipos_usuarios.hasOne(usuarios, {
     foreignKey: "id_tipo"

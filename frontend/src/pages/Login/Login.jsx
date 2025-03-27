@@ -4,7 +4,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Home } from "lucide-react";
  
 
-const Login = () => {
+const Login = () => { 
   const [isShow, setIsShow] = useState(false);
   
   const navigate = useNavigate();
