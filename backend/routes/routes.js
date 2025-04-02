@@ -24,6 +24,4 @@ routes.delete('/tiposusuarios/:id_tipo', tiposUsuariosController.deleteTiposUsua
 routes.get("/", (req, res) => {
     res.json({ message: "teste bem sucedido" });
   });
-  
-
   module.exports = routes;

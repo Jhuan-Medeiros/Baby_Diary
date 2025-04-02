@@ -1,132 +1,60 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
 import "../CriarUsuario/CriarUsuario.css";
-import api from "../../../api";
 
-export const CriarUsuario = () => {
-  const [cpf, setCpf] = useState("");
-  const [nome, setNome] = useState("");
-  const [senha, setSenha] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [permissao, setPermissao] = useState("usuario"); // Padrão: Usuário
-  const [erro, setErro] = useState("");
-  const [sucesso, setSucesso] = useState("");
+const CriarUsuario = () => {
+  const [cpf, setCpf] = useState('');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [mensagem, setMensagem] = useState('');
 
-  const handleCadastro = async () => {
-    setErro("");
-    setSucesso("");
-
-    if (!cpf || !nome || !senha || !telefone) {
-      setErro("Todos os campos são obrigatórios.");
-      return;
-    }
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const resposta = await api.post("/babydiary/usuario/criar", {
+      const response = await axios.post('/babydiary/usuario/criar', {
         cpf,
         nome,
+        email,
         senha,
         telefone,
-        permissao,
       });
-
-      if (resposta.data.sucesso) {
-        setSucesso("Usuário criado com sucesso!");
-        setCpf("");
-        setNome("");
-        setSenha("");
-        setTelefone("");
-        setPermissao("usuario"); // Resetar para o padrão
-      } else {
-        setErro(resposta.data.mensagem || "Erro ao criar usuário.");
-      }
+      setMensagem(response.data.mensagem);
     } catch (error) {
-      setErro("Erro ao conectar com o servidor.");
+      setMensagem('Erro ao criar o usuário');
     }
   };
 
-  return (
-    <div className="corpoCriarUsuario">
-      <div className="formularios">
-        <div className="areasDeRegistroUsuario">
-          <h2 className="tituloCriarUsuario">Criar Usuário</h2>
-          <input
-            type="text"
-            id="cpf"
-            placeholder="CPF"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
-          />
-          <input
-            type="text"
-            id="nome"
-            placeholder="Nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          />
-          <input
-            type="password"
-            id="senha"
-            placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-          />
-          <input
-            type="text"
-            id="telefone"
-            placeholder="Telefone"
-            value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
-          />
-
-          <div className="usuarioPermissao">
-            <label>
-              Admin
-              <input
-                type="radio"
-                name="permissao"
-                value="admin"
-                checked={permissao === "admin"}
-                onChange={() => setPermissao("admin")}
-              />
-            </label>
-
-            <label>
-              Usuário
-              <input
-                type="radio"
-                name="permissao"
-                value="usuario"
-                checked={permissao === "usuario"}
-                onChange={() => setPermissao("usuario")}
-              />
-            </label>
-
-            <label>
-              Professor
-              <input
-                type="radio"
-                name="permissao"
-                value="professor"
-                checked={permissao === "professor"}
-                onChange={() => setPermissao("professor")}
-              />
-            </label>
-          </div>
-        </div>
-
-        {erro && <p className="mensagemErro">{erro}</p>}
-        {sucesso && <p className="mensagemSucesso">{sucesso}</p>}
-
-        <div className="confirmaçãoECancelar">
-          <button onClick={handleCadastro}>Criar</button>
-          <button onClick={() => console.log("Lógica para deletar usuário")}>
-            Deletar
-          </button>
-        </div>
-      </div>
+  return (  
+    <div className="criarUsuario">
+      <h1>Criar Usuário</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          CPF:
+          <input type="text" value={cpf} onChange={(e) => setCpf(e.target.value)} />
+        </label>
+        <label>
+          Nome:
+          <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+        </label>
+        <label>
+          Email:
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <label>
+          Senha:
+          <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} />
+        </label>
+        <label>
+          Telefone:
+          <input type="text" value={telefone} onChange={(e) => setTelefone(e.target.value)} />
+        </label>
+        <button type="submit">Criar Usuário</button>
+      </form>
+      {mensagem && <p>{mensagem}</p>}
     </div>
   );
 };
 
-//1111111
-//123123
+export default CriarUsuario;

@@ -12,7 +12,7 @@ import { Rotina } from "./pages/Rotina/Rotina";
 import { Turmas } from "./pages/Turmas/Turmas";
 import { ListaChat } from "./pages/ListaChat/ListaChat";
 import { Config } from "./pages/Config/Config";
-import { CriarUsuario } from "./pages/CriarUsuario/CriarUsuario";
+import CriarUsuario from "./pages/CriarUsuario/CriarUsuario";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <ProtectedLayout />, // Grupo de rotas protegidas com navbar
     children: [
       { path: "/home", element: <Home /> },
-      { path: "/perfil", element: <Perfil /> },
+      { path: "perfil", element: <Perfil /> },
       { path: "/rotina", element: <Rotina /> },
       { path: "/turmas", element: <Turmas /> },
       { path: "/listaChat", element: <ListaChat/> },

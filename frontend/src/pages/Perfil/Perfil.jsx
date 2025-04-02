@@ -1,21 +1,37 @@
 import React from 'react'
 import "../Perfil/Perfil.css"
+import axios from "axios"
+import { useState, useEffect } from 'react';
+
 
 export const Perfil = () => {
 
-  const aluno = {
-    nome: "Ever San Eyes",
-    idade: 6,
-    curso: "Educação Infantil",
-    cpf: "123.456.789-00",
-    email: "ever.san@example.com",
-    dataInscricao: "31/12/2024",
-    turma: "IDEV-2",
-    telefoneResponsavel: "(14) 98765-4321",
-  };
+  const [aluno, setAluno] = useState(null);
+  const [erro, setErro] = useState('');
+
+  useEffect(() => {
+    const fetchAluno = async () => {
+      try {
+        const response = await axios.get(`/babydiary/usuarios/${cpf}`); // Ajuste a URL conforme necessário
+        setAluno(response.data);
+      } catch (error) {
+        setErro('Erro ao carregar os dados do aluno.');
+      }
+    };
+
+    fetchAluno();
+  }, []);
+
+  if (erro) {
+    return <div className="erro">{erro}</div>;
+  }
+
+  if (!aluno) {
+    return <div>Carregando...</div>;
+  }
 
   return (
-    <>    
+    <div className='corpoAreaPerfil'>    
       <div className="areaPerfil">
         <h1>Perfil do Aluno</h1>
         <div className="fotoAluno">
@@ -28,17 +44,14 @@ export const Perfil = () => {
         <div className="dadosAluno">
           <div className="perfilInfo">
             <h2>{aluno.nome}</h2>
-            <p><strong>Idade:</strong> {aluno.idade} anos</p>
-            <p><strong>Curso:</strong> {aluno.curso}</p>
             <p><strong>CPF:</strong> {aluno.cpf}</p>
             <p><strong>Email:</strong> {aluno.email}</p>
-            <p><strong>Data de Inscrição:</strong> {aluno.dataInscricao}</p>
             <p><strong>Turma:</strong> {aluno.turma}</p>
-            <p><strong>Telefone do Responsável:</strong> {aluno.telefoneResponsavel}</p>
+            <p><strong>Telefone do Responsável:</strong> {aluno.telefone}</p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

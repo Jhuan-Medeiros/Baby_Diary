@@ -8,6 +8,8 @@ const routes = require("./routes/routes");
 
 const app = express();
 
+app.use(express.json());
+
 // Configuração do CORS para permitir requisições do frontend
 app.use(
   cors({
@@ -16,7 +18,6 @@ app.use(
   })
 );
 
-app.use(express.json());
 app.use(cookieParser());
 
 tipos_usuarios.sync();
