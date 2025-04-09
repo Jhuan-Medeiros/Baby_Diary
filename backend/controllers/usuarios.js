@@ -3,10 +3,22 @@ const Usuarios = require("../models/usuarios");
 const tipos_usuarios = require("../models/tipos_usuarios");
 const bcrypt = require("bcrypt");
 
+
+
 exports.createUsuario = async (req, res) => {
   try {
-    const { cpf, nome, email, senha, telefone } = req.body;
+    
+    const { cpf, nome, email, senha, telefone, id_tipo } = req.body;
     const verificacao = await Usuarios.findOne({ where: { cpf } });
+
+    const usuarioExistente = await Usuarios.findOne({
+      where: { [Op.or]: [{ cpf }, { email }] }
+    });
+    
+    if (usuarioExistente) {
+      return res.status(409).json({ message: 'Usuário já existe' });
+    }
+
     if (verificacao) {
       return res.send("usuario ja foi cadastrado");
     }
@@ -19,34 +31,37 @@ exports.createUsuario = async (req, res) => {
       email,
       senha: senhaNova,
       telefone,
+      id_tipo,  
     });
     console.log(usuarioCriado);
     return res.send("usuario cadastrado com sucesso");
   } catch (err) {
-    return res.status(403).send(err);
+    console.error("Erro ao criar usuário:", err);
+    return res.status(500).json({ erro: err.message });
   }
+  
 };
 
 exports.login = async (req, res) => {
   try {
     const { cpf, senha } = req.body;
     console.log(req.body);
-
+    
     // Busca o usuário pelo CPF
     const usuario = await Usuarios.findOne({ where: { cpf } });
-
+    
     // Verifica se o usuário existe
     if (!usuario) {
       return res
-        .status(404)
-        .send({ sucesso: false, mensagem: "Usuário não encontrado" });
+      .status(404)
+      .send({ sucesso: false, mensagem: "Usuário não encontrado" });
     }
-
+    
     console.log(usuario);
-
+    
     // Compara a senha fornecida com a senha hash armazenada
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
-
+    
     if (senhaCorreta) {
       // Autenticação bem-sucedida
       return res.status(200).send({
@@ -60,14 +75,14 @@ exports.login = async (req, res) => {
     } else {
       // Senha incorreta
       return res
-        .status(401)
-        .send({ sucesso: false, mensagem: "Senha incorreta" });
+      .status(401)
+      .send({ sucesso: false, mensagem: "Senha incorreta" });
     }
   } catch (error) {
     console.error("Erro no login:", error);
     return res
-      .status(500)
-      .send({ sucesso: false, mensagem: "Erro interno do servidor" });
+    .status(500)
+    .send({ sucesso: false, mensagem: "Erro interno do servidor" });
   }
 };
 
@@ -79,7 +94,7 @@ exports.getUsersByCpf = async (req, res) => {
     if (!encontrarUsuario) {
       return res.status(404).send("Usuario not found");
     }
-
+    
     return res.send(encontrarUsuario);
   } catch (error) {
     return res.status(500).send("Internal Server Error");
@@ -100,7 +115,7 @@ exports.deleteUsuario = async (req, res) => {
 exports.updateUsuario = async (req, res) => {
   const Cpf = req.params.cpf;
   const CpfUsuario = await Usuarios.findOne({ where: { cpf: Cpf } });
-
+  
   if (CpfUsuario) {
     try {
       const [Updates] = await Usuarios.update(req.body, {
@@ -124,3 +139,4 @@ exports.getAllUsers = async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 };
+

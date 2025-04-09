@@ -31,7 +31,7 @@ const usuarios = database.define(
     },
     id_tipo: {
       type: Sequelize.INTEGER,
-      defaultValue: "1",
+      defaultValue: "usuario",
       AllowNUll: false,
       references: {
         model: tipos_usuarios,
@@ -41,14 +41,6 @@ const usuarios = database.define(
     telefone: {
       type: Sequelize.STRING,
       AllowNUll: false,
-    },
-    turmaId: {
-        type: Sequelize.INTEGER,
-        references: {
-            model: turmas,
-            key: "id",
-        },
-        allowNull: true,
     },
   },
   
@@ -65,7 +57,5 @@ usuarios.belongsTo(tipos_usuarios, {
   foreignKey: "id_tipo",
 });
 
-turmas.hasMany(usuarios, { foreignKey: "turmaId" });
-usuarios.belongsTo(turmas, { foreignKey: "turmaId" });
 
 module.exports = usuarios;
