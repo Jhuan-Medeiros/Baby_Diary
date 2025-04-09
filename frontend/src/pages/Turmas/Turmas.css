@@ -14,27 +14,32 @@
 .listaDeTurmas {
   background-color: #445c77;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   border-radius: 20px;
   width: 70%;
-  height: 65%;
+  padding: 2vh 0;
+  max-height: 65vh;
+  overflow-y: auto;
+
 }
+
 
 .listaDeTurmas button {
   background-color: #445c77;
   color: #f5fbef;
   border: none;
-  width: 100%;
-  height: 10%;
+  width: 90%; /* ou 80%, como preferir */
+  height: auto;
+  padding: 1vh 2vw;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 5%;
-  padding-right: 5%;
   font-weight: 300;
   font-size: large;
+  margin-bottom: 2vh;
+  border-radius: 10px;
 }
 
 .listaDeTurmas button::after {
@@ -51,4 +56,46 @@
   color: #f5fbef;
   border: none;
   border-radius: 20px;
+}
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popupContent {
+  background-color: #f5fbef;
+  padding: 2rem;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 300px;
+}
+
+.popupContent input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.botoesPopup {
+  display: flex;
+  justify-content: space-between;
+}
+
+.botoesPopup button { 
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #445c77;
+  color: #fff;
+  cursor: pointer;
 }

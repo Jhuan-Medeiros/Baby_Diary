@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const usuarios = require("./models/usuarios");
 const tipos_usuarios = require("./models/tipos_usuarios");
 const routes = require("./routes/routes");
+const turmas = require("./models/turmas");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 tipos_usuarios.sync();
 usuarios.sync();
+turmas.sync();
 
 app.use("/babydiary", routes);
 

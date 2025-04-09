@@ -3,6 +3,7 @@ const routes = express.Router();
 
 const usuariosController = require("../controllers/usuarios");
 const tiposUsuariosController = require("../controllers/tipos_usuarios");
+const turmascontroller = require("../controllers/turmas");
 
 routes.post('/login', usuariosController.login);
 routes.post('/usuario/criar', usuariosController.createUsuario);
@@ -21,7 +22,12 @@ routes.get('/tiposusuarios', tiposUsuariosController.getTiposUsuarios);
 
 routes.delete('/tiposusuarios/:id_tipo', tiposUsuariosController.deleteTiposUsuarios);
 
+routes.post("/turmas/criar", turmascontroller.createTurma);
+
+routes.get("/turmas", turmascontroller.getAllTurmas);
+
 routes.get("/", (req, res) => {
     res.json({ message: "teste bem sucedido" });
   });
-  module.exports = routes;
+module.exports = routes;
+
