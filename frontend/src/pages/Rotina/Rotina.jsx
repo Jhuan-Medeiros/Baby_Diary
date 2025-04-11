@@ -38,7 +38,7 @@ export const Rotina = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>Refecção</th>
+                            <th>Refeição</th>
                             <th>Bom</th>
                             <th>Pouco</th>
                             <th>Não quis</th>

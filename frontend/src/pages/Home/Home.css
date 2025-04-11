@@ -253,9 +253,17 @@ body {
   transition: 0.4s;
 }
 
+.date.inactive {
+  color: #737679;
+}
+
 .date:hover {
   background: #4978AE;
   color: #F5FBEF;
+}
+
+.date.selected{
+   background: #4978AE;
 }
 
 .date:active {
@@ -265,10 +273,6 @@ body {
 .date.inactive:hover {
   color: #F5FBEF;
   background: #999FA6;
-}
-
-.date.inactive {
-  color: #737679;
 }
 
 /*tablet*/

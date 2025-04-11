@@ -1,9 +1,41 @@
 import React, { useState } from 'react';
 import "../Home/Home.css";
 import NavbarProfessores from '../../components/navbarProfessores.jsx';
+import { createCalendario } from '../../services/services.js';
+
 
 export const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [formData, setFormData] = useState({
+    data: '',
+    titulo: '',
+    evento: '',
+    horario: ''
+  });
+
+  
+  const [eventosDataSelecionada, setEventosDataSelecionada] = useState([]);
+  const [dataSelecionada, setDataSelecionada] = useState(null);
+
+  
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await createCalendario(formData.data, formData.titulo, formData.evento, formData.horario);
+      alert("Evento adicionado com sucesso!");
+      setFormData({ data: '', titulo: '', evento: '', horario: '' }); // limpar form
+    } catch (error) {
+      console.error("Erro ao adicionar evento:", error);
+      alert("Erro ao adicionar evento.");
+    }
+  };
+
 
   const updateCalendar = (date) => {
 
@@ -65,7 +97,7 @@ export const Home = () => {
 
   return (
     <div className='corpoHome'>
-   
+
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
         <hr />
@@ -100,7 +132,7 @@ export const Home = () => {
 
       <div className="container-calendario">
         <div className="calendario-inicial">
-          <div className="cabeçalho-calendario">  
+          <div className="cabeçalho-calendario">
             <button onClick={handlePrevMonth}>←</button>
             <div className="mesAno" id="mesAno">
               <span>{monthYearString}</span>
@@ -120,6 +152,43 @@ export const Home = () => {
           <div className="datas" id="datas" dangerouslySetInnerHTML={{ __html: datesHTML }} />
         </div>
       </div>
+      <div className="formulario-evento">
+        <h2>Adicionar Evento</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="date"
+            name="data"
+            value={formData.data}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="titulo"
+            placeholder="Título"
+            value={formData.titulo}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="evento"
+            placeholder="Descrição do evento"
+            value={formData.evento}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="time"
+            name="horario"
+            value={formData.horario}
+            onChange={handleInputChange}
+            required
+          />
+          <button type="submit">Adicionar Evento</button>
+        </form>
+      </div>
+
       <NavbarProfessores></NavbarProfessores>
     </div>
   );

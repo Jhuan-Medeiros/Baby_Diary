@@ -19,6 +19,7 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 tipos_usuarios.sync();
 usuarios.sync();
