@@ -77,6 +77,7 @@ body{
 .senhaInput input {
   flex: 1;
   height: 100%;
+  padding-left: 1%;
   border: none;
   background: transparent;
   outline: none;
@@ -133,3 +134,12 @@ body{
   color: #f5fbef;
 }
 
+#cpf {
+  padding: 10px; /* Adiciona espaço interno ao redor do texto */
+  font-family: "Montserrat", sans-serif; /* Define a fonte */
+  font-size: medium; /* Ajusta o tamanho do texto */
+  color: #000; /* Define a cor do texto */
+  border: 1px solid #ccc; /* Opcional: Define a borda do input */
+  border-radius: 20px; /* Opcional: Define bordas arredondadas */
+  box-sizing: border-box; /* Garante que o padding não afete o tamanho total do input */
+}

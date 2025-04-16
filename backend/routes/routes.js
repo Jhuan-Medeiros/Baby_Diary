@@ -26,6 +26,14 @@ routes.post("/turmas/criar", turmascontroller.createTurma);
 
 routes.get("/turmas", turmascontroller.getAllTurmas);
 
+routes.get('/turmas/:id', turmascontroller.getTurmaById);
+
+routes.delete('/turmas/:id', turmascontroller.deleteTurma);
+
+routes.post("/turmas/:id/adicionar-aluno", turmascontroller.adicionarUsuarioNaTurma);
+
+routes.delete("/turmas/:id/remover-aluno", turmascontroller.removerUsuarioDaTurma);
+
 routes.get("/", (req, res) => {
     res.json({ message: "teste bem sucedido" });
   });

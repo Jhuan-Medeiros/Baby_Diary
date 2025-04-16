@@ -1,38 +1,36 @@
 const Sequelize = require("sequelize");
 const database = require("../config/sequelize");
-const { default_type } = require("mime");
 const tipos_usuarios = require("./tipos_usuarios");
-const turmas = require("./turmas");
 
 const usuarios = database.define(
   "usuarios",
   {
-    id:{
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
     cpf: {
       type: Sequelize.STRING,
-      AllowNUll: false,
+      allowNull: false,
       unique: true,
     },
     nome: {
       type: Sequelize.STRING,
-      AllowNUll: false,
+      allowNull: false,
     },
     email: {
       type: Sequelize.STRING,
-      AllowNUll: false,
+      allowNull: false,
     },
     senha: {
       type: Sequelize.STRING,
-      AllowNUll: false,
+      allowNull: false,
     },
     id_tipo: {
       type: Sequelize.INTEGER,
       defaultValue: "usuario",
-      AllowNUll: false,
+      allowNull: false,
       references: {
         model: tipos_usuarios,
         key: "id_tipo",
@@ -40,22 +38,19 @@ const usuarios = database.define(
     },
     telefone: {
       type: Sequelize.STRING,
-      AllowNUll: false,
+      allowNull: false,
     },
   },
-  
   {
-    timestamps: false, // Desativa createdAt e updatedAt
+    timestamps: false,
   }
 );
 
 tipos_usuarios.hasOne(usuarios, {
   foreignKey: "id_tipo",
 });
-
 usuarios.belongsTo(tipos_usuarios, {
   foreignKey: "id_tipo",
 });
-
 
 module.exports = usuarios;

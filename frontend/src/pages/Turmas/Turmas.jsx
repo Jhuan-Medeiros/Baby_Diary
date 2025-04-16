@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import "./Turmas.css";
 import NavbarProfessores from '../../components/navbarProfessores';
+import { useNavigate } from 'react-router-dom'; // <-- Importação nova
 
 export const Turmas = () => {
   const [turmas, setTurmas] = useState([]);
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [nomeNovaTurma, setNomeNovaTurma] = useState("");
+  const navigate = useNavigate(); // <-- Inicialização
 
   useEffect(() => {
     buscarTurmas();
@@ -34,7 +36,7 @@ export const Turmas = () => {
       if (resposta.ok) {
         setNomeNovaTurma("");
         setMostrarPopup(false);
-        buscarTurmas(); // Atualiza a lista
+        buscarTurmas();
       } else {
         console.error("Erro ao criar turma.");
       }
@@ -50,7 +52,12 @@ export const Turmas = () => {
       <div className='listaDeTurmas'>
         {turmas.length > 0 ? (
           turmas.map((turma) => (
-            <button key={turma.id}>{turma.nome}</button>
+            <button
+              key={turma.id}
+              onClick={() => navigate(`/turmas/${turma.id}`)} // <-- Redirecionamento
+            >
+              {turma.nome}
+            </button>
           ))
         ) : (
           <p>Nenhuma turma cadastrada.</p>

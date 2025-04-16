@@ -6,16 +6,17 @@ const usuarios = require("./models/usuarios");
 const tipos_usuarios = require("./models/tipos_usuarios");
 const routes = require("./routes/routes");
 const turmas = require("./models/turmas");
+const usuarios_turmas = require("./models/usuarios_turmas");
+
 
 const app = express();
 
 app.use(express.json());
 
-// Configuração do CORS para permitir requisições do frontend
 app.use(
   cors({
-    origin: "http://localhost:5173", // Permite apenas o frontend acessar a API
-    credentials: true, // Permite cookies e headers personalizados
+    origin: "http://localhost:5173", 
+    credentials: true, 
   })
 );
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 tipos_usuarios.sync();
 usuarios.sync();
 turmas.sync();
+usuarios_turmas.sync();
 
 app.use("/babydiary", routes);
 

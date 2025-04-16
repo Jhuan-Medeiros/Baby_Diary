@@ -20,10 +20,10 @@ const Login = () => {
       if (resposta.data.sucesso) {
         navigate("/home");
       } else {
-        setErro("CPF ou senha incorretos.");
+        setErro("Erro ao conectar com o servidor.");
       }
     } catch (err) {
-      setErro("Erro ao conectar com o servidor.");
+      setErro("CPF ou senha incorretos.");
     }
   };
 

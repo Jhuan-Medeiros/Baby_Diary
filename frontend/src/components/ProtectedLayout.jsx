@@ -1,11 +1,19 @@
 import NavbarProfessores from "./navbarProfessores";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const ProtectedLayout = () => {
+  const location = useLocation();
+
+  // Esconde a navbar se estiver em alguma página de turma
+  const hideNavbar = location.pathname.startsWith("/turmas/");
+
   return (
-    <div>
-      <NavbarProfessores />
-      <Outlet />
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-1">
+        <Outlet />
+      </div>
+
+      {!hideNavbar && <NavbarProfessores />}
     </div>
   );
 };

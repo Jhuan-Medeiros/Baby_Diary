@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize("babyDiary", "root", "root", {
     host: "localhost",

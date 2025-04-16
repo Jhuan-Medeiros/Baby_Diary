@@ -10,6 +10,7 @@
 
   import { Rotina } from "./pages/Rotina/Rotina";
   import { Turmas } from "./pages/Turmas/Turmas";
+  import { PaginaTurma } from "./pages/paginaTurma/PaginaTurma";
   import { ListaChat } from "./pages/ListaChat/ListaChat";
   import { Config } from "./pages/Config/Config";
   import CriarUsuario from "./pages/CriarUsuario/CriarUsuario";
@@ -26,6 +27,7 @@
         { path: "perfil", element: <Perfil /> },
         { path: "/rotina", element: <Rotina /> },
         { path: "/turmas", element: <Turmas /> },
+        { path: "/turmas/:id", element: <PaginaTurma /> },
         { path: "/listaChat", element: <ListaChat/> },
         { path: "/config", element: <Config/>},
         { path: "/criarUsuario", element: <CriarUsuario/>}
