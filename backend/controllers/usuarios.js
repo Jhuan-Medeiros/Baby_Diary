@@ -2,21 +2,19 @@ const { Op } = require("sequelize");
 const Usuarios = require("../models/usuarios");
 const tipos_usuarios = require("../models/tipos_usuarios");
 const bcrypt = require("bcrypt");
-
-
+const chave = require("../segredos/chave.js");
 
 exports.createUsuario = async (req, res) => {
   try {
-    
     const { cpf, nome, email, senha, telefone, id_tipo } = req.body;
     const verificacao = await Usuarios.findOne({ where: { cpf } });
 
     const usuarioExistente = await Usuarios.findOne({
-      where: { [Op.or]: [{ cpf }, { email }] }
+      where: { [Op.or]: [{ cpf }, { email }] },
     });
-    
+
     if (usuarioExistente) {
-      return res.status(409).json({ message: 'Usuário já existe' });
+      return res.status(409).json({ message: "Usuário já existe" });
     }
 
     if (verificacao) {
@@ -31,7 +29,7 @@ exports.createUsuario = async (req, res) => {
       email,
       senha: senhaNova,
       telefone,
-      id_tipo,  
+      id_tipo,
     });
     console.log(usuarioCriado);
     return res.send("usuario cadastrado com sucesso");
@@ -39,52 +37,62 @@ exports.createUsuario = async (req, res) => {
     console.error("Erro ao criar usuário:", err);
     return res.status(500).json({ erro: err.message });
   }
-  
 };
 
 exports.login = async (req, res) => {
+  const jwt = require("jsonwebtoken");
+
   try {
     const { cpf, senha } = req.body;
-    console.log(req.body);
-    
-    // Busca o usuário pelo CPF
-    const usuario = await Usuarios.findOne({ where: { cpf } });
-    
-    // Verifica se o usuário existe
+
+    const usuario = await Usuarios.findOne({
+      where: { cpf },
+      include: tipos_usuarios,
+    });
+
     if (!usuario) {
       return res
-      .status(404)
-      .send({ sucesso: false, mensagem: "Usuário não encontrado" });
+        .status(404)
+        .send({ sucesso: false, mensagem: "Usuário não encontrado" });
     }
-    
-    console.log(usuario);
-    
-    // Compara a senha fornecida com a senha hash armazenada
+
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
-    
-    if (senhaCorreta) {
-      // Autenticação bem-sucedida
-      return res.status(200).send({
-        sucesso: true,
-        usuario: {
-          id: usuario.id,
-          cpf: usuario.cpf,
-          // Outros campos que deseja retornar (evite incluir a senha)
-        },
-      });
-    } else {
-      // Senha incorreta
+
+    if (!senhaCorreta) {
       return res
-      .status(401)
-      .send({ sucesso: false, mensagem: "Senha incorreta" });
+        .status(401)
+        .send({ sucesso: false, mensagem: "Senha incorreta" });
     }
+
+    const token = jwt.sign(
+      {
+        id: usuario.id,
+        cpf: usuario.cpf,
+        tipo: usuario.id_tipo,
+      },
+      chave,
+      { expiresIn: "1d" }
+    );
+
+    return res.status(200).send({
+      sucesso: true,
+      token,
+      usuario: {
+        id: usuario.id,
+        cpf: usuario.cpf,
+        nome: usuario.nome,
+        tipo: usuario.id_tipo,
+        nome_tipo: usuario.tipos_usuarios?.nome
+      },
+    });
   } catch (error) {
     console.error("Erro no login:", error);
     return res
-    .status(500)
-    .send({ sucesso: false, mensagem: "Erro interno do servidor" });
+      .status(500)
+      .send({ sucesso: false, mensagem: "Erro interno do servidor" });
   }
 };
+
 
 exports.getUsersByCpf = async (req, res) => {
   try {
@@ -94,7 +102,7 @@ exports.getUsersByCpf = async (req, res) => {
     if (!encontrarUsuario) {
       return res.status(404).send("Usuario not found");
     }
-    
+
     return res.send(encontrarUsuario);
   } catch (error) {
     return res.status(500).send("Internal Server Error");
@@ -115,12 +123,12 @@ exports.deleteUsuario = async (req, res) => {
 exports.updateUsuario = async (req, res) => {
   const Cpf = req.params.cpf;
   const CpfUsuario = await Usuarios.findOne({ where: { cpf: Cpf } });
-  
+
   if (CpfUsuario) {
     try {
       const [Updates] = await Usuarios.update(req.body, {
         where: { cpf: req.params.cpf },
-      }); // verifica se tem alguma alteração
+      });
       return res.send({ message: "Usuario foi atualizado ;P" });
     } catch (error) {
       return res.send("deu erro aqui meu mano ==> ", error);
@@ -139,4 +147,3 @@ exports.getAllUsers = async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 };
-

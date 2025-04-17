@@ -28,7 +28,6 @@ exports.createTurma = async (req, res) => {
   }
 };
 
-// Listar todas as turmas (sem alunos)
 exports.getAllTurmas = async (req, res) => {
   try {
     const turmas = await Turmas.findAll();
@@ -39,7 +38,6 @@ exports.getAllTurmas = async (req, res) => {
   }
 };
 
-// Buscar turma por ID com alunos
 exports.getTurmaById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -58,7 +56,6 @@ exports.getTurmaById = async (req, res) => {
   }
 };
 
-// Deletar turma
 exports.deleteTurma = async (req, res) => {
   const { id } = req.params;
   try {
@@ -75,7 +72,6 @@ exports.deleteTurma = async (req, res) => {
   }
 };
 
-// Adicionar usuário à turma
 exports.adicionarUsuarioNaTurma = async (req, res) => {
   const { id } = req.params; // id da turma
   const { usuarioId } = req.body;
@@ -89,7 +85,6 @@ exports.adicionarUsuarioNaTurma = async (req, res) => {
       return res.status(404).json({ mensagem: "Turma ou usuário não encontrado." });
     }
 
-    // Verifica se já está na turma
     const jaExiste = await UsuariosTurmas.findOne({
       where: {
         usuarioId,
@@ -101,7 +96,6 @@ exports.adicionarUsuarioNaTurma = async (req, res) => {
       return res.status(409).json({ mensagem: "Usuário já está nessa turma." });
     }
 
-    // Adiciona via associação do Sequelize
     await turma.addAluno(usuario);
 
     return res.status(200).json({ mensagem: "Usuário adicionado à turma com sucesso!" });
@@ -122,7 +116,6 @@ exports.removerUsuarioDaTurma = async (req, res) => {
       return res.status(404).json({ mensagem: "Turma ou usuário não encontrado." });
     }
 
-    // Verifica se o usuário está na turma
     const usuarioNaTurma = await UsuariosTurmas.findOne({
       where: {
         usuarioId,
@@ -134,7 +127,6 @@ exports.removerUsuarioDaTurma = async (req, res) => {
       return res.status(404).json({ mensagem: "Usuário não encontrado nessa turma." });
     }
 
-    // Remove via associação do Sequelize
     await turma.removeAluno(usuario);
 
     return res.status(200).json({ mensagem: "Usuário removido da turma com sucesso!" });

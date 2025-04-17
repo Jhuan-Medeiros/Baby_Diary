@@ -4,7 +4,6 @@ import { Outlet, useLocation } from "react-router-dom";
 const ProtectedLayout = () => {
   const location = useLocation();
 
-  // Esconde a navbar se estiver em alguma página de turma
   const hideNavbar = location.pathname.startsWith("/turmas/");
 
   return (

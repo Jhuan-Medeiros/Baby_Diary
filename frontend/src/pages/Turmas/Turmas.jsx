@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import "./Turmas.css";
-import NavbarProfessores from '../../components/navbarProfessores';
-import { useNavigate } from 'react-router-dom'; // <-- Importação nova
+import NavbarProfessores from "../../components/navbarProfessores";
+import { useNavigate } from "react-router-dom";
 
 export const Turmas = () => {
   const [turmas, setTurmas] = useState([]);
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [nomeNovaTurma, setNomeNovaTurma] = useState("");
-  const navigate = useNavigate(); // <-- Inicialização
+  const [tipoUsuario, setTipoUsuario] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const tipo = localStorage.getItem("tipo");
+    setTipoUsuario(tipo);
     buscarTurmas();
   }, []);
 
@@ -27,11 +30,14 @@ export const Turmas = () => {
     if (!nomeNovaTurma.trim()) return;
 
     try {
-      const resposta = await fetch("http://localhost:3011/babydiary/turmas/criar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome: nomeNovaTurma })
-      });
+      const resposta = await fetch(
+        "http://localhost:3011/babydiary/turmas/criar",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome: nomeNovaTurma }),
+        }
+      );
 
       if (resposta.ok) {
         setNomeNovaTurma("");
@@ -46,15 +52,15 @@ export const Turmas = () => {
   };
 
   return (
-    <div className='corpoTurmas'>
-      <h1 className='tituloTurmas'>Turmas</h1>
+    <div className="corpoTurmas">
+      <h1 className="tituloTurmas">Turmas</h1>
 
-      <div className='listaDeTurmas'>
+      <div className="listaDeTurmas">
         {turmas.length > 0 ? (
           turmas.map((turma) => (
             <button
               key={turma.id}
-              onClick={() => navigate(`/turmas/${turma.id}`)} // <-- Redirecionamento
+              onClick={() => navigate(`/turmas/${turma.id}`)}
             >
               {turma.nome}
             </button>
@@ -64,12 +70,15 @@ export const Turmas = () => {
         )}
       </div>
 
-      <button
-        className='botaoCriarTurma'
-        onClick={() => setMostrarPopup(true)}
-      >
-        Adicionar Turma
-      </button>
+      {/* Só mostra o botão se o tipoUsuario for "3" (admin) */}
+      {tipoUsuario === "3" && (
+        <button
+          className="botaoCriarTurma"
+          onClick={() => setMostrarPopup(true)}
+        >
+          Adicionar Turma
+        </button>
+      )}
 
       {mostrarPopup && (
         <div className="popupOverlay">

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "../Login/Login.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Home } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import api from "../../../api";
+import { useAuth } from "../../contexts/authContext";
 
 const Login = () => {
   const [isShow, setIsShow] = useState(false);
@@ -11,26 +12,32 @@ const Login = () => {
   const [senha, setSenha] = useState("");
 
   const navigate = useNavigate();
-
+  const { login } = useAuth();
   const mostrarSenha = () => setIsShow(!isShow);
 
   const fazerLogin = async () => {
+    if (!cpf || !senha) {
+      setErro("Preencha todos os campos.");
+      return;
+    }
+
     try {
       const resposta = await api.post("/babydiary/login", { cpf, senha });
       if (resposta.data.sucesso) {
+        login(resposta.data.token); // salva token e atualiza o contexto
         navigate("/home");
       } else {
-        setErro("Erro ao conectar com o servidor.");
+        setErro("CPF ou senha incorretos.");
       }
     } catch (err) {
-      setErro("CPF ou senha incorretos.");
+      setErro("Erro ao conectar com o servidor.");
     }
   };
 
   return (
     <div className="corpoLogin">
       <div className="tituloLogin">
-        <img src="src\assets\img\logo.png" alt="logo" className="logo" />
+        <img src="src/assets/img/logo.png" alt="logo" className="logo" />
         <h1 className="tituloSite">Baby Diary</h1>
       </div>
       <div className="areaLogin">
@@ -51,8 +58,7 @@ const Login = () => {
               onChange={(e) => setSenha(e.target.value)}
             />
             <button onClick={mostrarSenha} type="button" id="loginButton">
-              {isShow && <Eye color="black" size={40} />}
-              {!isShow && <EyeOff color="black" size={40} />}
+              {isShow ? <Eye color="black" size={40} /> : <EyeOff color="black" size={40} />}
             </button>
           </div>
           {erro && <p className="mensagemErro">{erro}</p>}
