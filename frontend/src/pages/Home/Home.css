@@ -18,6 +18,7 @@ body {
   text-align: center;
 }
 
+
 /*estilização*/
 .navbar a {
   color: #333;
@@ -149,6 +150,13 @@ body {
 .rotina-inicial {
   background-color: #5b97db;
   height: 130px;
+  transition: all 0.5s ease;
+
+}
+
+.rotina-inicial:hover {
+  height: 150px;
+
 }
 
 #letras-coluna3 {
@@ -174,6 +182,7 @@ body {
 }
 
 /*calendario-alinhamento*/
+
 .container-calendario {
   display: flex;
   justify-content: center;
@@ -222,7 +231,7 @@ body {
 .dias {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 10px; /* Dá espaço entre os dias e as datas */
+  margin-bottom: 10px; 
 }
 
 .dia {
@@ -233,7 +242,7 @@ body {
 
 .dias, .datas {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* Mantém alinhado */
+  grid-template-columns: repeat(7, 1fr);
   gap: 5px;
 }
 
@@ -243,14 +252,24 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 5px;
   margin: auto;
   cursor: pointer;
   font-weight: 600;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 50px;
   transition: 0.4s;
+  border: none;
+  
+}
+
+.date.other-month {
+  color: #aaa;
+  cursor: default;
+}
+
+#eventos-do-dia {
+  margin-top: 20px;
 }
 
 .date.inactive {
@@ -274,6 +293,138 @@ body {
   color: #F5FBEF;
   background: #999FA6;
 }
+
+.active2 {
+  background: #445C77;
+  color: #F5FBEF;
+
+}
+
+/*adicionar eventos*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-conteudo {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.btn-fechar {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-abrir-form {
+    display: block;
+    margin: 30px auto;
+    width: 150px;
+    height: 50px;
+    background-color: #E4572E;
+    color: #f5fbef;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+
+.btn-abrir-form:hover {
+  height: 60px;
+}
+
+input {
+  height: 30px;
+  border: 1px solid black;
+  margin: 5px;
+}
+
+.formulario-inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.adicionar-infos {
+  width: 150px;
+  height: 40px;
+  display: block;
+  margin: 5px auto;
+  border-radius: 8px;
+  background-color: #445c77;
+  border: none;
+  color: #f5fbef;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.adicionar-infos:hover {
+  height: 50px;
+}
+
+.eventos-lista {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.eventos-lista ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.eventos-lista li {
+  margin-bottom: 10px;
+}
+
+.eventos-selecionados {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 600px;
+  background: #f1f1f1;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.evento-card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 5px solid #007bff;
+  border-radius: 8px;
+}
+
+.evento-card h4 {
+  margin: 0 0 5px 0;
+}
+
+.evento-card span {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+
 
 /*tablet*/
 @media screen and (max-width: 800px) {
@@ -328,6 +479,11 @@ body {
   .navbar a {
     font-size: 11px;
     margin: 0 11px;
+  }
+
+  .date {
+    width: 45px;
+    height: 40px;
   }
 
   .notifacaçao {

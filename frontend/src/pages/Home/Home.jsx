@@ -1,103 +1,123 @@
-import React, { useState } from 'react';
-import "../Home/Home.css";
+import React, { useEffect, useState } from 'react';
+import { getCalendarioByDate, createCalendario, deleteCalendario } from '../../services/services.js';
 import NavbarProfessores from '../../components/navbarProfessores.jsx';
-import { createCalendario } from '../../services/services.js';
-
+import '../Home/Home.css';
 
 export const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [formData, setFormData] = useState({
-    data: '',
-    titulo: '',
-    evento: '',
-    horario: ''
-  });
+  const [selectedDate, setSelectedDate] = useState('');
+  const [eventos, setEventos] = useState([]);
+  const [formData, setFormData] = useState({ data: '', titulo: '', evento: '', horario: '' });
+  const [modalAberto, setModalAberto] = useState(false);
 
-  
-  const [eventosDataSelecionada, setEventosDataSelecionada] = useState([]);
-  const [dataSelecionada, setDataSelecionada] = useState(null);
+  const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
 
-  
+  const carregarEventos = async (data) => {
+    try {
+      const eventosData = await getCalendarioByDate(data);
+      setEventos(eventosData);
+    } catch (error) {
+      console.error("Erro ao buscar eventos:", error);
+    }
+  };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleDateClick = (day) => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const dataSelecionada = new Date(year, month, day).toISOString().split('T')[0];
+    setSelectedDate(dataSelecionada);
+    setFormData(prev => ({ ...prev, data: dataSelecionada }));
+    carregarEventos(dataSelecionada);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await createCalendario(formData.data, formData.titulo, formData.evento, formData.horario);
-      alert("Evento adicionado com sucesso!");
-      setFormData({ data: '', titulo: '', evento: '', horario: '' }); // limpar form
+      setModalAberto(false);
+      carregarEventos(formData.data);
+      setFormData({ data: '', titulo: '', evento: '', horario: '' });
     } catch (error) {
       console.error("Erro ao adicionar evento:", error);
-      alert("Erro ao adicionar evento.");
     }
   };
 
+  const handleDelete = async (data) => {
+    try {
+      await deleteCalendario(data);
+      carregarEventos(selectedDate);
+    } catch (error) {
+      console.error("Erro ao deletar evento:", error);
+    }
+  };
 
-  const updateCalendar = (date) => {
+  
 
-    const currentYear = date.getFullYear();
-    const currentMonth = date.getMonth();
-
-    // primeiro e último dia do mês
-    const firstDay = new Date(currentYear, currentMonth, 1);
-    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const renderCalendar = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
     const totalDays = lastDay.getDate();
-    const firstDayIndex = firstDay.getDay();
-    const lastDayIndex = lastDay.getDay();
-
-    // ajusta para que a semana comece na segunda-feira
-    const adjustedFirstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // se domingo (0), muda para 6 (último dia da semana)
-
-    // atualiza o mês e o ano
-    const monthYearString = date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
-
-    let datesHTML = '';
-
-    // preenche com os dias do mês anterior
-    let prevDates = '';
-    for (let i = adjustedFirstDayIndex; i > 0; i--) {
-      const prevDate = new Date(currentYear, currentMonth, 1 - i);
-      prevDates += `<div class="date inactive">${prevDate.getDate()}</div>`;
+  
+    const startDay = (firstDay.getDay() + 6) % 7; // Ajuste para começar na segunda
+    const daysArray = [];
+  
+    const prevLastDay = new Date(year, month, 0).getDate(); // Último dia do mês anterior
+  
+    // Dias do mês anterior
+    for (let i = startDay - 1; i >= 0; i--) {
+      daysArray.push(
+        <div key={`prev-${i}`} className="date other-month">
+          {prevLastDay - i}
+        </div>
+      );
     }
-
-    // preenche os dias do mês atual
-    let currentDates = '';
+  
+    // Dias do mês atual
     for (let i = 1; i <= totalDays; i++) {
-      const currentDay = new Date(currentYear, currentMonth, i);
-      const activeClass = currentDay.toDateString() === new Date().toDateString() ? 'active' : '';
-      currentDates += `<div class="date ${activeClass}">${i}</div>`;
+      const isToday = new Date().toDateString() === new Date(year, month, i).toDateString();
+      daysArray.push(
+        <button
+          key={`curr-${i}`}
+          className={`date ${isToday ? 'active2' : ''}`}
+          onClick={() => handleDateClick(i)}
+        >
+          {i}
+        </button>
+      );
     }
-
-    // preenche com os dias do próximo mês
-    let nextDates = '';
-    for (let i = 1; i <= 7 - lastDayIndex - 1; i++) {
-      const nextDate = new Date(currentYear, currentMonth + 1, i);
-      nextDates += `<div class="date inactive">${nextDate.getDate()}</div>`;
+  
+    // Dias do próximo mês para completar 42 dias
+    const totalSlots = 42;
+    const remaining = totalSlots - daysArray.length;
+  
+    for (let i = 1; i <= remaining; i++) {
+      daysArray.push(
+        <div key={`next-${i}`} className="date other-month">
+          {i}
+        </div>
+      );
     }
-
-    return {
-      monthYearString,
-      datesHTML: prevDates + currentDates + nextDates
-    };
+  
+    return daysArray;
   };
+  
 
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
+    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
+    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1));
   };
 
-  const { monthYearString, datesHTML } = updateCalendar(currentDate);
+  const monthYearString = currentDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
 
   return (
     <div className='corpoHome'>
 
+      {/* Sessão de avisos fixos */}
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
         <hr />
@@ -111,6 +131,7 @@ export const Home = () => {
         <p id="aviso-msg">Amanhã não teremos aula devido ao feriado de Carnaval.</p>
       </div>
 
+      {/* Chat fixo com professor */}
       <div className="chat-inicial">
         <div className="alinhamento-chat">
           <img src="src/assets/img/perfil-chat.png" alt="perfil-chat" id="perfil-chat" />
@@ -121,6 +142,7 @@ export const Home = () => {
         </div>
       </div>
 
+      {/* Acesso à rotina */}
       <div className="rotina-inicial">
         <a id="rotina-style" href="rotina">
           <div className="alinhamento-rotina">
@@ -134,62 +156,62 @@ export const Home = () => {
         <div className="calendario-inicial">
           <div className="cabeçalho-calendario">
             <button onClick={handlePrevMonth}>←</button>
-            <div className="mesAno" id="mesAno">
-              <span>{monthYearString}</span>
-            </div>
+            <div className="mesAno"><span>{monthYearString}</span></div>
             <button onClick={handleNextMonth}>→</button>
           </div>
 
-          <div className="dias">
-            <div className="dia">Seg</div>
-            <div className="dia">Ter</div>
-            <div className="dia">Qua</div>
-            <div className="dia">Qui</div>
-            <div className="dia">Sex</div>
-            <div className="dia">Sab</div>
-            <div className="dia">Dom</div>
-          </div>
-          <div className="datas" id="datas" dangerouslySetInnerHTML={{ __html: datesHTML }} />
+          <div className="dias">{diasSemana.map(dia => <div key={dia} className="dia">{dia}</div>)}</div>
+
+          <div className="datas">{renderCalendar()}</div>
+
+          {selectedDate && (
+            <div className="eventos-data">
+              <h3 id="eventos-do-dia">Eventos de {selectedDate}</h3>
+              {eventos.length === 0 ? (
+                <p>Sem eventos nesta data.</p>
+              ) : (
+                eventos.map((ev, i) => (
+                  <div key={i} className="evento">
+                    <p><strong>{ev.titulo}</strong> - {ev.evento} às {ev.horario}</p>
+                    <button onClick={() => handleDelete(ev.data)}>Excluir</button>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </div>
-      <div className="formulario-evento">
-        <h2>Adicionar Evento</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="date"
-            name="data"
-            value={formData.data}
-            onChange={handleInputChange}
-            required
-          />
-          <input
-            type="text"
-            name="titulo"
-            placeholder="Título"
-            value={formData.titulo}
-            onChange={handleInputChange}
-            required
-          />
-          <input
-            type="text"
-            name="evento"
-            placeholder="Descrição do evento"
-            value={formData.evento}
-            onChange={handleInputChange}
-            required
-          />
-          <input
-            type="time"
-            name="horario"
-            value={formData.horario}
-            onChange={handleInputChange}
-            required
-          />
-          <button type="submit">Adicionar Evento</button>
-        </form>
-      </div>
 
-      <NavbarProfessores></NavbarProfessores>
+      <button className="btn-abrir-form" onClick={() => setModalAberto(true)}>
+        <strong>Novo Evento</strong>
+      </button>
+
+      {/* Modal para novo evento */}
+      {modalAberto && (
+        <div className="modal-overlay">
+          <div className="modal-conteudo">
+            <button className="btn-fechar" onClick={() => setModalAberto(false)}>×</button>
+            <h2>Adicionar Evento</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="formulario-inputs">
+                <input type="text" name="titulo" placeholder="Título" value={formData.titulo} onChange={(e) => setFormData({ ...formData, titulo: e.target.value })} required />
+                <input type="text" name="evento" placeholder="Descrição" value={formData.evento} onChange={(e) => setFormData({ ...formData, evento: e.target.value })} required />
+                <input type="date" name="data" value={formData.data} onChange={(e) => setFormData({ ...formData, data: e.target.value })} required />
+                <input type="time" name="horario" value={formData.horario} onChange={(e) => setFormData({ ...formData, horario: e.target.value })} required />
+                <button className="adicionar-infos" type="submit"><strong>Adicionar Evento</strong></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <NavbarProfessores />
+
+
     </div>
-  );
-};
+  )
+}
+
+
+
+
