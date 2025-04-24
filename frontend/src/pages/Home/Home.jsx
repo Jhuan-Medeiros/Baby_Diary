@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getCalendarioByDate, createCalendario, deleteCalendario } from '../../services/services.js';
 import NavbarProfessores from '../../components/navbarProfessores.jsx';
 import '../Home/Home.css';
@@ -9,6 +9,8 @@ export const Home = () => {
   const [eventos, setEventos] = useState([]);
   const [formData, setFormData] = useState({ data: '', titulo: '', evento: '', horario: '' });
   const [modalAberto, setModalAberto] = useState(false);
+  const [mensagem, setMensagem] = useState(null);
+
 
   const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
 
@@ -24,7 +26,7 @@ export const Home = () => {
   const handleDateClick = (day) => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    const dataSelecionada = new Date(year, month, day).toISOString().split('T')[0];
+    const dataSelecionada = new Date(year, month, day).toISOString().split('T')[0]; //formato YYYY-MM-DD
     setSelectedDate(dataSelecionada);
     setFormData(prev => ({ ...prev, data: dataSelecionada }));
     carregarEventos(dataSelecionada);
@@ -34,13 +36,18 @@ export const Home = () => {
     e.preventDefault();
     try {
       await createCalendario(formData.data, formData.titulo, formData.evento, formData.horario);
+      setMensagem({ tipo: 'sucesso', texto: 'Evento adicionado com sucesso!' });
       setModalAberto(false);
       carregarEventos(formData.data);
       setFormData({ data: '', titulo: '', evento: '', horario: '' });
     } catch (error) {
       console.error("Erro ao adicionar evento:", error);
+      setMensagem({ tipo: 'erro', texto: 'Erro ao adicionar o evento. Tente novamente.' });
     }
+
+    setTimeout(() => setMensagem(null), 3000);
   };
+
 
   const handleDelete = async (data) => {
     try {
@@ -51,7 +58,7 @@ export const Home = () => {
     }
   };
 
-  
+
 
   const renderCalendar = () => {
     const year = currentDate.getFullYear();
@@ -59,13 +66,13 @@ export const Home = () => {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const totalDays = lastDay.getDate();
-  
-    const startDay = (firstDay.getDay() + 6) % 7; // Ajuste para começar na segunda
+
+    const startDay = (firstDay.getDay() + 6) % 7; // ajuste para começar na segunda
     const daysArray = [];
-  
-    const prevLastDay = new Date(year, month, 0).getDate(); // Último dia do mês anterior
-  
-    // Dias do mês anterior
+
+    const prevLastDay = new Date(year, month, 0).getDate(); // ultimo dia do mês anterior
+
+    // dias do mês anterior
     for (let i = startDay - 1; i >= 0; i--) {
       daysArray.push(
         <div key={`prev-${i}`} className="date other-month">
@@ -73,8 +80,8 @@ export const Home = () => {
         </div>
       );
     }
-  
-    // Dias do mês atual
+
+    // dias do mês atual
     for (let i = 1; i <= totalDays; i++) {
       const isToday = new Date().toDateString() === new Date(year, month, i).toDateString();
       daysArray.push(
@@ -87,11 +94,11 @@ export const Home = () => {
         </button>
       );
     }
-  
-    // Dias do próximo mês para completar 42 dias
+
+    // dias do próximo mês para completar 42 dias
     const totalSlots = 42;
     const remaining = totalSlots - daysArray.length;
-  
+
     for (let i = 1; i <= remaining; i++) {
       daysArray.push(
         <div key={`next-${i}`} className="date other-month">
@@ -99,10 +106,10 @@ export const Home = () => {
         </div>
       );
     }
-  
+
     return daysArray;
   };
-  
+
 
   const handlePrevMonth = () => {
     setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1));
@@ -117,7 +124,7 @@ export const Home = () => {
   return (
     <div className='corpoHome'>
 
-      {/* Sessão de avisos fixos */}
+      {/* sessão de avisos fixos */}
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
         <hr />
@@ -131,7 +138,7 @@ export const Home = () => {
         <p id="aviso-msg">Amanhã não teremos aula devido ao feriado de Carnaval.</p>
       </div>
 
-      {/* Chat fixo com professor */}
+      {/* chat fixo com professor */}
       <div className="chat-inicial">
         <div className="alinhamento-chat">
           <img src="src/assets/img/perfil-chat.png" alt="perfil-chat" id="perfil-chat" />
@@ -142,7 +149,7 @@ export const Home = () => {
         </div>
       </div>
 
-      {/* Acesso à rotina */}
+      {/* acesso à rotina */}
       <div className="rotina-inicial">
         <a id="rotina-style" href="rotina">
           <div className="alinhamento-rotina">
@@ -186,7 +193,14 @@ export const Home = () => {
         <strong>Novo Evento</strong>
       </button>
 
-      {/* Modal para novo evento */}
+      {mensagem && (
+        <div className={`popup-mensagem ${mensagem.tipo}`}>
+          {mensagem.texto}
+        </div>
+      )}
+
+
+      {/* modal para novo evento */}
       {modalAberto && (
         <div className="modal-overlay">
           <div className="modal-conteudo">
@@ -203,6 +217,7 @@ export const Home = () => {
             </form>
           </div>
         </div>
+
       )}
 
       <NavbarProfessores />
@@ -211,7 +226,3 @@ export const Home = () => {
     </div>
   )
 }
-
-
-
-

@@ -424,6 +424,38 @@ input {
   color: #555;
 }
 
+/*pop-up adicionar evento*/
+
+.popup-mensagem {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.2rem 2rem;
+  border-radius: 12px;
+  font-weight: bold;
+  color: #fff;
+  z-index: 9999;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
+  animation: fadeInOut 3s ease-in-out forwards;
+  text-align: center;
+  max-width: 90%;
+}
+
+.popup-mensagem.sucesso {
+  background-color: #445C77;
+}
+
+.popup-mensagem.erro {
+  background-color: #E4572E;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -60%); }
+  10% { opacity: 1; transform: translate(-50%, -50%); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -60%); }
+}
+
 
 
 /*tablet*/
@@ -531,7 +563,7 @@ input {
 
 
   .calendario-inicial {
-    width: 400px;
+    width: 390px;
   }
 
 
