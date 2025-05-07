@@ -23,9 +23,13 @@ const Login = () => {
 
     try {
       const resposta = await api.post("/babydiary/login", { cpf, senha });
+      const tipo = resposta.data.usuario.tipo;
+      const nome = resposta.data.usuario.nome;
       if (resposta.data.sucesso) {
         login(resposta.data.token); // salva token e atualiza o contexto
         navigate("/home");
+        localStorage.setItem("tipo", tipo);
+        localStorage.setItem("nome", nome);
       } else {
         setErro("CPF ou senha incorretos.");
       }

@@ -7,18 +7,25 @@ export const Turmas = () => {
   const [turmas, setTurmas] = useState([]);
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [nomeNovaTurma, setNomeNovaTurma] = useState("");
-  const [tipoUsuario, setTipoUsuario] = useState(null);
+  const [tipoUsuario, setTipoUsuario] = useState(null); // Inicializado como null
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const tipo = localStorage.getItem("tipo");
-    setTipoUsuario(tipo);
-    buscarTurmas();
-  }, []);
-
+  // Função para buscar turmas
   const buscarTurmas = async () => {
+
     try {
-      const resposta = await fetch("http://localhost:3011/babydiary/turmas");
+      const resposta = await fetch("http://localhost:3011/babydiary/turmas", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Token para autenticação
+        },
+      });
+
+      if (resposta.status === 401) {
+        console.error("Usuário não autorizado.");
+        return;
+      }
+
       const dados = await resposta.json();
       setTurmas(dados);
     } catch (erro) {
@@ -26,6 +33,7 @@ export const Turmas = () => {
     }
   };
 
+  // Função para criar nova turma
   const criarTurma = async () => {
     if (!nomeNovaTurma.trim()) return;
 
@@ -34,7 +42,10 @@ export const Turmas = () => {
         "http://localhost:3011/babydiary/turmas/criar",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
+          },
           body: JSON.stringify({ nome: nomeNovaTurma }),
         }
       );
@@ -42,7 +53,7 @@ export const Turmas = () => {
       if (resposta.ok) {
         setNomeNovaTurma("");
         setMostrarPopup(false);
-        buscarTurmas();
+        buscarTurmas(); // Atualiza as turmas após a criação
       } else {
         console.error("Erro ao criar turma.");
       }
@@ -50,6 +61,13 @@ export const Turmas = () => {
       console.error("Erro na requisição:", erro);
     }
   };
+
+  // Atualiza o tipoUsuario quando a página é carregada
+  useEffect(() => {
+    const tipo = localStorage.getItem("tipo");
+    setTipoUsuario(tipo); 
+    buscarTurmas();
+  }, []);
 
   return (
     <div className="corpoTurmas">
@@ -70,8 +88,8 @@ export const Turmas = () => {
         )}
       </div>
 
-      {/* Só mostra o botão se o tipoUsuario for "3" (admin) */}
-      {tipoUsuario === "3" && (
+      {/* Só mostra o botão se o tipoUsuario for "1" (admin) */}
+      {tipoUsuario === "1" && (
         <button
           className="botaoCriarTurma"
           onClick={() => setMostrarPopup(true)}

@@ -25,6 +25,7 @@ const router = createBrowserRouter([
     path: "/recuperarSenha",
     element: <RecuperarSenha />,
   },
+  { path : "/criarUsuario", element: <CriarUsuario /> },
   {
     element: (
       <RotaPrivada>
@@ -39,7 +40,6 @@ const router = createBrowserRouter([
       { path: "/turmas/:id", element: <PaginaTurma /> },
       { path: "/listaChat", element: <ListaChat /> },
       { path: "/config", element: <Config /> },
-      { path : "/criarUsuario", element: <CriarUsuario /> },
     ],
   },
 ]);

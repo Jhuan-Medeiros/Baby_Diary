@@ -20,6 +20,7 @@ export const Config = () => {
         <button>Feedback de aplicativo</button>
         <button>Contato da escola</button>
         <button onClick={handleLogout}>Logout</button>
+        <button onClick={() => navigate("/criarUsuario")}>Criar usuário</button>
       </div>
     </div>
   );
