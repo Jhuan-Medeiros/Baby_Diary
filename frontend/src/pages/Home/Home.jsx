@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { getCalendarioByDate, createCalendario, deleteCalendario } from '../../services/services.js';
-import NavbarProfessores from '../../components/navbarProfessores.jsx';
+import { getCalendarioByDate, createCalendario } from '../../services/services.js';
 import '../Home/Home.css';
 
 export const Home = () => {
@@ -10,7 +9,6 @@ export const Home = () => {
   const [formData, setFormData] = useState({ data: '', titulo: '', evento: '', horario: '' });
   const [modalAberto, setModalAberto] = useState(false);
   const [mensagem, setMensagem] = useState(null);
-
 
   const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
 
@@ -48,18 +46,6 @@ export const Home = () => {
     setTimeout(() => setMensagem(null), 3000);
   };
 
-
-  const handleDelete = async (data) => {
-    try {
-      await deleteCalendario(data);
-      carregarEventos(selectedDate);
-    } catch (error) {
-      console.error("Erro ao deletar evento:", error);
-    }
-  };
-
-
-
   const renderCalendar = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -95,21 +81,8 @@ export const Home = () => {
       );
     }
 
-    // dias do próximo mês para completar 42 dias
-    const totalSlots = 42;
-    const remaining = totalSlots - daysArray.length;
-
-    for (let i = 1; i <= remaining; i++) {
-      daysArray.push(
-        <div key={`next-${i}`} className="date other-month">
-          {i}
-        </div>
-      );
-    }
-
     return daysArray;
   };
-
 
   const handlePrevMonth = () => {
     setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1));
@@ -180,7 +153,6 @@ export const Home = () => {
                 eventos.map((ev, i) => (
                   <div key={i} className="evento">
                     <p><strong>{ev.titulo}</strong> - {ev.evento} às {ev.horario}</p>
-                    <button onClick={() => handleDelete(ev.data)}>Excluir</button>
                   </div>
                 ))
               )}
@@ -189,16 +161,17 @@ export const Home = () => {
         </div>
       </div>
 
-      <button className="btn-abrir-form" onClick={() => setModalAberto(true)}>
-        <strong>Novo Evento</strong>
-      </button>
+      <div className="botoes-eventos">
+        <button className="btn-abrir-form" onClick={() => setModalAberto(true)}>
+          <strong>Novo Evento</strong>
+        </button>
+      </div>
 
       {mensagem && (
         <div className={`popup-mensagem ${mensagem.tipo}`}>
           {mensagem.texto}
         </div>
       )}
-
 
       {/* modal para novo evento */}
       {modalAberto && (
@@ -217,11 +190,7 @@ export const Home = () => {
             </form>
           </div>
         </div>
-
       )}
-
-      <NavbarProfessores />
-
 
     </div>
   )

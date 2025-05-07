@@ -20,17 +20,18 @@ exports.getCalendario = async (req, res) => {
     }
 }
 
-exports.deleteCalendario = async (req, res) => {
+exports.getCalendarioByDate = async (req, res) => {
     try {
-
-        const encontarCaledario = await Calendario.findOne({
-          where: { id_calendario: req.params.id_calendario },
-        });
-    
-        await encontarCaledario.destroy();
-        return res.send("Evento deletado");
-        
-      } catch (err) {
-        return res.send("Erro ao deletar evento", err);
-      }
-}
+      const { data } = req.params;
+  
+      const eventos = await Calendario.findAll({
+        where: { data: data },
+        order: [['horario', 'ASC']],
+      });
+  
+      return res.status(200).json(eventos);
+    } catch (err) {
+      return res.status(500).json({ message: "Erro ao buscar eventos", error: err.message });
+    }
+  };
+  

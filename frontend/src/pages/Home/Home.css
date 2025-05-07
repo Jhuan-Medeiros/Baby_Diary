@@ -9,67 +9,6 @@ body {
   
 }
 
-/*posição*/
-.navbar {
-  background-color: #f5fbef;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
-
-
-/*estilização*/
-.navbar a {
-  color: #333;
-  text-decoration: none;
-  font-size: 22px;
-  margin: 0 37px;
-}
-
-.navbar a.active {
-  color: #4978ae;
-}
-
-.icon-link {
-  text-decoration: none;
-  color: #333;
-  padding: 10px;
-  transition: background 0.3s ease;
-  border-radius: 8px;
-}
-
-
-.icon-link.active {
-  color: #4978ae;
-  /* Muda a cor do texto */
-}
-
-/*ícones*/
-#homeAzul,
-#turmas,
-#perfil,
-#mensagens,
-#config {
-  width: 40px;
-  height: 40px;
-}
-
-/*ajuste navbar meio*/
-.nav-item {
-  display: flex;
-  justify-content: center;
-  height: 75px;
-  align-items: center;
-}
-
-/*ajuste ícones coluna*/
-.icons-abaixo {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
 /*notificaçao*/
 .notifacaçao {
   background-color: #445c77;
@@ -325,6 +264,11 @@ body {
   animation: fadeIn 0.3s ease-in-out;
 }
 
+.botoes-eventos {
+  display: flex;
+  justify-content: center;
+}
+
 .btn-fechar {
   position: absolute;
   top: 10px;
@@ -337,7 +281,7 @@ body {
 
 .btn-abrir-form {
     display: block;
-    margin: 30px auto;
+    margin: 30px;
     width: 150px;
     height: 50px;
     background-color: #E4572E;
@@ -380,49 +324,6 @@ input {
   height: 50px;
 }
 
-.eventos-lista {
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px auto;
-  width: 80%;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.eventos-lista ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.eventos-lista li {
-  margin-bottom: 10px;
-}
-
-.eventos-selecionados {
-  margin: 20px auto;
-  padding: 20px;
-  max-width: 600px;
-  background: #f1f1f1;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.evento-card {
-  background: white;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-left: 5px solid #007bff;
-  border-radius: 8px;
-}
-
-.evento-card h4 {
-  margin: 0 0 5px 0;
-}
-
-.evento-card span {
-  font-size: 0.9rem;
-  color: #555;
-}
 
 /*pop-up adicionar evento*/
 
@@ -460,10 +361,6 @@ input {
 
 /*tablet*/
 @media screen and (max-width: 800px) {
-  .navbar a {
-    font-size: 20px;
-    margin: 0 17px;
-  }
 
   .notifacaçao {
     height: 240px;
@@ -496,22 +393,12 @@ input {
     width: 550px;
   }
 
-  #homeAzul,
-  #turmas,
-  #perfil,
-  #mensagens,
-  #config {
-    width: 45px;
-    height: 45px;
-  }
+
 }
 
 /*mobile*/
 @media screen and (max-width: 600px) {
-  .navbar a {
-    font-size: 11px;
-    margin: 0 11px;
-  }
+
 
   .date {
     width: 45px;
@@ -561,28 +448,12 @@ input {
     width: 333px;
   }
 
-
   .calendario-inicial {
     width: 390px;
   }
 
-
-
-  #homeAzul,
-  #turmas,
-  #perfil,
-  #mensagens,
-  #config {
-    width: 30px;
-    height: 30px;
-  }
-
   /*mini-mobile*/
   @media screen and (max-width: 420px) {
-    .navbar a {
-      font-size: 8px;
-      margin: 0 7px;
-    }
 
     .notifacaçao {
       height: 220px;
@@ -644,13 +515,5 @@ input {
       width: 300px;
     }
 
-    #homeAzul,
-    #turmas,
-    #perfil,
-    #mensagens,
-    #config {
-      width: 30px;
-      height: 30px;
-    }
   }
 }
