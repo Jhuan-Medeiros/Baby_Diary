@@ -15,7 +15,6 @@ const RotaPrivada = ({ children }) => {
     return <Navigate to="/" />;
   }
 
-  console.log("Usuário logado:", usuario);
   return children ? children : <Outlet />;
 };
 

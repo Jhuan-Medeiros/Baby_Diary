@@ -12,9 +12,10 @@ import { RecuperarSenha } from "./pages/RecuperarSenha/RecuperarSenha";
 import { Rotina } from "./pages/Rotina/Rotina";
 import { Turmas } from "./pages/Turmas/Turmas";
 import { PaginaTurma } from "./pages/paginaTurma/PaginaTurma";
-import { ListaChat } from "./pages/ListaChat/ListaChat";
+import ListaChat from "./pages/ListaChat/ListaChat";
 import { Config } from "./pages/Config/Config";
 import CriarUsuario from "./pages/CriarUsuario/CriarUsuario";
+import Chat from "./pages/Chat/Chat"; 
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "/turmas", element: <Turmas /> },
       { path: "/turmas/:id", element: <PaginaTurma /> },
       { path: "/listaChat", element: <ListaChat /> },
+      { path: "/conversas/:id", element: <Chat /> },
       { path: "/config", element: <Config /> },
     ],
   },

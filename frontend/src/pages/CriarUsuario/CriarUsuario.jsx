@@ -15,14 +15,23 @@ const CriarUsuario = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3011/babydiary/usuario/criar', {
-        cpf,
-        nome,
-        email,
-        senha,
-        telefone,
-        id_tipo: parseInt(tipoUsuario),
-      });
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        'http://localhost:3011/babydiary/usuario/criar',
+        {
+          cpf,
+          nome,
+          email,
+          senha,
+          telefone,
+          id_tipo: parseInt(tipoUsuario),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast.success("Usuário criado com sucesso!");
 

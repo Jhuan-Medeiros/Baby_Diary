@@ -161,6 +161,32 @@ export const PaginaTurma = () => {
     }
   };
 
+  const criarChatComAluno = async (idAluno, nomeAluno) => {
+    try {
+      const res = await fetch("http://localhost:3011/babydiary/conversas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          usuario1_id: Number(localStorage.getItem("id")), // id do usuário logado
+          usuario2_id: idAluno,
+          titulo: `Chat com ${nomeAluno}`,
+        }),
+      });
+
+      if (res.ok) {
+        alert("Chat criado com sucesso!");
+      } else {
+        const erro = await res.json();
+        alert("Erro ao criar chat: " + (erro.detalhes || ""));
+      }
+    } catch (err) {
+      alert("Erro ao criar chat.");
+    }
+  };
+
   if (!turma) return <p>Carregando...</p>;
 
   return (
@@ -192,12 +218,20 @@ export const PaginaTurma = () => {
             <li key={aluno.id} className="flex justify-between items-center">
               <span>{aluno.nome}</span>
               {tipoUsuario === 1 && (
-                <button
-                  onClick={() => removerAluno(aluno.id, aluno.nome)}
-                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                >
-                  Remover
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => removerAluno(aluno.id, aluno.nome)}
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                  >
+                    Remover
+                  </button>
+                  <button
+                    onClick={() => criarChatComAluno(aluno.id, aluno.nome)}
+                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                  >
+                    Criar Chat
+                  </button>
+                </div>
               )}
             </li>
           ))

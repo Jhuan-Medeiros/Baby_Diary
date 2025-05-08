@@ -2,7 +2,10 @@ const { Op } = require("sequelize");
 const Usuarios = require("../models/usuarios");
 const tipos_usuarios = require("../models/tipos_usuarios");
 const bcrypt = require("bcrypt");
-const chave = require("../segredos/chave.js");
+require('dotenv').config()
+const chave = process.env.CHAVE_JWT;
+const jwt = require("jsonwebtoken");
+
 
 exports.createUsuario = async (req, res) => {
   try {
@@ -20,9 +23,7 @@ exports.createUsuario = async (req, res) => {
     if (verificacao) {
       return res.send("usuario ja foi cadastrado");
     }
-    console.log(senha);
     const senhaNova = await bcrypt.hash(senha, 10);
-    console.log(senhaNova, senha);
     const usuarioCriado = await Usuarios.create({
       cpf,
       nome,
@@ -31,7 +32,6 @@ exports.createUsuario = async (req, res) => {
       telefone,
       id_tipo,
     });
-    console.log(usuarioCriado);
     return res.send("usuario cadastrado com sucesso");
   } catch (err) {
     console.error("Erro ao criar usuário:", err);
@@ -40,7 +40,6 @@ exports.createUsuario = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const jwt = require("jsonwebtoken");
 
   try {
     const { cpf, senha } = req.body;

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const chave = require("../segredos/chave.js");
+require('dotenv').config();
+const chave = process.env.CHAVE_JWT;
 
 function verificarTipoUsuario(tiposPermitidos){
     return (req, res, next) => {

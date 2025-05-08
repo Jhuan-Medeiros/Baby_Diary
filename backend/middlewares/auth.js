@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
-const chave = require("../segredos/chave.js");
+require("dotenv").config();
 
+const chave = process.env.CHAVE_JWT;
 module.exports = (req, res, next) => {
     const authHeader = req.headers.authorization;
 

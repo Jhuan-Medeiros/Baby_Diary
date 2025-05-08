@@ -4,7 +4,6 @@ const Usuario = require("../models/usuarios");
 
 exports.criarConversa = async (req, res) => {
   const { usuario1_id, usuario2_id, titulo } = req.body;
-  console.log(req.body);
 
   try {
     const conversaExistente = await Conversa.findOne({

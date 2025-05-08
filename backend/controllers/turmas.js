@@ -75,7 +75,7 @@ exports.deleteTurma = async (req, res) => {
 exports.adicionarUsuarioNaTurma = async (req, res) => {
   const { id } = req.params; // id da turma
   const { usuarioId } = req.body;
-  console.log(usuarioId, id);
+
 
   try {
     const turma = await Turmas.findByPk(id);
