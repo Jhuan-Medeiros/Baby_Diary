@@ -279,22 +279,28 @@ body {
   cursor: pointer;
 }
 
-.btn-abrir-form {
-    display: block;
-    margin: 30px;
-    width: 150px;
-    height: 50px;
-    background-color: #E4572E;
-    color: #f5fbef;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.5s ease;
-  }
 
-.btn-abrir-form:hover {
+.btn-abrir-form {
+  display: block;
+  margin: 30px;
+  width: 180px;
   height: 60px;
+  background-color: #E4572E;
+  color: #f5fbef;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-size: 16px;
 }
+
+
+  .btn-abrir-form:hover {
+    height: 75px;
+    background-color: #D44A26;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transform: translateY(-3px); 
+  }
 
 input {
   height: 30px;
@@ -356,6 +362,41 @@ input {
   90% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -60%); }
 }
+
+.evento {
+  margin-top: 5px ;
+  font-size: 18px;
+}
+
+/*Botão de excluir*/
+.btn-excluir {
+  width: 40px;
+  height: 40px;
+  background-color: #E4572E;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-excluir:hover {
+  background-color: #D44A26; /* Tom mais escuro ao passar o mouse */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra mais forte */
+  transform: translateY(3px); 
+
+}
+
+
+/*Pop-up de deletar eventos*/
 
 
 

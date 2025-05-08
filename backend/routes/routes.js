@@ -29,6 +29,14 @@ routes.get('/calendario', calendarioController.getCalendario);
 
 routes.get('/calendario/data/:data', calendarioController.getCalendarioByDate);
 
+//NEW
+
+routes.delete('/calendario/:id_calendario', calendarioController.deleteCalendarioById);
+
+// routes.put('/calendario/:id_calendario', calendarioController.updateCalendarioById);
+
+
+
 routes.get("/", (req, res) => {
     res.json({ message: "teste bem sucedido" });
   });

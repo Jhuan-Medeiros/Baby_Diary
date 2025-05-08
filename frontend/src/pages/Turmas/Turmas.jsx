@@ -15,7 +15,6 @@ export const Turmas = () => {
             <button>Turma 6</button>
         </div>
         <button className='botaoCriarTurma'>Adicionar Turma</button>
-        <NavbarProfessores/>
     </div>
   )
 }

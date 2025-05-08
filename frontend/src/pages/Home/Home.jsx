@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getCalendarioByDate, createCalendario } from '../../services/services.js';
+import { deleteCalendario, getCalendarioByDate, createCalendario, getCalendario } from '../../services/services.js';
 import '../Home/Home.css';
 
 export const Home = () => {
@@ -9,8 +9,14 @@ export const Home = () => {
   const [formData, setFormData] = useState({ data: '', titulo: '', evento: '', horario: '' });
   const [modalAberto, setModalAberto] = useState(false);
   const [mensagem, setMensagem] = useState(null);
+  //NEW
+  const [modalTodosEventosAberto, setModalTodosEventosAberto] = useState(false);
+  const [todosEventos, setTodosEventos] = useState([]);
+  
+
 
   const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
+
 
   const carregarEventos = async (data) => {
     try {
@@ -20,6 +26,17 @@ export const Home = () => {
       console.error("Erro ao buscar eventos:", error);
     }
   };
+
+  //NEW
+  const carregarTodosEventos = async () => {
+    try {
+      const eventos = await getCalendario();
+      setTodosEventos(eventos);
+    } catch (error) {
+      console.error("Erro ao buscar todos os eventos:", error);
+    }
+  };
+
 
   const handleDateClick = (day) => {
     const year = currentDate.getFullYear();
@@ -46,6 +63,25 @@ export const Home = () => {
     setTimeout(() => setMensagem(null), 3000);
   };
 
+  //NEW
+
+  const handleDeleteEvento = async (id) => {
+    const confirmar = window.confirm("Deseja realmente deletar este evento?");
+    if (!confirmar) return;
+
+    try {
+      await deleteCalendario(id);
+      setMensagem({ tipo: 'sucesso', texto: 'Evento deletado com sucesso!' });
+      carregarTodosEventos();
+    } catch (error) {
+      console.error("Erro ao deletar evento:", error);
+      setMensagem({ tipo: 'erro', texto: 'Erro ao deletar o evento.' });
+    }
+
+    setTimeout(() => setMensagem(null), 3000);
+  };
+
+
   const renderCalendar = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -66,6 +102,8 @@ export const Home = () => {
         </div>
       );
     }
+
+    
 
     // dias do mês atual
     for (let i = 1; i <= totalDays; i++) {
@@ -165,7 +203,15 @@ export const Home = () => {
         <button className="btn-abrir-form" onClick={() => setModalAberto(true)}>
           <strong>Novo Evento</strong>
         </button>
+
+        <button className="btn-abrir-form" onClick={() => {
+          carregarTodosEventos();
+          setModalTodosEventosAberto(true);
+        }}>
+          <strong>Deletar Eventos</strong>
+        </button>
       </div>
+
 
       {mensagem && (
         <div className={`popup-mensagem ${mensagem.tipo}`}>
@@ -191,6 +237,29 @@ export const Home = () => {
           </div>
         </div>
       )}
+
+      {modalTodosEventosAberto && (
+        <div className="modal-overlay">
+          <div className="modal-conteudo">
+            <button className="btn-fechar" onClick={() => setModalTodosEventosAberto(false)}>×</button>
+            <h2>Todos os Eventos</h2>
+            {todosEventos.length === 0 ? (
+              <p>Não há eventos cadastrados.</p>
+            ) : (
+              todosEventos.map((ev) => (
+                <div key={ev.id_calendario} className="evento">
+                  <p>
+                    <strong>{ev.titulo}</strong> - {ev.evento} <br />
+                    Data: {ev.data} às {ev.horario}
+                  </p>
+                  <button className="btn-excluir" onClick={() => handleDeleteEvento(ev.id_calendario)}>✖</button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
 
     </div>
   )

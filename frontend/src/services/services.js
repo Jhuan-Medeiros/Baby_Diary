@@ -16,7 +16,18 @@ export async function createCalendario(data, titulo, evento, horario) {
   return response.data;
 } // cria evento
 
-export async function deleteCalendario(data) {
-    const response = await http.delete(`/calendario/${data}`);
+
+//NEW
+
+export async function deleteCalendario(id_calendario) {
+    const response = await http.delete(`/calendario/${id_calendario}`);
     return response.data;
-} // deleta evento
+}
+
+// export async function updateCalendario(id_calendario, data, titulo, evento, horario) {
+//     const response = await http.put(`/calendario/${id_calendario}`, { data, titulo, evento, horario });
+//     return response.data;
+//   }
+  
+
+
