@@ -1,6 +1,55 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { deleteCalendario, getCalendarioByDate, createCalendario, getCalendario } from '../../services/services.js';
 import '../Home/Home.css';
+
+function calcularPascoa(ano) {
+  const f = Math.floor;
+  const G = ano % 19;
+  const C = f(ano / 100);
+  const H = (C - f(C / 4) - f((8 * C + 13) / 25) + 19 * G + 15) % 30;
+  const I = H - f(H / 28) * (1 - f(29 / (H + 1)) * f((21 - G) / 11));
+  const J = (ano + f(ano / 4) + I + 2 - C + f(C / 4)) % 7;
+  const L = I - J;
+  const mes = 3 + f((L + 40) / 44);
+  const dia = L + 28 - 31 * f(mes / 4);
+  return new Date(ano, mes - 1, dia);
+}
+
+function formatarData(date) {
+  return date.toISOString().split('T')[0];
+}
+
+function calcularFeriadosNacionais(ano) {
+  const feriados = [];
+
+  // Feriados fixos
+  feriados.push(`${ano}-01-01`);
+  feriados.push(`${ano}-04-21`);
+  feriados.push(`${ano}-05-01`);
+  feriados.push(`${ano}-09-07`);
+  feriados.push(`${ano}-10-12`);
+  feriados.push(`${ano}-11-02`);
+  feriados.push(`${ano}-11-15`);
+  feriados.push(`${ano}-12-25`);
+
+  // Feriados móveis
+  const pascoa = calcularPascoa(ano);
+
+  const carnaval = new Date(pascoa);
+  carnaval.setDate(pascoa.getDate() - 47);
+  feriados.push(formatarData(carnaval));
+
+  const sextaSanta = new Date(pascoa);
+  sextaSanta.setDate(pascoa.getDate() - 2);
+  feriados.push(formatarData(sextaSanta));
+
+  const corpusChristi = new Date(pascoa);
+  corpusChristi.setDate(pascoa.getDate() + 60);
+  feriados.push(formatarData(corpusChristi));
+
+  return feriados;
+}
+
 
 export const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -12,11 +61,17 @@ export const Home = () => {
   //NEW
   const [modalTodosEventosAberto, setModalTodosEventosAberto] = useState(false);
   const [todosEventos, setTodosEventos] = useState([]);
-  
+  const [feriadosDoMes, setFeriadosDoMes] = useState([]);
+
+  useEffect(() => {
+    const ano = currentDate.getFullYear();
+    const feriados = calcularFeriadosNacionais(ano);
+    setFeriadosDoMes(feriados);
+  }, [currentDate]);
+
 
 
   const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
-
 
   const carregarEventos = async (data) => {
     try {
@@ -49,6 +104,16 @@ export const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    const ano = new Date(formData.data).getFullYear();
+    const feriados = calcularFeriadosNacionais(ano);
+  
+    if (feriados.includes(formData.data)) {
+      setMensagem({ tipo: 'erro', texto: 'Não é possível adicionar eventos em feriados.' });
+      setTimeout(() => setMensagem(null), 3000);
+      return;
+    }
+  
     try {
       await createCalendario(formData.data, formData.titulo, formData.evento, formData.horario);
       setMensagem({ tipo: 'sucesso', texto: 'Evento adicionado com sucesso!' });
@@ -59,10 +124,10 @@ export const Home = () => {
       console.error("Erro ao adicionar evento:", error);
       setMensagem({ tipo: 'erro', texto: 'Erro ao adicionar o evento. Tente novamente.' });
     }
-
+  
     setTimeout(() => setMensagem(null), 3000);
   };
-
+  
   //NEW
 
   const handleDeleteEvento = async (id) => {
@@ -94,6 +159,9 @@ export const Home = () => {
 
     const prevLastDay = new Date(year, month, 0).getDate(); // ultimo dia do mês anterior
 
+    const feriados = calcularFeriadosNacionais(year);
+
+
     // dias do mês anterior
     for (let i = startDay - 1; i >= 0; i--) {
       daysArray.push(
@@ -103,16 +171,20 @@ export const Home = () => {
       );
     }
 
-    
+
 
     // dias do mês atual
     for (let i = 1; i <= totalDays; i++) {
+      const dataCompleta = new Date(year, month, i).toISOString().split('T')[0];
       const isToday = new Date().toDateString() === new Date(year, month, i).toDateString();
+      const isFeriado = feriados.includes(dataCompleta);
+
       daysArray.push(
         <button
           key={`curr-${i}`}
-          className={`date ${isToday ? 'active2' : ''}`}
+          className={`date ${isToday ? 'active2' : ''} ${isFeriado ? 'feriado' : ''}`}
           onClick={() => handleDateClick(i)}
+          title={isFeriado ? 'Feriado' : ''}
         >
           {i}
         </button>
@@ -185,14 +257,21 @@ export const Home = () => {
           {selectedDate && (
             <div className="eventos-data">
               <h3 id="eventos-do-dia">Eventos de {selectedDate}</h3>
-              {eventos.length === 0 ? (
+              {eventos.length === 0 && !feriadosDoMes.includes(selectedDate) ? (
                 <p>Sem eventos nesta data.</p>
               ) : (
-                eventos.map((ev, i) => (
-                  <div key={i} className="evento">
-                    <p><strong>{ev.titulo}</strong> - {ev.evento} às {ev.horario}</p>
-                  </div>
-                ))
+                <>
+                  {feriadosDoMes.includes(selectedDate) && (
+                    <div className="evento">
+                      <p>Feriado Nacional</p>
+                    </div>
+                  )}
+                  {eventos.map((ev, i) => (
+                    <div key={i} className="evento">
+                      <p><strong>{ev.titulo}</strong> - {ev.evento} às {ev.horario}</p>
+                    </div>
+                  ))}
+                </>
               )}
             </div>
           )}

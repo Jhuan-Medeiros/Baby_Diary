@@ -239,6 +239,17 @@ body {
 
 }
 
+/*feriados*/
+.feriado {
+  background-color: #ffe0e0;
+  color: #c70000;
+}
+
+.feriado:hover {
+  background-color: #E4572E;
+  color: #F5FBEF;
+}
+
 /*adicionar eventos*/
 .modal-overlay {
   position: fixed;
@@ -365,7 +376,7 @@ input {
 
 .evento {
   margin-top: 5px ;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 /*Botão de excluir*/
