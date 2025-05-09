@@ -35,9 +35,16 @@
   }
   
   .form-mensagem {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     display: flex;
     gap: 8px;
-    margin-top: 10px;
+    background: #78a3d4;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    z-index: 100;
   }
   
   .form-mensagem input {
@@ -55,4 +62,17 @@
     border-radius: 8px;
     cursor: pointer;
   }
-  
+
+  .conversa-container {
+    padding-bottom: 60px; /* ajuste conforme a altura da barra fixa */
+  }
+
+  .indentificador{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 5vw;
+    background-color: #4e607d;
+    color: white;
+    
+  }

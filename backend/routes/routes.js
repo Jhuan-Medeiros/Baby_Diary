@@ -13,10 +13,11 @@ const mensagensController = require("../controllers/mensagens");
 routes.post("/login", usuariosController.login);
 
 const somenteAdmin = [middlewareAuth, verificarTipoUsuario([1])];
+const somenteAutenticado = [middlewareAuth];
 
 // Rotas de usuário
 routes.post("/usuario/criar", somenteAdmin, usuariosController.createUsuario);
-routes.get("/usuarios/:cpf", somenteAdmin, usuariosController.getUsersByCpf);
+routes.get("/usuarios/:cpf", somenteAutenticado,usuariosController.getUsersByCpf);
 routes.get("/usuarios", somenteAdmin, usuariosController.getAllUsers);
 routes.delete("/usuarios/:cpf", somenteAdmin, usuariosController.deleteUsuario);
 routes.put("/usuarios/:cpf", somenteAdmin, usuariosController.updateUsuario);

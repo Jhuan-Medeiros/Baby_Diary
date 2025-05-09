@@ -1,26 +1,26 @@
-import React from 'react'
-import "../Perfil/Perfil.css"
-import axios from "axios"
-import { useState, useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import "../Perfil/Perfil.css";
+import api from "../../../api";
+import { useAuth } from "../../contexts/authContext";
 
 export const Perfil = () => {
-
   const [aluno, setAluno] = useState(null);
   const [erro, setErro] = useState('');
+  const { usuario } = useAuth();
 
   useEffect(() => {
     const fetchAluno = async () => {
       try {
-        const response = await axios.get(`/babydiary/usuarios/${cpf}`); // Ajuste a URL conforme necessário
+        if (!usuario) return;
+        const response = await api.get(`/babydiary/usuarios/${usuario.id}`);
         setAluno(response.data);
       } catch (error) {
-        setErro('Erro ao carregar os dados do aluno.');
+        setErro('Erro ao carregar os dados do usuário.');
       }
     };
 
     fetchAluno();
-  }, []);
+  }, [usuario]);
 
   if (erro) {
     return <div className="erro">{erro}</div>;
@@ -31,11 +31,11 @@ export const Perfil = () => {
   }
 
   return (
-    <div className='corpoAreaPerfil'>    
+    <div className='corpoAreaPerfil'>
       <div className="areaPerfil">
-        <h1>Perfil do Aluno</h1>
+        <h1>Perfil do Usuário</h1>
         <div className="fotoAluno">
-          <img src="src/assets/img/zoi.jpg" alt="Foto do aluno" />
+          <img src="src/assets/img/zoi.jpg" alt="Foto do usuário" />
         </div>
       </div>
 
@@ -46,8 +46,8 @@ export const Perfil = () => {
             <h2>{aluno.nome}</h2>
             <p><strong>CPF:</strong> {aluno.cpf}</p>
             <p><strong>Email:</strong> {aluno.email}</p>
-            <p><strong>Turma:</strong> {aluno.turma}</p>
-            <p><strong>Telefone do Responsável:</strong> {aluno.telefone}</p>
+            <p><strong>Telefone:</strong> {aluno.telefone}</p>
+            <p><strong>Turma:</strong> {aluno.turmas?.map(t => t.nome).join(", ") || "Nenhuma"}</p>
           </div>
         </div>
       </div>

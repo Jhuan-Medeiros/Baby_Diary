@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const Usuarios = require("../models/usuarios");
 const tipos_usuarios = require("../models/tipos_usuarios");
+const Turmas = require("../models/turmas");
 const bcrypt = require("bcrypt");
 require('dotenv').config()
 const chave = process.env.CHAVE_JWT;
@@ -96,7 +97,9 @@ exports.login = async (req, res) => {
 exports.getUsersByCpf = async (req, res) => {
   try {
     const encontrarUsuario = await Usuarios.findByPk(req.params.cpf, {
-      include: tipos_usuarios,
+      include: [{model: tipos_usuarios},
+        {model: Turmas, as: "turmas"}
+      ],
     });
     if (!encontrarUsuario) {
       return res.status(404).send("Usuario not found");

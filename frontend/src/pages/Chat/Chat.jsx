@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // 
+import { useParams, useNavigate } from "react-router-dom"; //
 import api from "../../../api";
 import { useAuth } from "../../contexts/authContext";
 import "./Chat.css";
 
 const Chat = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams(); // id da conversa
   const [mensagens, setMensagens] = useState([]);
   const [novaMensagem, setNovaMensagem] = useState("");
@@ -35,11 +37,19 @@ const Chat = () => {
 
   return (
     <div className="conversa-container">
+      <div className="indentificador">
+      <button onClick={() => navigate("/listaChat")} className="voltar-button">
+        Voltar
+      </button>
+        <h1>{mensagens[0]?.usuario.nome}</h1>
+      </div>
       <div className="mensagens-box">
         {mensagens.map((m) => (
           <div
             key={m.id}
-            className={`mensagem ${m.id_usuario === usuario.id ? "enviada" : "recebida"}`}
+            className={`mensagem ${
+              m.id_usuario === usuario.id ? "enviada" : "recebida"
+            }`}
           >
             <div className="mensagem-texto">{m.texto}</div>
           </div>
