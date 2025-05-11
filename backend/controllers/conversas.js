@@ -44,3 +44,22 @@ exports.getConversasDoUsuario = async (req, res) => {
     res.status(500).json({ erro: "Erro ao buscar conversas", detalhes: error.message });
   }
 };
+
+exports.getConversaById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const conversa = await Conversa.findByPk(id, {
+      include: [
+        { model: Usuario, as: "Usuario1", attributes: ["id", "nome", "imagem"] },
+        { model: Usuario, as: "Usuario2", attributes: ["id", "nome", "imagem"] },
+      ],
+    });
+
+    if (!conversa) return res.status(404).json({ erro: "Conversa não encontrada" });
+
+    res.json(conversa);
+  } catch (error) {
+    res.status(500).json({ erro: "Erro ao buscar conversa", detalhes: error.message });
+  }
+};

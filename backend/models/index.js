@@ -44,6 +44,10 @@ const Usuarios = database.define("usuarios", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  imagem: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
 }, {
   timestamps: false,
 });

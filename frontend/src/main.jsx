@@ -15,7 +15,7 @@ import { PaginaTurma } from "./pages/paginaTurma/PaginaTurma";
 import ListaChat from "./pages/ListaChat/ListaChat";
 import { Config } from "./pages/Config/Config";
 import CriarUsuario from "./pages/CriarUsuario/CriarUsuario";
-import Chat from "./pages/Chat/Chat"; 
+import Chat from "./pages/Chat/Chat";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     path: "/recuperarSenha",
     element: <RecuperarSenha />,
   },
-  { path : "/criarUsuario", element: <CriarUsuario /> },
+  { path: "/criarUsuario", element: <CriarUsuario /> },
   {
     element: (
       <RotaPrivada>

@@ -149,3 +149,43 @@ exports.getAllUsers = async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 };
+
+
+exports.upload = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!req.file || !req.file.mimetype.startsWith("image/")) {
+      return res
+        .status(400)
+        .json({ error: "Arquivo inválido. Apenas imagens são permitidas." });
+    }
+
+    const imagemPath = req.file.path.replace(/^.*uploads[\\/]/, "uploads/"); // limpa o caminho absoluto
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+
+    // Remove imagem antiga, se houver
+    if (usuario.imagem) {
+      const imagemAntiga = path.resolve(usuario.imagem);
+      if (fs.existsSync(imagemAntiga)) {
+        fs.unlinkSync(imagemAntiga);
+      }
+    }
+
+    // Atualiza com a nova imagem
+    usuario.imagem = imagemPath;
+    await usuario.save();
+
+    const urlPublica = `${req.protocol}://${req.get(
+      "host"
+    )}/${imagemPath.replace(/\\/g, "/")}`;
+    res.json({ mensagem: "Imagem atualizada", imagem: urlPublica });
+  } catch (error) {
+    console.error("Erro ao salvar imagem:", error);
+    res.status(500).json({ error: "Erro ao salvar imagem" });
+  }
+};
