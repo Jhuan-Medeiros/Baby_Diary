@@ -44,6 +44,7 @@ const mensagens = database.define("mensagens", {
 // Defina a associação com o modelo de Usuario
 mensagens.belongsTo(Usuario, { foreignKey: "id_usuario", as: "usuario" });
 mensagens.belongsTo(Usuario, { foreignKey: "id_destinatario", as: "destinatario" });
+mensagens.belongsTo(Usuario, { as: "Remetente", foreignKey: "id_usuario" });
 
 module.exports = mensagens;
 

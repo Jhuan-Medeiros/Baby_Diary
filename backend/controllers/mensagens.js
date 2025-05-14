@@ -8,11 +8,19 @@ exports.enviarMensagem = async (req, res) => {
     const mensagem = await Mensagem.create({
       id_conversa,
       id_usuario,
-      id_destinatario, // Certifique-se de que este campo está sendo enviado
+      id_destinatario,
       texto: conteudo,
     });
 
-    res.status(201).json(mensagem);
+    // Busca a mensagem recém-criada com os dados do remetente e destinatário
+    const mensagemCompleta = await Mensagem.findByPk(mensagem.id, {
+      include: [
+        { model: Usuario, as: "usuario", attributes: ["id", "nome", "imagem"] },
+        { model: Usuario, as: "destinatario", attributes: ["id", "nome", "imagem"] },
+      ],
+    });
+
+    res.status(201).json(mensagemCompleta);
   } catch (error) {
     console.error("Erro ao enviar mensagem:", error);
     res.status(500).json({ erro: "Erro ao enviar mensagem", detalhes: error.message });

@@ -1,12 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import "../Home/Home.css";
-import NavbarProfessores from '../../components/navbarProfessores.jsx';
+import NavbarProfessores from "../../components/navbarProfessores.jsx";
+import api from "../../../api";
+import { useAuth } from "../../contexts/authContext";
 
 export const Home = () => {
+  const { usuario } = useAuth();
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [chat, setchat] = useState([]);
+
+  // Função para buscar conversas
+  const buscarConversas = () => {
+    if (usuario) {
+      api.get(`/babydiary/conversas/${usuario.id}/ultimas`).then((res) => {
+        setchat(res.data);
+      });
+    }
+  };
+
+  useEffect(() => {
+    buscarConversas(); // busca inicial
+
+    const interval = setInterval(() => {
+      buscarConversas();
+    }, 300000); // 5 minutos = 300.000 ms
+
+    return () => clearInterval(interval); // limpa ao desmontar
+  }, [usuario]);
 
   const updateCalendar = (date) => {
-
     const currentYear = date.getFullYear();
     const currentMonth = date.getMonth();
 
@@ -21,27 +43,31 @@ export const Home = () => {
     const adjustedFirstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // se domingo (0), muda para 6 (último dia da semana)
 
     // atualiza o mês e o ano
-    const monthYearString = date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+    const monthYearString = date.toLocaleString("pt-BR", {
+      month: "long",
+      year: "numeric",
+    });
 
-    let datesHTML = '';
+    let datesHTML = "";
 
     // preenche com os dias do mês anterior
-    let prevDates = '';
+    let prevDates = "";
     for (let i = adjustedFirstDayIndex; i > 0; i--) {
       const prevDate = new Date(currentYear, currentMonth, 1 - i);
       prevDates += `<div class="date inactive">${prevDate.getDate()}</div>`;
     }
 
     // preenche os dias do mês atual
-    let currentDates = '';
+    let currentDates = "";
     for (let i = 1; i <= totalDays; i++) {
       const currentDay = new Date(currentYear, currentMonth, i);
-      const activeClass = currentDay.toDateString() === new Date().toDateString() ? 'active' : '';
+      const activeClass =
+        currentDay.toDateString() === new Date().toDateString() ? "active" : "";
       currentDates += `<div class="date ${activeClass}">${i}</div>`;
     }
 
     // preenche com os dias do próximo mês
-    let nextDates = '';
+    let nextDates = "";
     for (let i = 1; i <= 7 - lastDayIndex - 1; i++) {
       const nextDate = new Date(currentYear, currentMonth + 1, i);
       nextDates += `<div class="date inactive">${nextDate.getDate()}</div>`;
@@ -49,7 +75,7 @@ export const Home = () => {
 
     return {
       monthYearString,
-      datesHTML: prevDates + currentDates + nextDates
+      datesHTML: prevDates + currentDates + nextDates,
     };
   };
 
@@ -61,11 +87,14 @@ export const Home = () => {
     setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
   };
 
+  const abrirChat = (id) => {
+    console.log(`Abrindo chat com ID: ${id}`); // Replace with actual chat opening logic
+  };
+
   const { monthYearString, datesHTML } = updateCalendar(currentDate);
 
   return (
-    <div className='corpoHome'>
-   
+    <div className="corpoHome">
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
         <hr />
@@ -76,17 +105,41 @@ export const Home = () => {
             <p id="data">3 de março 2025</p>
           </div>
         </div>
-        <p id="aviso-msg">Amanhã não teremos aula devido ao feriado de Carnaval.</p>
+        <p id="aviso-msg">
+          Amanhã não teremos aula devido ao feriado de Carnaval.
+        </p>
       </div>
 
       <div className="chat-inicial">
-        <div className="alinhamento-chat">
-          <img src="src/assets/img/perfil-chat.png" alt="perfil-chat" id="perfil-chat" />
-          <div className="letras-coluna2">
-            <h2>Professor Cururu</h2>
-            <p id="info-chat">Filho com problema intestinal</p>
-          </div>
-        </div>
+        {chat
+          .filter((c) => c.ultimaMensagem)
+          .sort((a, b) => new Date(b.ultimaMensagem.data) - new Date(a.ultimaMensagem.data))
+          .slice(0, 1)
+          .map((c) => (
+            <div
+              key={c.id}
+              className="chat-card-alinhamento-chat"
+              onClick={() => abrirChat(c.id)}
+            >
+              <img
+                id="perfil-chat"
+                src={
+                  c.ultimaMensagem.Remetente?.imagem
+                    ? `http://localhost:3011/${c.ultimaMensagem.Remetente.imagem.replace(/\\/g, "/")}`
+                    : "src/assets/img/perfil-chat.png"
+                }
+                alt="perfil"
+              />
+              <div className="letras-coluna2">
+                <span id="tituloChat">  
+                  <strong>{c.outroUsuario.nome}</strong>
+                </span>
+                <span id="info-chat">
+                  {c.ultimaMensagem.texto}
+                </span>
+              </div>
+            </div>
+          ))}
       </div>
 
       <div className="rotina-inicial">
@@ -100,7 +153,7 @@ export const Home = () => {
 
       <div className="container-calendario">
         <div className="calendario-inicial">
-          <div className="cabeçalho-calendario">  
+          <div className="cabeçalho-calendario">
             <button onClick={handlePrevMonth}>←</button>
             <div className="mesAno" id="mesAno">
               <span>{monthYearString}</span>
@@ -117,7 +170,11 @@ export const Home = () => {
             <div className="dia">Sab</div>
             <div className="dia">Dom</div>
           </div>
-          <div className="datas" id="datas" dangerouslySetInnerHTML={{ __html: datesHTML }} />
+          <div
+            className="datas"
+            id="datas"
+            dangerouslySetInnerHTML={{ __html: datesHTML }}
+          />
         </div>
       </div>
       <NavbarProfessores></NavbarProfessores>

@@ -47,6 +47,7 @@ routes.get("/", somenteAdmin, (req, res) => {
 routes.post("/conversas", middlewareAuth, conversasController.criarConversa);
 routes.get("/conversas/conversa/:id", middlewareAuth, conversasController.getConversaById);
 routes.get("/conversas/:idUsuario", middlewareAuth, conversasController.getConversasDoUsuario);
+routes.get("/conversas/:idUsuario/ultimas", conversasController.listarConversasComUltimaMensagem);
 
 // (se tiver mensagens também, adicione aqui)
 routes.post("/mensagens", middlewareAuth, mensagensController.enviarMensagem);

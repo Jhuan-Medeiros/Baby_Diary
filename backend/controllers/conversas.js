@@ -1,6 +1,7 @@
-const { Op } = require("sequelize"); // faltando no seu código!
+const { Op, Sequelize } = require("sequelize");
 const Conversa = require("../models/conversas");
 const Usuario = require("../models/usuarios");
+const Mensagem = require("../models/mensagens");
 
 exports.criarConversa = async (req, res) => {
   const { usuario1_id, usuario2_id, titulo } = req.body;
@@ -24,7 +25,6 @@ exports.criarConversa = async (req, res) => {
   }
 };
 
-
 exports.getConversasDoUsuario = async (req, res) => {
   const { idUsuario } = req.params;
 
@@ -34,8 +34,8 @@ exports.getConversasDoUsuario = async (req, res) => {
         [Op.or]: [{ usuario1_id: idUsuario }, { usuario2_id: idUsuario }],
       },
       include: [
-        { model: Usuario, as: "Usuario1", attributes: ["id", "nome"] },
-        { model: Usuario, as: "Usuario2", attributes: ["id", "nome"] },
+        { model: Usuario, as: "Usuario1", attributes: ["id", "nome", "imagem"] },
+        { model: Usuario, as: "Usuario2", attributes: ["id", "nome", "imagem"] },
       ],
     });
 
@@ -61,5 +61,51 @@ exports.getConversaById = async (req, res) => {
     res.json(conversa);
   } catch (error) {
     res.status(500).json({ erro: "Erro ao buscar conversa", detalhes: error.message });
+  }
+};
+
+exports.listarConversasComUltimaMensagem = async (req, res) => {
+  const { idUsuario } = req.params;
+
+  try {
+    const conversas = await Conversa.findAll({
+      where: {
+        [Op.or]: [{ usuario1_id: idUsuario }, { usuario2_id: idUsuario }],
+      },
+      include: [
+        { model: Usuario, as: "Usuario1", attributes: ["id", "nome", "imagem"] },
+        { model: Usuario, as: "Usuario2", attributes: ["id", "nome", "imagem"] },
+      ],
+    });
+
+    // Buscar a última mensagem de cada conversa
+    const resultado = await Promise.all(conversas.map(async (c) => {
+      const outroUsuario = c.Usuario1.id == idUsuario
+        ? { id: c.Usuario2.id, nome: c.Usuario2.nome, imagem: c.Usuario2.imagem }
+        : { id: c.Usuario1.id, nome: c.Usuario1.nome, imagem: c.Usuario1.imagem };
+      const ultimaMensagem = await Mensagem.findOne({
+        where: { id_conversa: c.id },
+        order: [["createdAt", "DESC"]],
+        include: [
+          { model: Usuario, as: "Remetente", attributes: ["id", "nome", "imagem"] }
+        ]
+      });
+      return {
+        id: c.id,
+        outroUsuario: { id: outroUsuario.id, nome: outroUsuario.nome },
+        ultimaMensagem: ultimaMensagem
+          ? {
+              texto: ultimaMensagem.texto,
+              data: ultimaMensagem.createdAt,
+              remetente: ultimaMensagem.Remetente ? ultimaMensagem.Remetente.nome : null,
+              Remetente: ultimaMensagem.Remetente || null
+            }
+          : null
+      };
+    }));
+
+    res.json(resultado);
+  } catch (error) {
+    res.status(500).json({ erro: "Erro ao listar conversas com última mensagem", detalhes: error.message });
   }
 };

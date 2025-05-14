@@ -13,6 +13,8 @@ const Chat = () => {
   const [novaMensagem, setNovaMensagem] = useState("");
   const [destinatario, setDestinatario] = useState(null); // Estado para o destinatário
   const { usuario } = useAuth();
+  const [imagem, setImagem] = useState(null); // Estado para a imagem
+  const [mostrarModal, setMostrarModal] = useState(false); // Estado para o modal
 
   useEffect(() => {
     const carregarMensagens = async () => {
@@ -42,16 +44,46 @@ const Chat = () => {
       return;
     }
 
-    await api.post(`/babydiary/mensagens`, {
-      id_conversa: id,
-      id_usuario: usuario.id,
-      conteudo: novaMensagem,
-      id_destinatario: destinatario.id,
-    });
+    try {
+      await api.post(`/babydiary/mensagens`, {
+        id_conversa: id,
+        id_usuario: usuario.id,
+        id_destinatario: destinatario.id,
+        conteudo: novaMensagem,          
+      });
 
-    setNovaMensagem("");
-    const res = await api.get(`/babydiary/mensagens/${id}`);
-    setMensagens(res.data);
+      setNovaMensagem("");
+      const res = await api.get(`/babydiary/mensagens/${id}`);
+      setMensagens(res.data);
+    } catch (error) {
+      console.error("Erro ao enviar mensagem:", error);
+      alert("Erro ao enviar mensagem.");
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!imagem) return alert("Selecione uma imagem.");
+
+    const formData = new FormData();
+    formData.append("imagem", imagem);
+
+    try {
+      const res = await api.post(
+        `/babydiary/usuarios/${usuario.id}/upload`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      setAluno({ ...aluno, imagem: res.data.imagem }); // atualiza imagem no estado
+      setMostrarModal(false); // fecha o modal
+      setImagem(null); // limpa o input
+      alert("Imagem atualizada com sucesso!"); // mostra alerta
+    } catch (error) {
+      console.error("Erro ao enviar imagem:", error);
+      alert("Erro ao enviar imagem.");
+    }
   };
 
   return (

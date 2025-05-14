@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 require('dotenv').config()
 const chave = process.env.CHAVE_JWT;
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs");
 
 
 exports.createUsuario = async (req, res) => {

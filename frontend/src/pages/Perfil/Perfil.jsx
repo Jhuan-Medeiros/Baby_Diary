@@ -52,7 +52,7 @@ export const Perfil = () => {
         }
       );
 
-      setAluno({ ...aluno, imagem: res.data.imagem }); // atualiza imagem no estado
+      setAluno({ ...aluno, imagem: res.data.imagem }); 
       handleFecharModal();
       alert("Imagem atualizada com sucesso!");
     } catch (error) {
@@ -70,14 +70,16 @@ export const Perfil = () => {
         <h1>Perfil do Usuário</h1>
         <div className="fotoAluno">
           <img
-            src={`http://localhost:3011/${aluno.imagem}`}
+            src={
+              aluno.imagem
+                ? `http://localhost:3011/${aluno.imagem.replace(/\\/g, "/")}`
+                : "src/assets/img/perfil-chat.png"
+            }
             alt="Foto do usuário"
             onClick={handleImagemClick}
             style={{
               cursor: "pointer",
               borderRadius: "50%",
-              width: 150,
-              height: 150,
             }}
           />
         </div>

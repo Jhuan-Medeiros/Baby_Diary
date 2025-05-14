@@ -117,23 +117,17 @@ body {
 }
 
 /*chat-inicial*/
-.chat-inicial {
+.chat-card-alinhamento-chat{
   background-color: #4978ae;
-  height: 130px;
-}
-
-#perfil-chat {
-  width: 80px;
-  height: 80px;
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 20px;
-}
-
-/*alinha imagem(chat)*/
-.alinhamento-chat {
+  height: 100px;
   display: flex;
   align-items: center;
+}
+
+#tituloChat{
+  font-size: xx-large;
+  color: #f5fbef;
+  margin-left: 10px;
 }
 
 /*alinha letras*/
@@ -144,7 +138,8 @@ body {
 
 #info-chat {
   color: #f5fbef;
-  font-size: 20px;
+  font-size:  x-large;
+  margin-left: 10px;
 }
 
 /*rotina*/
@@ -369,7 +364,7 @@ body {
   }
 
   #info-chat {
-    font-size: 15px;
+    font-size:  larger;
   }
 
   #letras-coluna3 {

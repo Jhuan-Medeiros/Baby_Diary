@@ -41,4 +41,5 @@ const Conversa = database.define(
 Conversa.belongsTo(Usuario, { foreignKey: "usuario1_id", as: "Usuario1" });
 Conversa.belongsTo(Usuario, { foreignKey: "usuario2_id", as: "Usuario2" });
 
+
 module.exports = Conversa;
