@@ -84,7 +84,10 @@ exports.listarConversasComUltimaMensagem = async (req, res) => {
         ? { id: c.Usuario2.id, nome: c.Usuario2.nome, imagem: c.Usuario2.imagem }
         : { id: c.Usuario1.id, nome: c.Usuario1.nome, imagem: c.Usuario1.imagem };
       const ultimaMensagem = await Mensagem.findOne({
-        where: { id_conversa: c.id },
+        where: {
+          id_conversa: c.id,
+          id_destinatario: idUsuario // só mensagens recebidas pelo usuário logado
+        },
         order: [["createdAt", "DESC"]],
         include: [
           { model: Usuario, as: "Remetente", attributes: ["id", "nome", "imagem"] }

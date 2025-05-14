@@ -136,6 +136,11 @@ body {
   flex-direction: column;
 }
 
+#perfil-chat{
+  border-radius: 50px;
+  margin-left: 10px;
+}
+
 #info-chat {
   color: #f5fbef;
   font-size:  x-large;

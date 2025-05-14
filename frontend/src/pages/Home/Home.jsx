@@ -3,11 +3,13 @@ import "../Home/Home.css";
 import NavbarProfessores from "../../components/navbarProfessores.jsx";
 import api from "../../../api";
 import { useAuth } from "../../contexts/authContext";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
   const { usuario } = useAuth();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [chat, setchat] = useState([]);
+  const navigate = useNavigate();
 
   // Função para buscar conversas
   const buscarConversas = () => {
@@ -87,8 +89,8 @@ export const Home = () => {
     setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
   };
 
-  const abrirChat = (id) => {
-    console.log(`Abrindo chat com ID: ${id}`); // Replace with actual chat opening logic
+  const abrirChat = (idConversa) => {
+    navigate(`/conversas/${idConversa}`);
   };
 
   const { monthYearString, datesHTML } = updateCalendar(currentDate);
