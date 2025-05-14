@@ -24,13 +24,44 @@ export const Rotina = () => {
         "Porção de fruta"
     ];
 
+    const [opcaoSelecionada, setOpcaoSelecionada] = useState("");
+
+    const opcoes = ["Aluno", "Aluno 2", "Aluno 3"];
+
+    const handleChange = (event) => {
+        setOpcaoSelecionada(event.target.value);
+    };
+
+
     const evacuacaoOptions = ["Normal", "Seco", "Mole", "Líquido", "Não Evacuou"];
 
     return (
         <>
+
             <div className="titulo">
                 <h1 id="cor-tit">Rotina do aluno</h1>
             </div>
+            <hr />
+            <div className="dropdown-container">
+                <label htmlFor="dropdown" className="dropdown-label">Selecione o aluno para enviar:</label>
+                <select
+                    id="dropdown"
+                    value={opcaoSelecionada}
+                    onChange={handleChange}
+                    className="dropdown-select"
+                >
+                    <option value="" disabled>Selecione...</option>
+                    {opcoes.map((opcao, index) => (
+                        <option key={index} value={opcao}>{opcao}</option>
+                    ))}
+                </select>
+
+                {opcaoSelecionada && (
+                    <p className="dropdown-info"><strong>{opcaoSelecionada}</strong></p>
+                )}
+            </div>
+
+
             <div className="subtitulo">
                 <h1 id="cor-sub">Alimentou-se</h1>
             </div>

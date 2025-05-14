@@ -24,10 +24,10 @@ export async function deleteCalendario(id_calendario) {
     return response.data;
 }
 
-// export async function updateCalendario(id_calendario, data, titulo, evento, horario) {
-//     const response = await http.put(`/calendario/${id_calendario}`, { data, titulo, evento, horario });
-//     return response.data;
-//   }
+export async function updateCalendario(id_calendario, data, titulo, evento, horario) {
+    const response = await http.put(`/calendario/${id_calendario}`, { data, titulo, evento, horario });
+    return response.data;
+  }
   
 
 

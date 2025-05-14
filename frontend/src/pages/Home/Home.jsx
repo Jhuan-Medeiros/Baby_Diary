@@ -1,5 +1,5 @@
-import React, {useEffect, useState } from 'react';
-import { deleteCalendario, getCalendarioByDate, createCalendario, getCalendario } from '../../services/services.js';
+import React, { useEffect, useState } from 'react';
+import { updateCalendario, deleteCalendario, getCalendarioByDate, createCalendario, getCalendario } from '../../services/services.js';
 import '../Home/Home.css';
 
 function calcularPascoa(ano) {
@@ -62,14 +62,18 @@ export const Home = () => {
   const [modalTodosEventosAberto, setModalTodosEventosAberto] = useState(false);
   const [todosEventos, setTodosEventos] = useState([]);
   const [feriadosDoMes, setFeriadosDoMes] = useState([]);
+  const [modalConfirmacaoAberto, setModalConfirmacaoAberto] = useState(false);
+  const [eventoParaDeletar, setEventoParaDeletar] = useState(null);
+  const [modalEditarAberto, setModalEditarAberto] = useState(false);
+  const [eventoEditando, setEventoEditando] = useState(null);
+
+
 
   useEffect(() => {
     const ano = currentDate.getFullYear();
     const feriados = calcularFeriadosNacionais(ano);
     setFeriadosDoMes(feriados);
   }, [currentDate]);
-
-
 
   const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
 
@@ -104,16 +108,16 @@ export const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const ano = new Date(formData.data).getFullYear();
     const feriados = calcularFeriadosNacionais(ano);
-  
+
     if (feriados.includes(formData.data)) {
       setMensagem({ tipo: 'erro', texto: 'Não é possível adicionar eventos em feriados.' });
       setTimeout(() => setMensagem(null), 3000);
       return;
     }
-  
+
     try {
       await createCalendario(formData.data, formData.titulo, formData.evento, formData.horario);
       setMensagem({ tipo: 'sucesso', texto: 'Evento adicionado com sucesso!' });
@@ -124,26 +128,25 @@ export const Home = () => {
       console.error("Erro ao adicionar evento:", error);
       setMensagem({ tipo: 'erro', texto: 'Erro ao adicionar o evento. Tente novamente.' });
     }
-  
+
     setTimeout(() => setMensagem(null), 3000);
   };
-  
+
   //NEW
 
-  const handleDeleteEvento = async (id) => {
-    const confirmar = window.confirm("Deseja realmente deletar este evento?");
-    if (!confirmar) return;
-
+  const confirmarDeleteEvento = async () => {
     try {
-      await deleteCalendario(id);
+      await deleteCalendario(eventoParaDeletar);
       setMensagem({ tipo: 'sucesso', texto: 'Evento deletado com sucesso!' });
       carregarTodosEventos();
     } catch (error) {
       console.error("Erro ao deletar evento:", error);
       setMensagem({ tipo: 'erro', texto: 'Erro ao deletar o evento.' });
+    } finally {
+      setEventoParaDeletar(null);
+      setModalConfirmacaoAberto(false);
+      setTimeout(() => setMensagem(null), 3000);
     }
-
-    setTimeout(() => setMensagem(null), 3000);
   };
 
 
@@ -244,6 +247,7 @@ export const Home = () => {
 
       <div className="container-calendario">
         <div className="calendario-inicial">
+
           <div className="cabeçalho-calendario">
             <button onClick={handlePrevMonth}>←</button>
             <div className="mesAno"><span>{monthYearString}</span></div>
@@ -293,10 +297,11 @@ export const Home = () => {
 
 
       {mensagem && (
-        <div className={`popup-mensagem ${mensagem.tipo}`}>
+        <div className={`toast ${mensagem.tipo === 'erro' ? 'erro' : ''}`}>
           {mensagem.texto}
         </div>
       )}
+
 
       {/* modal para novo evento */}
       {modalAberto && (
@@ -326,18 +331,96 @@ export const Home = () => {
               <p>Não há eventos cadastrados.</p>
             ) : (
               todosEventos.map((ev) => (
-                <div key={ev.id_calendario} className="evento">
+                <div key={ev.id_calendario} className="evento" >
                   <p>
                     <strong>{ev.titulo}</strong> - {ev.evento} <br />
                     Data: {ev.data} às {ev.horario}
                   </p>
-                  <button className="btn-excluir" onClick={() => handleDeleteEvento(ev.id_calendario)}>✖</button>
+                  <div className="btns">
+                    <button
+                      className="btn-excluir"
+                      onClick={() => {
+                        setEventoParaDeletar(ev.id_calendario);
+                        setModalConfirmacaoAberto(true);
+                      }}
+                    >
+                      ✖
+                    </button>
+                    <button
+                      className="btn-editar"
+                      onClick={() => {
+                        setEventoEditando(ev);
+                        setFormData({
+                          data: ev.data,
+                          titulo: ev.titulo,
+                          evento: ev.evento,
+                          horario: ev.horario,
+                        });
+                        setModalEditarAberto(true);
+                      }}
+                    >
+                      ✎
+                    </button>
+                  </div>
+
+
                 </div>
               ))
             )}
           </div>
         </div>
       )}
+
+      {modalConfirmacaoAberto && (
+        <div className="modal-overlay">
+          <div className="modal-conteudo confirmacao">
+            <p>Tem certeza que deseja excluir este evento?</p>
+            <div className="botoes-confirmacao">
+              <button className="btn-cancelar" onClick={() => setModalConfirmacaoAberto(false)}>Cancelar</button>
+              <button className="btn-confirmar" onClick={confirmarDeleteEvento}>Confirmar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {modalEditarAberto && (
+        <div className="modal-overlay">
+          <div className="modal-conteudo">
+            <button className="btn-fechar" onClick={() => setModalEditarAberto(false)}>×</button>
+            <h2>Editar Evento</h2>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                await updateCalendario(
+                  eventoEditando.id_calendario,
+                  formData.data,
+                  formData.titulo,
+                  formData.evento,
+                  formData.horario
+                );
+                setMensagem({ tipo: 'sucesso', texto: 'Evento atualizado com sucesso!' });
+                setModalEditarAberto(false);
+                carregarTodosEventos();
+                if (selectedDate === formData.data) carregarEventos(selectedDate);
+              } catch (error) {
+                console.error("Erro ao editar evento:", error);
+                setMensagem({ tipo: 'erro', texto: 'Erro ao editar evento.' });
+              }
+              setTimeout(() => setMensagem(null), 1000);
+            }}>
+              <div className="formulario-inputs">
+                <input type="text" name="titulo" placeholder="Título" value={formData.titulo} onChange={(e) => setFormData({ ...formData, titulo: e.target.value })} required />
+                <input type="text" name="evento" placeholder="Descrição" value={formData.evento} onChange={(e) => setFormData({ ...formData, evento: e.target.value })} required />
+                <input type="date" name="data" value={formData.data} onChange={(e) => setFormData({ ...formData, data: e.target.value })} required />
+                <input type="time" name="horario" value={formData.horario} onChange={(e) => setFormData({ ...formData, horario: e.target.value })} required />
+                <button className="adicionar-infos" type="submit"><strong>Salvar Alterações</strong></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+
 
 
     </div>

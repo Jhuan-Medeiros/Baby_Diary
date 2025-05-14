@@ -53,18 +53,19 @@ exports.getCalendarioByDate = async (req, res) => {
     }
 };
 
-// exports.updateCalendarioById = async (req, res) => {
-//   try {
-//     const { id_calendario } = req.params;
-//     const evento = await Calendario.findByPk(id_calendario);
-
-//     if (!evento) {
-//       return res.status(404).json({ message: "Evento não encontrado" });
-//     }
-
-//     await evento.update(req.body);
-//     return res.status(200).json({ message: "Evento atualizado com sucesso", evento });
-//   } catch (error) {
-//     return res.status(500).json({ message: "Erro ao atualizar evento", error });
-//   }
-// };
+exports.updateCalendarioById = async (req, res) => {
+    try {
+      const { id_calendario } = req.params;
+      const evento = await Calendario.findByPk(id_calendario);
+  
+      if (!evento) {
+        return res.status(404).json({ message: "Evento não encontrado" });
+      }
+  
+      await evento.update(req.body);
+      return res.status(200).json({ message: "Evento atualizado com sucesso", evento });
+    } catch (error) {
+      return res.status(500).json({ message: "Erro ao atualizar evento", error });
+    }
+  };
+  

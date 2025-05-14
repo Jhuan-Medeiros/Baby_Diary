@@ -2,9 +2,9 @@
 .navbar {
     background-color: #f5fbef;
     bottom: 0;
-    position: fixed;
-    width: 100%;
     text-align: center;
+    width: 100%;
+    position: fixed;
 }
 
 
