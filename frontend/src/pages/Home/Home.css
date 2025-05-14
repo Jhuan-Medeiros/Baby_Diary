@@ -139,6 +139,8 @@ body {
 #perfil-chat{
   border-radius: 50px;
   margin-left: 10px;
+  height: 60px;
+  width: 60px;
 }
 
 #info-chat {
