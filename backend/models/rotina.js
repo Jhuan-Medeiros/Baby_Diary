@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const database = require("../config/sequelize");
 
-const Rotina = database.define("Rotina", {
+const  rotina = database.define("Rotina", {
     id_rotina: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -25,7 +25,7 @@ const Rotina = database.define("Rotina", {
     },
 }, {
     tableName: "rotina",
-    timestamps: false, // Se não quiser createdAt/updatedAt
+    timestamps: false,
 });
 
-module.exports = Rotina;
+module.exports = rotina;

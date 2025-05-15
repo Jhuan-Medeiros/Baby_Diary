@@ -13,6 +13,7 @@ const usuarios_turmas = require("./models/usuarios_turmas");
 const conversas = require("./models/conversas");
 const mensagens = require("./models/mensagens");
 const imagens = require("./models/imagens");
+const rotina = require("./models/rotina");
 
 const app = express();
 
@@ -31,13 +32,14 @@ app.use(
 app.use(cookieParser());
 
 tipos_usuarios.sync();
-// imagens.sync();
+imagens.sync();
 usuarios.sync();
 turmas.sync();
 usuarios_turmas.sync();
 conversas.sync();
 mensagens.sync();
 calendario.sync();
+rotina.sync()
 
 app.use("/babydiary", routes);
 

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+
 export const PaginaTurma = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export const PaginaTurma = () => {
   const [filtro, setFiltro] = useState("");
   const [mostrarPesquisa, setMostrarPesquisa] = useState(false);
   const token = localStorage.getItem("token");
-  const tipoUsuario = Number(localStorage.getItem("tipo")); // convertido para número
+  const tipoUsuario = Number(localStorage.getItem("tipo"));
 
   const carregarTurma = () => {
     fetch(`http://localhost:3011/babydiary/turmas/${id}`, {
@@ -170,7 +171,7 @@ export const PaginaTurma = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          usuario1_id: Number(localStorage.getItem("id")), // id do usuário logado
+          usuario1_id: Number(localStorage.getItem("id")),
           usuario2_id: idAluno,
           titulo: `Chat com ${nomeAluno}`,
         }),
@@ -225,14 +226,14 @@ export const PaginaTurma = () => {
                   >
                     Remover
                   </button>
+                </div>
+              )}
                   <button
                     onClick={() => criarChatComAluno(aluno.id, aluno.nome)}
                     className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
                   >
                     Criar Chat
                   </button>
-                </div>
-              )}
             </li>
           ))
         ) : (

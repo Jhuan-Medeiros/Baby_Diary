@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import "../Rotina/Rotina.css";
-import { createRotina } from "../../services/services.js";
+import { createRotina, getUsuarios } from "../../services/services.js";
 
 export const Rotina = () => {
     const [selected, setSelected] = useState({});
     const [evacuacao, setEvacuacao] = useState("");
-    const [opcaoSelecionada, setOpcaoSelecionada] = useState("");
     const [observacoes, setObservacoes] = useState("");
     const [mensagemPopup, setMensagemPopup] = useState("");
     const [tipoPopup, setTipoPopup] = useState(""); //estilizaçao pop-up
+    const [alunos, setAlunos] = useState([]);
+    const [alunoSelecionado, setAlunoSelecionado] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredAlunos, setFilteredAlunos] = useState([]);
+    const [showResults, setShowResults] = useState(false);
+    const [alunoConfirmadoId, setAlunoConfirmadoId] = useState(null);
 
     const navigate = useNavigate();
-
-
 
     const rows = [
         "Fruta 8:30-9h",
@@ -24,8 +27,19 @@ export const Rotina = () => {
         "Porção de fruta"
     ];
 
-    const opcoes = ["Aluno", "Aluno 2", "Aluno 3"];
     const evacuacaoOptions = ["Normal", "Seco", "Mole", "Líquido", "Não Defecou"];
+
+    useEffect(() => {
+        async function fetchAlunos() {
+            try {
+                const data = await getUsuarios();
+                setAlunos(data);
+            } catch (error) {
+                console.error("Erro ao buscar alunos:", error);
+            }
+        }
+        fetchAlunos();
+    }, []);
 
     const mostrarPopup = (mensagem, tipo) => {
         setMensagemPopup(mensagem);
@@ -35,7 +49,6 @@ export const Rotina = () => {
             setTipoPopup("");
         }, 3000);
     };
-
 
     const handleSelection = (row, option) => {
         setSelected(prev => ({
@@ -48,14 +61,27 @@ export const Rotina = () => {
         setEvacuacao(option);
     };
 
-    const handleChange = (event) => {
-        setOpcaoSelecionada(event.target.value);
+    const handleSearch = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        setShowResults(true);
+        
+        const filtered = alunos.filter(aluno => 
+            aluno.nome.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredAlunos(filtered);
+    };
+
+    const selecionarAluno = (aluno) => {
+        setAlunoSelecionado(aluno.nome);
+        setSearchTerm(aluno.nome);
+        setShowResults(false);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!opcaoSelecionada) {
+        if (!alunoSelecionado) {
             mostrarPopup("Por favor, selecione um aluno.", "erro");
             return;
         }
@@ -71,14 +97,13 @@ export const Rotina = () => {
             return;
         }
         
-
         const alimentacaoData = rows.reduce((acc, row, index) => {
             acc[row] = selected[index] || "";
             return acc;
         }, {});
 
         const data = {
-            aluno: opcaoSelecionada,
+            aluno: alunoSelecionado,
             alimentacao: alimentacaoData,
             evacuacao: evacuacao,
             observacoes: observacoes,
@@ -94,34 +119,67 @@ export const Rotina = () => {
             console.error("Erro:", err);
             mostrarPopup("Erro ao enviar rotina.", "erro");
         }
-        
     };
 
     return (
         <div className="container-rotina">
             <div className="titulo">
-                <h1 id="cor-tit">Rotina do aluno</h1>
+                <h1>Rotina Diária</h1>
             </div>
-            <div className="dropdown-container">
-                <label htmlFor="dropdown" className="dropdown-label">Selecione o aluno para enviar:</label>
-                <select
-                    id="dropdown"
-                    value={opcaoSelecionada}
-                    onChange={handleChange}
-                    className="dropdown-select"
-                >
-                    <option value="" disabled>Selecione...</option>
-                    {opcoes.map((opcao, index) => (
-                        <option key={index} value={opcao}>{opcao}</option>
-                    ))}
-                </select>
 
-                {opcaoSelecionada && (
-                    <p className="dropdown-info"><strong>{opcaoSelecionada}</strong></p>
-                )}
+            <div className="search-container">
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    placeholder="Buscar aluno..."
+                    className="search-input"
+                />
             </div>
-            <div className="tabela-rotina">
-                <form>
+
+            {searchTerm && (
+                <div className="lista-alunos">
+                    {filteredAlunos.map((aluno) => (
+                        <div key={aluno.id} className="aluno-item">
+                            <span>{aluno.nome}</span>
+                            <button
+                                onClick={() => {
+                                    if (alunoConfirmadoId === aluno.id) {
+                                        setAlunoConfirmadoId(null); // desseleciona
+                                    } else {
+                                        selecionarAluno(aluno);
+                                        setAlunoConfirmadoId(aluno.id); // seleciona
+                                    }
+                                }}
+                                style={{
+                                    backgroundColor: alunoConfirmadoId === aluno.id ? "green" : "",
+                                    color: alunoConfirmadoId === aluno.id ? "white" : "",
+                                }}
+                            >
+                                {alunoConfirmadoId === aluno.id ? "Confirmado" : "Confirmar"}
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {alunoConfirmadoId && (
+                <div className="aluno-selecionado" style={{ margin: "10px 0", padding: 8, background: "#e0ffe0", borderRadius: 6 }}>
+                    <span>
+                        Selecionado: {filteredAlunos.find(a => a.id === alunoConfirmadoId)?.nome || "Aluno"}
+                    </span>
+                    <button
+                        style={{ marginLeft: 12, background: "red", color: "white", border: "none", borderRadius: 4, padding: "4px 10px" }}
+                        onClick={() => setAlunoConfirmadoId(null)}
+                        type="button"
+                    >
+                        Desselecionar
+                    </button>
+                </div>
+            )}
+
+            <div className="tabela">
+                <form onSubmit={handleSubmit}>
                     <table>
                         <thead>
                             <tr>
@@ -161,7 +219,6 @@ export const Rotina = () => {
                                     </td>
                                 </tr>
                             ))}
-
                         </tbody>
                     </table>
                 </form>
@@ -200,7 +257,6 @@ export const Rotina = () => {
                     {mensagemPopup}
                 </div>
             )}
-
         </div>
     );
 };

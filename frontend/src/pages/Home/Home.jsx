@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { updateCalendario, deleteCalendario, getCalendarioByDate, createCalendario, getCalendario } from "../../services/services.js";
 import "../Home/Home.css";
-import api from "../../../api";
+import api from "../../services/api";
 import { useAuth } from "../../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 
@@ -81,7 +81,7 @@ export const Home = () => {
   // Função para buscar conversas
   const buscarConversas = () => {
     if (usuario) {
-      api.get(`/babydiary/conversas/${usuario.id}/ultimas`).then((res) => {
+      api.get(`/conversas/${usuario.id}/ultimas`).then((res) => {
         setChat(res.data);
       });
     }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; //
-import api from "../../../api";
+import api from "../../services/api";
 import { useAuth } from "../../contexts/authContext";
 import "./Chat.css";
 import { ArrowLeft } from "lucide-react";
@@ -18,12 +18,12 @@ const Chat = () => {
 
   useEffect(() => {
     const carregarMensagens = async () => {
-      const res = await api.get(`/babydiary/mensagens/${id}`);
+      const res = await api.get(`/mensagens/${id}`);
       setMensagens(res.data);
     };
 
     const carregarDestinatario = async () => {
-      const resConversa = await api.get(`/babydiary/conversas/conversa/${id}`);
+      const resConversa = await api.get(`/conversas/conversa/${id}`);
       const outroUsuario =
         resConversa.data.usuario1_id === usuario.id
           ? resConversa.data.Usuario2
@@ -45,7 +45,7 @@ const Chat = () => {
     }
 
     try {
-      await api.post(`/babydiary/mensagens`, {
+      await api.post(`/mensagens`, {
         id_conversa: id,
         id_usuario: usuario.id,
         id_destinatario: destinatario.id,
@@ -53,7 +53,7 @@ const Chat = () => {
       });
 
       setNovaMensagem("");
-      const res = await api.get(`/babydiary/mensagens/${id}`);
+      const res = await api.get(`/mensagens/${id}`);
       setMensagens(res.data);
     } catch (error) {
       console.error("Erro ao enviar mensagem:", error);
@@ -69,7 +69,7 @@ const Chat = () => {
 
     try {
       const res = await api.post(
-        `/babydiary/usuarios/${usuario.id}/upload`,
+        `/usuarios/${usuario.id}/upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

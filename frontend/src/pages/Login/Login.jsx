@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../Login/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import api from "../../../api";
+import api from "../../services/api";
 import { useAuth } from "../../contexts/authContext";
 
 const Login = () => { 
@@ -22,7 +22,7 @@ const Login = () => {
     }
 
     try {
-      const resposta = await api.post("/babydiary/login", { cpf, senha });
+      const resposta = await api.post("/login", { cpf, senha });
       const tipo = resposta.data.usuario.tipo;
       const nome = resposta.data.usuario.nome;
       if (resposta.data.sucesso) {

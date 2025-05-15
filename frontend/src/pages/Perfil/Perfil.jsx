@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../Perfil/Perfil.css";
-import api from "../../../api";
+import api from "../../services/api";
 import { useAuth } from "../../contexts/authContext";
 
 export const Perfil = () => {
@@ -14,7 +14,7 @@ export const Perfil = () => {
     const fetchAluno = async () => {
       try {
         if (!usuario) return;
-        const response = await api.get(`/babydiary/usuarios/${usuario.id}`);
+        const response = await api.get(`/usuarios/${usuario.id}`);
         setAluno(response.data);
       } catch (error) {
         setErro("Erro ao carregar os dados do usuário.");
@@ -45,7 +45,7 @@ export const Perfil = () => {
 
     try {
       const res = await api.post(
-        `/babydiary/usuarios/${usuario.id}/upload`,
+        `/usuarios/${usuario.id}/upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
