@@ -47,8 +47,7 @@ routes.get('/calendario/data/:data', calendarioController.getCalendarioByDate);
 routes.delete('/calendario/:id_calendario', calendarioController.deleteCalendarioById);
 routes.put('/calendario/:id_calendario', calendarioController.updateCalendarioById);
 
-routes.post('/rotina', rotinaController.createRotina);
-
+// Rotas de rotina
 routes.post('/rotina', rotinaController.createRotina);
 
 // Rotas de turmas
