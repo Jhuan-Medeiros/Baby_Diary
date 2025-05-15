@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+
 import "../Rotina/Rotina.css";
 import { createRotina } from "../../services/services.js";
 
@@ -9,6 +11,8 @@ export const Rotina = () => {
     const [observacoes, setObservacoes] = useState("");
     const [mensagemPopup, setMensagemPopup] = useState("");
     const [tipoPopup, setTipoPopup] = useState(""); //estilizaçao pop-up
+
+    const navigate = useNavigate();
 
 
 
@@ -83,10 +87,14 @@ export const Rotina = () => {
         try {
             await createRotina(data);
             mostrarPopup("Rotina enviada com sucesso!", "sucesso");
+            setTimeout(() => {
+                navigate("/home");
+            }, 3000);
         } catch (err) {
             console.error("Erro:", err);
             mostrarPopup("Erro ao enviar rotina.", "erro");
         }
+        
     };
 
     return (
