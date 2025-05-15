@@ -1,3 +1,8 @@
+body {
+  overflow-y: scroll;
+}
+
+
 
 .areaPerfil h1 {
   margin-bottom: 1vw;

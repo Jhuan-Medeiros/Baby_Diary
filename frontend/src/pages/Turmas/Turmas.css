@@ -1,8 +1,8 @@
 body {
-    margin: 0;
-    overflow-x: hidden;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
-
 
 .corpoTurmas {
   background-color: #73a0d3;
@@ -14,21 +14,35 @@ body {
   flex-direction: column;
   padding-bottom: 5vh;
 }
+
 .tituloTurmas {
   color: #f5fbef;
 }
+
 .listaDeTurmas {
   background-color: #445c77;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  gap: 7vh;                          
   flex-direction: column;
   border-radius: 20px;
   width: 70%;
-  height: 65%;
+  max-height: 40%; 
+  max-width: 60%;
+  overflow-y: auto; 
+  padding: 40px 15px; 
 }
 
-.listaDeTurmas button {
+
+
+
+/* Estilização dos itens de turma */
+.turmaItem {
+  width: 100%;
+}
+
+.turmaButton {
   background-color: #445c77;
   color: #f5fbef;
   border: none;
@@ -41,15 +55,28 @@ body {
   padding-right: 5%;
   font-weight: 300;
   font-size: large;
+  cursor: pointer;
 }
 
-.listaDeTurmas button::after {
-  display: flex;
-  content: "▶"; /* Setinha */
-  color: #f5fbef;
+.arrow {
+  cursor: pointer;
+  margin-left: auto;
   font-size: 1.5vh;
 }
 
+/* Lista de alunos */
+.listaAlunos {
+  background-color: #f5fbef;
+  color: #000;
+  width: 100%;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+
+}
+
+
+/* Botão para criar turma */
 .botaoCriarTurma {
   background-color: #445c77;
   height: 6vh;
@@ -57,4 +84,148 @@ body {
   color: #f5fbef;
   border: none;
   border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Modal para criar turma */
+.modalCriarTurma {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+/* Estilos para adicionar aluno */
+.adicionarAlunoContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+  padding: 0 5%;
+}
+
+.adicionarAlunoInput {
+  flex: 1;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.adicionarAlunoButton {
+  background-color: #445c77;
+  color: #f5fbef;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Modal geral que cobre tudo */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Conteúdo branco centralizado */
+.modalAlunoContent {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  width: 400px;
+  height: 400px;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* Cards de alunos */
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.alunoCard {
+  min-width: 120px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Campo de busca */
+.campoBusca {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Scroll horizontal dos cards */
+.scrollHorizontal {
+  display: flex;
+  flex-wrap: wrap; /* Faz os cards quebrarem linha */
+  overflow-y: auto; /* Ativa scroll vertical */
+  max-height: 150px; /* Limita a altura do container */
+  gap: 10px;
+  padding: 10px;
+  justify-content: center;
+}
+
+/* Botões do modal */
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modalButtons button {
+  flex: 1;
+  padding: 8px;
+  background-color: #445c77;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modalButtons button:hover {
+  background-color: #3a4f65;
+}
+
+/* .excluirAlunoButton {
+ 
+} */
+
+.arrow {
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 2vh;
+  
 }
