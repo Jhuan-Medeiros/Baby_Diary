@@ -1,3 +1,9 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+
 .corpoTurmas {
   background-color: #73a0d3;
   height: 100vh;
