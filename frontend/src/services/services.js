@@ -29,5 +29,9 @@ export async function updateCalendario(id_calendario, data, titulo, evento, hora
     return response.data;
   }
   
-
+//rotina
+  export async function createRotina(data) {
+    const response = await http.post('/rotina', data);
+    return response.data;
+}
 

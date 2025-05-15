@@ -1,9 +1,37 @@
 import React, { useState } from 'react';
 import "../Rotina/Rotina.css";
+import { createRotina } from "../../services/services.js";
 
 export const Rotina = () => {
     const [selected, setSelected] = useState({});
     const [evacuacao, setEvacuacao] = useState("");
+    const [opcaoSelecionada, setOpcaoSelecionada] = useState("");
+    const [observacoes, setObservacoes] = useState("");
+    const [mensagemPopup, setMensagemPopup] = useState("");
+    const [tipoPopup, setTipoPopup] = useState(""); //estilizaçao pop-up
+
+
+
+    const rows = [
+        "Fruta 8:30-9h",
+        "Almoço 8:30-9h",
+        "Leite 12:30-13h",
+        "Lanche 12:30-13h",
+        "Porção de fruta"
+    ];
+
+    const opcoes = ["Aluno", "Aluno 2", "Aluno 3"];
+    const evacuacaoOptions = ["Normal", "Seco", "Mole", "Líquido", "Não Defecou"];
+
+    const mostrarPopup = (mensagem, tipo) => {
+        setMensagemPopup(mensagem);
+        setTipoPopup(tipo);
+        setTimeout(() => {
+            setMensagemPopup("");
+            setTipoPopup("");
+        }, 3000);
+    };
+
 
     const handleSelection = (row, option) => {
         setSelected(prev => ({
@@ -16,32 +44,56 @@ export const Rotina = () => {
         setEvacuacao(option);
     };
 
-    const rows = [
-        "Fruta 8:30-9h",
-        "Almoço 8:30-9h",
-        "Leite 12:30-13h",
-        "Lanche 12:30-13h",
-        "Porção de fruta"
-    ];
-
-    const [opcaoSelecionada, setOpcaoSelecionada] = useState("");
-
-    const opcoes = ["Aluno", "Aluno 2", "Aluno 3"];
-
     const handleChange = (event) => {
         setOpcaoSelecionada(event.target.value);
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const evacuacaoOptions = ["Normal", "Seco", "Mole", "Líquido", "Não Evacuou"];
+        if (!opcaoSelecionada) {
+            mostrarPopup("Por favor, selecione um aluno.", "erro");
+            return;
+        }
+        
+        const todasRefeicoesPreenchidas = rows.every((row) => selected[row]);
+        if (!todasRefeicoesPreenchidas) {
+            mostrarPopup("Por favor, preencha todas as opções de alimentação.", "erro");
+            return;
+        }
+        
+        if (!evacuacao) {
+            mostrarPopup("Por favor, selecione o tipo evacuação.", "erro");
+            return;
+        }
+        
+
+        const alimentacaoData = rows.reduce((acc, row, index) => {
+            acc[row] = selected[index] || "";
+            return acc;
+        }, {});
+
+        const data = {
+            aluno: opcaoSelecionada,
+            alimentacao: alimentacaoData,
+            evacuacao: evacuacao,
+            observacoes: observacoes,
+        };
+
+        try {
+            await createRotina(data);
+            mostrarPopup("Rotina enviada com sucesso!", "sucesso");
+        } catch (err) {
+            console.error("Erro:", err);
+            mostrarPopup("Erro ao enviar rotina.", "erro");
+        }
+    };
 
     return (
         <>
-
             <div className="titulo">
                 <h1 id="cor-tit">Rotina do aluno</h1>
             </div>
-            <hr />
             <div className="dropdown-container">
                 <label htmlFor="dropdown" className="dropdown-label">Selecione o aluno para enviar:</label>
                 <select
@@ -59,11 +111,6 @@ export const Rotina = () => {
                 {opcaoSelecionada && (
                     <p className="dropdown-info"><strong>{opcaoSelecionada}</strong></p>
                 )}
-            </div>
-
-
-            <div className="subtitulo">
-                <h1 id="cor-sub">Alimentou-se</h1>
             </div>
             <div className="tabela-rotina">
                 <form>
@@ -84,28 +131,29 @@ export const Rotina = () => {
                                         <input
                                             type="radio"
                                             name={`row-${index}`}
-                                            checked={selected[index] === 'bom'}
-                                            onChange={() => handleSelection(index, 'bom')}
+                                            checked={selected[row] === 'bom'}
+                                            onChange={() => handleSelection(row, 'bom')}
                                         />
                                     </td>
                                     <td>
                                         <input
                                             type="radio"
                                             name={`row-${index}`}
-                                            checked={selected[index] === 'pouco'}
-                                            onChange={() => handleSelection(index, 'pouco')}
+                                            checked={selected[row] === 'pouco'}
+                                            onChange={() => handleSelection(row, 'pouco')}
                                         />
                                     </td>
                                     <td>
                                         <input
                                             type="radio"
                                             name={`row-${index}`}
-                                            checked={selected[index] === 'nao quis'}
-                                            onChange={() => handleSelection(index, 'nao quis')}
+                                            checked={selected[row] === 'nao quis'}
+                                            onChange={() => handleSelection(row, 'nao quis')}
                                         />
                                     </td>
                                 </tr>
                             ))}
+
                         </tbody>
                     </table>
                 </form>
@@ -131,13 +179,20 @@ export const Rotina = () => {
             <div className="subtitulo">
                 <h1 id="cor-sub">Observações</h1>
             </div>
-            <div class="observacoes">
-                <textarea id="observacoes"></textarea>
+            <div className="observacoes">
+                <textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} />
             </div>
 
-            <div class="enviarButao">
-                <button id="enviar"><strong>Enviar</strong></button>
+            <div className="enviarButao">
+                <button id="enviar" onClick={handleSubmit}><strong>Enviar</strong></button>
             </div>
+
+            {mensagemPopup && (
+                <div className={`popup ${tipoPopup}`}>
+                    {mensagemPopup}
+                </div>
+            )}
+
         </>
     );
 };

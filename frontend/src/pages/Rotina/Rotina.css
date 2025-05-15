@@ -1,39 +1,39 @@
 * {
-    margin: 0;
-    padding: 0;
-    font-family: "Montserrat", sans-serif;
-  }
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+}
 
-  hr {
-    margin-top: 10px;
+hr {
+  margin-top: 10px;
 
-  }
-  
-  body {
-    background-color: #73A0D3;
-    padding-bottom: 80px;
-  }
+}
 
-  .tabela-rotina table {
-    border-spacing: 0;
-    border: 2px solid #ccc;
-    border-radius: 15px;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+body {
+  background-color: #73A0D3;
+  padding-bottom: 80px;
+}
+
+.tabela-rotina table {
+  border-spacing: 0;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 
 
-  #cor-sub {
-    color: #f5fbef;
-    font-size: 25px;
-  }
+#cor-sub {
+  color: #f5fbef;
+  font-size: 25px;
+}
 
-  #cor-tit {
-    color: #f5fbef;
-    font-size: 30px;
-  }
+#cor-tit {
+  color: #f5fbef;
+  font-size: 30px;
+}
 
 .titulo {
   display: flex;
@@ -52,7 +52,7 @@
 
 .dropdown-label {
   font-size: 18px;
-  color: #333;
+  color: #f5fbef;
   font-weight: 500;
 }
 
@@ -94,7 +94,9 @@ table {
   background-color: #3f3f3f;
   color: #f5fbef;
 }
-th, td {
+
+th,
+td {
   border: 1px solid #f5fbef;
   padding: 10px;
   text-align: center;
@@ -103,6 +105,7 @@ th, td {
 th {
   background-color: #445c77;
 }
+
 td {
   background-color: #4978ae;
 }
@@ -110,6 +113,7 @@ td {
 input[type="radio"] {
   width: 25px;
   height: 25px;
+  accent-color: #3f3f3f;
 }
 
 .radio-evacuacao {
@@ -181,10 +185,32 @@ input[type="radio"] {
 #enviar:hover {
   height: 75px;
   background-color: #D44A26;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-  transform: translateY(-3px); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
 }
 
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  color: #f5fbef;
+  padding: 20px 30px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  font-weight: bold;
+  z-index: 9999;
+  opacity: 0;
+  animation: scaleIn 0.4s forwards, scaleOut 0.4s forwards 2.6s;
+}
+
+.popup.sucesso {
+  background-color: #2ecc71;
+}
+
+.popup.erro {
+  background-color: #e74c3c;
+}
 
 @media screen and (max-width: 600px) {
 

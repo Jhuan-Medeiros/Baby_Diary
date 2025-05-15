@@ -4,6 +4,8 @@ const routes = express.Router();
 const usuariosController = require("../controllers/usuarios");
 const tiposUsuariosController = require("../controllers/tipos_usuarios");
 const calendarioController = require('../controllers/calendario')
+const rotinaController = require('../controllers/rotina');
+
 
 routes.post('/login', usuariosController.login);
 routes.post('/usuario/criar', usuariosController.createUsuario);
@@ -34,6 +36,8 @@ routes.get('/calendario/data/:data', calendarioController.getCalendarioByDate);
 routes.delete('/calendario/:id_calendario', calendarioController.deleteCalendarioById);
 
 routes.put('/calendario/:id_calendario', calendarioController.updateCalendarioById);
+
+routes.post('/rotina', rotinaController.createRotina);
 
 
 
