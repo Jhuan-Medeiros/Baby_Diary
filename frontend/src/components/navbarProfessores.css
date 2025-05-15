@@ -1,0 +1,108 @@
+/*posição*/
+.navbar {
+    background-color: #f5fbef;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+}
+
+
+/*estilização*/
+.navbar a {
+    color: #333;
+    text-decoration: none;
+    font-size: 22px;
+    margin: 0 37px;
+}
+
+.navbar a.active {
+    color: #4978ae;
+}
+
+.icon-link {
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    transition: background 0.3s ease;
+    border-radius: 8px;
+}
+
+
+.icon-link.active {
+    color: #4978ae;
+    /* Muda a cor do texto */
+}
+
+/*ícones*/
+#homeAzul,
+#turmas,
+#perfil,
+#mensagens,
+#config {
+    width: 40px;
+    height: 40px;
+}
+
+/*ajuste navbar meio*/
+.nav-item {
+    display: flex;
+    justify-content: center;
+    height: 75px;
+    align-items: center;
+}
+
+/*ajuste ícones coluna*/
+.icons-abaixo {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 800px) {
+    .navbar a {
+        font-size: 20px;
+        margin: 0 17px;
+    }
+
+    #homeAzul,
+    #turmas,
+    #perfil,
+    #mensagens,
+    #config {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .navbar a {
+        font-size: 11px;
+        margin: 0 11px;
+    }
+
+    #homeAzul,
+    #turmas,
+    #perfil,
+    #mensagens,
+    #config {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .navbar a {
+        font-size: 8px;
+        margin: 0 7px;
+    }
+
+    #homeAzul,
+    #turmas,
+    #perfil,
+    #mensagens,
+    #config {
+        width: 30px;
+        height: 30px;
+    }
+}

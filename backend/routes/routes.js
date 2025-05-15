@@ -5,6 +5,7 @@ const verificarTipoUsuario = require("../middlewares/verificarTipoUsuario");
 const upload = require("../middlewares/upload");
 const usuariosController = require("../controllers/usuarios");
 const tiposUsuariosController = require("../controllers/tipos_usuarios");
+const calendarioController = require('../controllers/calendario')
 const turmascontroller = require("../controllers/turmas");
 const conversasController = require("../controllers/conversas");
 const mensagensController = require("../controllers/mensagens");
@@ -26,6 +27,21 @@ routes.put("/usuarios/:cpf", somenteAdmin, usuariosController.updateUsuario);
 routes.post("/tiposusuarios", somenteAdmin, tiposUsuariosController.createTiposUsuarios);
 routes.get("/tiposusuarios", somenteAdmin, tiposUsuariosController.getTiposUsuarios);
 routes.delete("/tiposusuarios/:id_tipo", somenteAdmin, tiposUsuariosController.deleteTiposUsuarios);
+
+
+routes.post('/calendario', calendarioController.createCalendario);
+
+routes.get('/calendario', calendarioController.getCalendario);
+
+routes.get('/calendario/data/:data', calendarioController.getCalendarioByDate);
+
+//NEW
+
+routes.delete('/calendario/:id_calendario', calendarioController.deleteCalendarioById);
+
+routes.put('/calendario/:id_calendario', calendarioController.updateCalendarioById);
+
+
 
 // Rotas de turmas
 routes.post("/turmas/criar", somenteAdmin, turmascontroller.createTurma);

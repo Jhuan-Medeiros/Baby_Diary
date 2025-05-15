@@ -5,7 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 import api from "../../../api";
 import { useAuth } from "../../contexts/authContext";
 
-const Login = () => {
+const Login = () => { 
   const [isShow, setIsShow] = useState(false);
   const [erro, setErro] = useState("");
   const [cpf, setCpf] = useState("");
