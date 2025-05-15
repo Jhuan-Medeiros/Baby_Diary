@@ -42,4 +42,3 @@ calendario.sync();
 app.use("/babydiary", routes);
 
 app.listen(3011, () => console.log("Servidor rodando na porta 3011"));
-app.listen(3011, () => console.log("Servidor rodando na porta 3011"));

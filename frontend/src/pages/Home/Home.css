@@ -12,7 +12,7 @@ body {
 
 .corpoHome {
   height: 120vh;
-  
+  min-height: 125vh;
 }
 
 /*notificaçao*/
@@ -135,6 +135,7 @@ body {
   justify-content: center;
   align-items: center;
   margin-top: 50px;
+  flex-direction: column;
 }
 
 .calendario-inicial {
@@ -293,6 +294,7 @@ body {
 .botoes-eventos {
   display: flex;
   justify-content: center;
+  width: 100vw;
 }
 
 .btn-fechar {
@@ -537,7 +539,7 @@ input {
   }
 
   .corpoHome {
-    height: 130vh;
+    min-height: 125vh;
     
   }
 
@@ -601,7 +603,7 @@ input {
   }
 
   .corpoHome {
-    height: 120vh;
+    min-height: 125vh;
     
   }
 
@@ -669,7 +671,7 @@ input {
     }
 
     .corpoHome {
-      height: 150vh;
+      min-height: 125vh;
     }
 
   }

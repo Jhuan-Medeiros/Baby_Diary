@@ -28,20 +28,12 @@ routes.post("/tiposusuarios", somenteAdmin, tiposUsuariosController.createTiposU
 routes.get("/tiposusuarios", somenteAdmin, tiposUsuariosController.getTiposUsuarios);
 routes.delete("/tiposusuarios/:id_tipo", somenteAdmin, tiposUsuariosController.deleteTiposUsuarios);
 
-
+// Rotas de calendario
 routes.post('/calendario', calendarioController.createCalendario);
-
 routes.get('/calendario', calendarioController.getCalendario);
-
 routes.get('/calendario/data/:data', calendarioController.getCalendarioByDate);
-
-//NEW
-
 routes.delete('/calendario/:id_calendario', calendarioController.deleteCalendarioById);
-
 routes.put('/calendario/:id_calendario', calendarioController.updateCalendarioById);
-
-
 
 // Rotas de turmas
 routes.post("/turmas/criar", somenteAdmin, turmascontroller.createTurma);
@@ -59,13 +51,13 @@ routes.get("/", somenteAdmin, (req, res) => {
   res.json({ message: "teste bem sucedido" });
 });
 
-// 🔥 Rotas de chat diretamente aqui
+// Rotas de chat diretamente aqui
 routes.post("/conversas", middlewareAuth, conversasController.criarConversa);
 routes.get("/conversas/conversa/:id", middlewareAuth, conversasController.getConversaById);
 routes.get("/conversas/:idUsuario", middlewareAuth, conversasController.getConversasDoUsuario);
 routes.get("/conversas/:idUsuario/ultimas", conversasController.listarConversasComUltimaMensagem);
 
-// (se tiver mensagens também, adicione aqui)
+// Rotas de mensagens
 routes.post("/mensagens", middlewareAuth, mensagensController.enviarMensagem);
 routes.get("/mensagens/:idConversa", middlewareAuth, mensagensController.buscarMensagensPorConversa);
 

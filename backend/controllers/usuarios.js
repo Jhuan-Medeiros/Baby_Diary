@@ -127,8 +127,6 @@ exports.deleteUsuario = async (req, res) => {
 exports.updateUsuario = async (req, res) => {
   const Cpf = req.params.cpf;
   const CpfUsuario = await Usuarios.findOne({ where: { cpf: Cpf } });
-  const Cpf = req.params.cpf;
-  const CpfUsuario = await Usuarios.findOne({ where: { cpf: Cpf } });
 
   if (CpfUsuario) {
     try {
@@ -139,9 +137,6 @@ exports.updateUsuario = async (req, res) => {
     } catch (error) {
       return res.send("deu erro aqui meu mano ==> ", error);
     }
-  }
-  return res.send("usuario not found!!!");
-};
   }
   return res.send("usuario not found!!!");
 };

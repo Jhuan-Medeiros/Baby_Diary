@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { updateCalendario, deleteCalendario, getCalendarioByDate, createCalendario, getCalendario } from '../../services/services.js';
-import '../Home/Home.css';
+import React, { useEffect, useState } from "react";
+import { updateCalendario, deleteCalendario, getCalendarioByDate, createCalendario, getCalendario } from "../../services/services.js";
+import "../Home/Home.css";
+import api from "../../../api";
+import { useAuth } from "../../contexts/authContext";
+import { useNavigate } from "react-router-dom";
 
 function calcularPascoa(ano) {
   const f = Math.floor;
@@ -16,7 +19,7 @@ function calcularPascoa(ano) {
 }
 
 function formatarData(date) {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 }
 
 function calcularFeriadosNacionais(ano) {
@@ -50,22 +53,19 @@ function calcularFeriadosNacionais(ano) {
   return feriados;
 }
 
-import React, { useState, useEffect } from "react";
-import "../Home/Home.css";
-import NavbarProfessores from "../../components/navbarProfessores.jsx";
-import api from "../../../api";
-import { useAuth } from "../../contexts/authContext";
-import { useNavigate } from "react-router-dom";
-
 export const Home = () => {
   const { usuario } = useAuth();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
   const [eventos, setEventos] = useState([]);
-  const [formData, setFormData] = useState({ data: '', titulo: '', evento: '', horario: '' });
+  const [formData, setFormData] = useState({
+    data: "",
+    titulo: "",
+    evento: "",
+    horario: "",
+  });
   const [modalAberto, setModalAberto] = useState(false);
   const [mensagem, setMensagem] = useState(null);
-  //NEW
   const [modalTodosEventosAberto, setModalTodosEventosAberto] = useState(false);
   const [todosEventos, setTodosEventos] = useState([]);
   const [feriadosDoMes, setFeriadosDoMes] = useState([]);
@@ -73,16 +73,35 @@ export const Home = () => {
   const [eventoParaDeletar, setEventoParaDeletar] = useState(null);
   const [modalEditarAberto, setModalEditarAberto] = useState(false);
   const [eventoEditando, setEventoEditando] = useState(null);
+  const [chat, setChat] = useState([]);
+  const navigate = useNavigate();
 
+  const diasSemana = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 
+  // Função para buscar conversas
+  const buscarConversas = () => {
+    if (usuario) {
+      api.get(`/babydiary/conversas/${usuario.id}/ultimas`).then((res) => {
+        setChat(res.data);
+      });
+    }
+  };
+
+  useEffect(() => {
+    buscarConversas(); // busca inicial
+
+    const interval = setInterval(() => {
+      buscarConversas();
+    }, 300000); // 5 minutos = 300.000 ms
+
+    return () => clearInterval(interval); // limpa ao desmontar
+  }, [usuario]);
 
   useEffect(() => {
     const ano = currentDate.getFullYear();
     const feriados = calcularFeriadosNacionais(ano);
     setFeriadosDoMes(feriados);
   }, [currentDate]);
-
-  const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
 
   const carregarEventos = async (data) => {
     try {
@@ -93,7 +112,6 @@ export const Home = () => {
     }
   };
 
-  //NEW
   const carregarTodosEventos = async () => {
     try {
       const eventos = await getCalendario();
@@ -102,7 +120,6 @@ export const Home = () => {
       console.error("Erro ao buscar todos os eventos:", error);
     }
   };
-
 
   const handleDateClick = (day) => {
     const year = currentDate.getFullYear();
@@ -120,155 +137,49 @@ export const Home = () => {
     const feriados = calcularFeriadosNacionais(ano);
 
     if (feriados.includes(formData.data)) {
-      setMensagem({ tipo: 'erro', texto: 'Não é possível adicionar eventos em feriados.' });
+      setMensagem({
+        tipo: "erro",
+        texto: "Não é possível adicionar eventos em feriados.",
+      });
       setTimeout(() => setMensagem(null), 3000);
       return;
     }
 
     try {
-      await createCalendario(formData.data, formData.titulo, formData.evento, formData.horario);
-      setMensagem({ tipo: 'sucesso', texto: 'Evento adicionado com sucesso!' });
+      await createCalendario(
+        formData.data,
+        formData.titulo,
+        formData.evento,
+        formData.horario
+      );
+      setMensagem({ tipo: "sucesso", texto: "Evento adicionado com sucesso!" });
       setModalAberto(false);
       carregarEventos(formData.data);
-      setFormData({ data: '', titulo: '', evento: '', horario: '' });
+      setFormData({ data: "", titulo: "", evento: "", horario: "" });
     } catch (error) {
       console.error("Erro ao adicionar evento:", error);
-      setMensagem({ tipo: 'erro', texto: 'Erro ao adicionar o evento. Tente novamente.' });
+      setMensagem({
+        tipo: "erro",
+        texto: "Erro ao adicionar o evento. Tente novamente.",
+      });
     }
 
     setTimeout(() => setMensagem(null), 3000);
   };
 
-  //NEW
-
   const confirmarDeleteEvento = async () => {
     try {
       await deleteCalendario(eventoParaDeletar);
-      setMensagem({ tipo: 'sucesso', texto: 'Evento deletado com sucesso!' });
+      setMensagem({ tipo: "sucesso", texto: "Evento deletado com sucesso!" });
       carregarTodosEventos();
     } catch (error) {
       console.error("Erro ao deletar evento:", error);
-      setMensagem({ tipo: 'erro', texto: 'Erro ao deletar o evento.' });
+      setMensagem({ tipo: "erro", texto: "Erro ao deletar o evento." });
     } finally {
       setEventoParaDeletar(null);
       setModalConfirmacaoAberto(false);
       setTimeout(() => setMensagem(null), 3000);
     }
-  };
-
-
-  const renderCalendar = () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-  const [chat, setchat] = useState([]);
-  const navigate = useNavigate();
-
-  // Função para buscar conversas
-  const buscarConversas = () => {
-    if (usuario) {
-      api.get(`/babydiary/conversas/${usuario.id}/ultimas`).then((res) => {
-        setchat(res.data);
-      });
-    }
-  };
-
-  useEffect(() => {
-    buscarConversas(); // busca inicial
-
-    const interval = setInterval(() => {
-      buscarConversas();
-    }, 300000); // 5 minutos = 300.000 ms
-
-    return () => clearInterval(interval); // limpa ao desmontar
-  }, [usuario]);
-
-  const updateCalendar = (date) => {
-    const currentYear = date.getFullYear();
-    const currentMonth = date.getMonth();
-
-    // primeiro e último dia do mês
-    const firstDay = new Date(currentYear, currentMonth, 1);
-    const lastDay = new Date(currentYear, currentMonth + 1, 0);
-    const totalDays = lastDay.getDate();
-
-    const startDay = (firstDay.getDay() + 6) % 7; // ajuste para começar na segunda
-    const daysArray = [];
-
-    const prevLastDay = new Date(year, month, 0).getDate(); // ultimo dia do mês anterior
-
-    const feriados = calcularFeriadosNacionais(year);
-
-
-    // dias do mês anterior
-    for (let i = startDay - 1; i >= 0; i--) {
-      daysArray.push(
-        <div key={`prev-${i}`} className="date other-month">
-          {prevLastDay - i}
-        </div>
-      );
-    const firstDayIndex = firstDay.getDay();
-    const lastDayIndex = lastDay.getDay();
-
-    // ajusta para que a semana comece na segunda-feira
-    const adjustedFirstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // se domingo (0), muda para 6 (último dia da semana)
-
-    // atualiza o mês e o ano
-    const monthYearString = date.toLocaleString("pt-BR", {
-      month: "long",
-      year: "numeric",
-    });
-
-    let datesHTML = "";
-
-    // preenche com os dias do mês anterior
-    let prevDates = "";
-    for (let i = adjustedFirstDayIndex; i > 0; i--) {
-      const prevDate = new Date(currentYear, currentMonth, 1 - i);
-      prevDates += `<div class="date inactive">${prevDate.getDate()}</div>`;
-    }
-
-
-
-    // dias do mês atual
-    // preenche os dias do mês atual
-    let currentDates = "";
-    for (let i = 1; i <= totalDays; i++) {
-      const dataCompleta = new Date(year, month, i).toISOString().split('T')[0];
-      const isToday = new Date().toDateString() === new Date(year, month, i).toDateString();
-      const isFeriado = feriados.includes(dataCompleta);
-
-      daysArray.push(
-        <button
-          key={`curr-${i}`}
-          className={`date ${isToday ? 'active2' : ''} ${isFeriado ? 'feriado' : ''}`}
-          onClick={() => handleDateClick(i)}
-          title={isFeriado ? 'Feriado' : ''}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    return daysArray;
-      const currentDay = new Date(currentYear, currentMonth, i);
-      const activeClass =
-        currentDay.toDateString() === new Date().toDateString() ? "active" : "";
-      currentDates += `<div class="date ${activeClass}">${i}</div>`;
-    }
-
-    // preenche com os dias do próximo mês
-    let nextDates = "";
-    for (let i = 1; i <= 7 - lastDayIndex - 1; i++) {
-      const nextDate = new Date(currentYear, currentMonth + 1, i);
-      nextDates += `<div class="date inactive">${nextDate.getDate()}</div>`;
-    }
-
-    return {
-      monthYearString,
-      datesHTML: prevDates + currentDates + nextDates,
-    };
   };
 
   const handlePrevMonth = () => {
@@ -283,12 +194,71 @@ export const Home = () => {
     navigate(`/conversas/${idConversa}`);
   };
 
-  const monthYearString = currentDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+  const renderCalendar = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const startDay = (firstDay.getDay() + 6) % 7; // ajuste para começar na segunda
+    const lastDay = new Date(year, month + 1, 0);
+    const totalDays = lastDay.getDate();
+    const daysArray = [];
+    const feriados = calcularFeriadosNacionais(year);
+    const prevLastDay = new Date(year, month, 0).getDate(); // ultimo dia do mês anterior
+    
+    // dias do mês anterior
+    for (let i = startDay - 1; i >= 0; i--) {
+      daysArray.push(
+        <div key={`prev-${i}`} className="date other-month">
+          {prevLastDay - i}
+        </div>
+      );
+    }
+    
+    // dias do mês atual
+    for (let i = 1; i <= totalDays; i++) {
+      const dataCompleta = new Date(year, month, i)
+        .toISOString()
+        .split("T")[0];
+      const isToday =
+        new Date().toDateString() ===
+        new Date(year, month, i).toDateString();
+      const isFeriado = feriados.includes(dataCompleta);
+
+      daysArray.push(
+        <button
+          key={`curr-${i}`}
+          className={`date ${isToday ? "active2" : ""} ${
+            isFeriado ? "feriado" : ""
+          }`}
+          onClick={() => handleDateClick(i)}
+          title={isFeriado ? "Feriado" : ""}
+        >
+          {i}
+        </button>
+      );
+    }
+    
+    // Calcular dias para preencher o final do calendário (próximo mês)
+    const totalCells = 42; // 6 linhas de 7 dias
+    const remainingCells = totalCells - (daysArray.length);
+    
+    for (let i = 1; i <= remainingCells; i++) {
+      daysArray.push(
+        <div key={`next-${i}`} className="date other-month">
+          {i}
+        </div>
+      );
+    }
+    
+    return daysArray;
+  };
+
+  const monthYearString = currentDate.toLocaleString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
 
   return (
-    <div className='corpoHome'>
-
-      {/* sessão de avisos fixos */}
     <div className="corpoHome">
       <div className="notifacaçao">
         <h1 id="avisos">Avisos:</h1>
@@ -304,12 +274,15 @@ export const Home = () => {
           Amanhã não teremos aula devido ao feriado de Carnaval.
         </p>
       </div>
-
       {/* chat fixo com professor */}
       <div className="chat-inicial">
         {chat
           .filter((c) => c.ultimaMensagem)
-          .sort((a, b) => new Date(b.ultimaMensagem.data) - new Date(a.ultimaMensagem.data))
+          .sort(
+            (a, b) =>
+              new Date(b.ultimaMensagem.data) -
+              new Date(a.ultimaMensagem.data)
+          )
           .slice(0, 1)
           .map((c) => (
             <div
@@ -321,23 +294,23 @@ export const Home = () => {
                 id="perfil-chat"
                 src={
                   c.ultimaMensagem.Remetente?.imagem
-                    ? `http://localhost:3011/${c.ultimaMensagem.Remetente.imagem.replace(/\\/g, "/")}`
+                    ? `http://localhost:3011/${c.ultimaMensagem.Remetente.imagem.replace(
+                        /\\/g,
+                        "/"
+                      )}`
                     : "src/assets/img/perfil-chat.png"
                 }
                 alt="perfil"
               />
               <div className="letras-coluna2">
-                <span id="tituloChat">  
+                <span id="tituloChat">
                   <strong>{c.outroUsuario.nome}</strong>
                 </span>
-                <span id="info-chat">
-                  {c.ultimaMensagem.texto}
-                </span>
+                <span id="info-chat">{c.ultimaMensagem.texto}</span>
               </div>
             </div>
           ))}
       </div>
-
       {/* acesso à rotina */}
       <div className="rotina-inicial">
         <a id="rotina-style" href="rotina">
@@ -347,25 +320,31 @@ export const Home = () => {
           </div>
         </a>
       </div>
-
       <div className="container-calendario">
         <div className="calendario-inicial">
-
-          <div className="cabeçalho-calendario">
           <div className="cabeçalho-calendario">
             <button onClick={handlePrevMonth}>←</button>
-            <div className="mesAno"><span>{monthYearString}</span></div>
+            <div className="mesAno">
+              <span>{monthYearString}</span>
+            </div>
             <button onClick={handleNextMonth}>→</button>
           </div>
 
-          <div className="dias">{diasSemana.map(dia => <div key={dia} className="dia">{dia}</div>)}</div>
+          <div className="dias">
+            {diasSemana.map((dia) => (
+              <div key={dia} className="dia">
+                {dia}
+              </div>
+            ))}
+          </div>
 
           <div className="datas">{renderCalendar()}</div>
 
           {selectedDate && (
             <div className="eventos-data">
               <h3 id="eventos-do-dia">Eventos de {selectedDate}</h3>
-              {eventos.length === 0 && !feriadosDoMes.includes(selectedDate) ? (
+              {eventos.length === 0 &&
+              !feriadosDoMes.includes(selectedDate) ? (
                 <p>Sem eventos nesta data.</p>
               ) : (
                 <>
@@ -376,174 +355,266 @@ export const Home = () => {
                   )}
                   {eventos.map((ev, i) => (
                     <div key={i} className="evento">
-                      <p><strong>{ev.titulo}</strong> - {ev.evento} às {ev.horario}</p>
+                      <p>
+                        <strong>{ev.titulo}</strong> - {ev.evento} às{" "}
+                        {ev.horario}
+                      </p>
                     </div>
                   ))}
                 </>
               )}
             </div>
           )}
-          <div className="dias">
-            <div className="dia">Seg</div>
-            <div className="dia">Ter</div>
-            <div className="dia">Qua</div>
-            <div className="dia">Qui</div>
-            <div className="dia">Sex</div>
-            <div className="dia">Sab</div>
-            <div className="dia">Dom</div>
+        </div>
+
+        <div className="botoes-eventos">
+          <button
+            className="btn-abrir-form"
+            onClick={() => setModalAberto(true)}
+          >
+            <strong>Novo Evento</strong>
+          </button>
+
+          <button
+            className="btn-abrir-form"
+            onClick={() => {
+              carregarTodosEventos();
+              setModalTodosEventosAberto(true);
+            }}
+          >
+            <strong>Deletar Eventos</strong>
+          </button>
+        </div>
+
+        {mensagem && (
+          <div className={`toast ${mensagem.tipo === "erro" ? "erro" : ""}`}>
+            {mensagem.texto}
           </div>
-          <div
-            className="datas"
-            id="datas"
-            dangerouslySetInnerHTML={{ __html: datesHTML }}
-          />
-        </div>
-      </div>
+        )}
 
-      <div className="botoes-eventos">
-        <button className="btn-abrir-form" onClick={() => setModalAberto(true)}>
-          <strong>Novo Evento</strong>
-        </button>
-
-        <button className="btn-abrir-form" onClick={() => {
-          carregarTodosEventos();
-          setModalTodosEventosAberto(true);
-        }}>
-          <strong>Deletar Eventos</strong>
-        </button>
-      </div>
-
-
-      {mensagem && (
-        <div className={`toast ${mensagem.tipo === 'erro' ? 'erro' : ''}`}>
-          {mensagem.texto}
-        </div>
-      )}
-
-
-      {/* modal para novo evento */}
-      {modalAberto && (
-        <div className="modal-overlay">
-          <div className="modal-conteudo">
-            <button className="btn-fechar" onClick={() => setModalAberto(false)}>×</button>
-            <h2>Adicionar Evento</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="formulario-inputs">
-                <input type="text" name="titulo" placeholder="Título" value={formData.titulo} onChange={(e) => setFormData({ ...formData, titulo: e.target.value })} required />
-                <input type="text" name="evento" placeholder="Descrição" value={formData.evento} onChange={(e) => setFormData({ ...formData, evento: e.target.value })} required />
-                <input type="date" name="data" value={formData.data} onChange={(e) => setFormData({ ...formData, data: e.target.value })} required />
-                <input type="time" name="horario" value={formData.horario} onChange={(e) => setFormData({ ...formData, horario: e.target.value })} required />
-                <button className="adicionar-infos" type="submit"><strong>Adicionar Evento</strong></button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {modalTodosEventosAberto && (
-        <div className="modal-overlay">
-          <div className="modal-conteudo">
-            <button className="btn-fechar" onClick={() => setModalTodosEventosAberto(false)}>×</button>
-            <h2>Todos os Eventos</h2>
-            {todosEventos.length === 0 ? (
-              <p>Não há eventos cadastrados.</p>
-            ) : (
-              todosEventos.map((ev) => (
-                <div key={ev.id_calendario} className="evento" >
-                  <p>
-                    <strong>{ev.titulo}</strong> - {ev.evento} <br />
-                    Data: {ev.data} às {ev.horario}
-                  </p>
-                  <div className="btns">
-                    <button
-                      className="btn-excluir"
-                      onClick={() => {
-                        setEventoParaDeletar(ev.id_calendario);
-                        setModalConfirmacaoAberto(true);
-                      }}
-                    >
-                      ✖
-                    </button>
-                    <button
-                      className="btn-editar"
-                      onClick={() => {
-                        setEventoEditando(ev);
-                        setFormData({
-                          data: ev.data,
-                          titulo: ev.titulo,
-                          evento: ev.evento,
-                          horario: ev.horario,
-                        });
-                        setModalEditarAberto(true);
-                      }}
-                    >
-                      ✎
-                    </button>
-                  </div>
-
-
+        {/* modal para novo evento */}
+        {modalAberto && (
+          <div className="modal-overlay">
+            <div className="modal-conteudo">
+              <button
+                className="btn-fechar"
+                onClick={() => setModalAberto(false)}
+              >
+                ×
+              </button>
+              <h2>Adicionar Evento</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="formulario-inputs">
+                  <input
+                    type="text"
+                    name="titulo"
+                    placeholder="Título"
+                    value={formData.titulo}
+                    onChange={(e) =>
+                      setFormData({ ...formData, titulo: e.target.value })
+                    }
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="evento"
+                    placeholder="Descrição"
+                    value={formData.evento}
+                    onChange={(e) =>
+                      setFormData({ ...formData, evento: e.target.value })
+                    }
+                    required
+                  />
+                  <input
+                    type="date"
+                    name="data"
+                    value={formData.data}
+                    onChange={(e) =>
+                      setFormData({ ...formData, data: e.target.value })
+                    }
+                    required
+                  />
+                  <input
+                    type="time"
+                    name="horario"
+                    value={formData.horario}
+                    onChange={(e) =>
+                      setFormData({ ...formData, horario: e.target.value })
+                    }
+                    required
+                  />
+                  <button className="adicionar-infos" type="submit">
+                    <strong>Adicionar Evento</strong>
+                  </button>
                 </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
-
-      {modalConfirmacaoAberto && (
-        <div className="modal-overlay">
-          <div className="modal-conteudo confirmacao">
-            <p>Tem certeza que deseja excluir este evento?</p>
-            <div className="botoes-confirmacao">
-              <button className="btn-cancelar" onClick={() => setModalConfirmacaoAberto(false)}>Cancelar</button>
-              <button className="btn-confirmar" onClick={confirmarDeleteEvento}>Confirmar</button>
+              </form>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {modalEditarAberto && (
-        <div className="modal-overlay">
-          <div className="modal-conteudo">
-            <button className="btn-fechar" onClick={() => setModalEditarAberto(false)}>×</button>
-            <h2>Editar Evento</h2>
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              try {
-                await updateCalendario(
-                  eventoEditando.id_calendario,
-                  formData.data,
-                  formData.titulo,
-                  formData.evento,
-                  formData.horario
-                );
-                setMensagem({ tipo: 'sucesso', texto: 'Evento atualizado com sucesso!' });
-                setModalEditarAberto(false);
-                carregarTodosEventos();
-                if (selectedDate === formData.data) carregarEventos(selectedDate);
-              } catch (error) {
-                console.error("Erro ao editar evento:", error);
-                setMensagem({ tipo: 'erro', texto: 'Erro ao editar evento.' });
-              }
-              setTimeout(() => setMensagem(null), 1000);
-            }}>
-              <div className="formulario-inputs">
-                <input type="text" name="titulo" placeholder="Título" value={formData.titulo} onChange={(e) => setFormData({ ...formData, titulo: e.target.value })} required />
-                <input type="text" name="evento" placeholder="Descrição" value={formData.evento} onChange={(e) => setFormData({ ...formData, evento: e.target.value })} required />
-                <input type="date" name="data" value={formData.data} onChange={(e) => setFormData({ ...formData, data: e.target.value })} required />
-                <input type="time" name="horario" value={formData.horario} onChange={(e) => setFormData({ ...formData, horario: e.target.value })} required />
-                <button className="adicionar-infos" type="submit"><strong>Salvar Alterações</strong></button>
-              </div>
-            </form>
+        {modalTodosEventosAberto && (
+          <div className="modal-overlay">
+            <div className="modal-conteudo">
+              <button
+                className="btn-fechar"
+                onClick={() => setModalTodosEventosAberto(false)}
+              >
+                ×
+              </button>
+              <h2>Todos os Eventos</h2>
+              {todosEventos.length === 0 ? (
+                <p>Não há eventos cadastrados.</p>
+              ) : (
+                todosEventos.map((ev) => (
+                  <div key={ev.id_calendario} className="evento">
+                    <p>
+                      <strong>{ev.titulo}</strong> - {ev.evento} <br />
+                      Data: {ev.data} às {ev.horario}
+                    </p>
+                    <div className="btns">
+                      <button
+                        className="btn-excluir"
+                        onClick={() => {
+                          setEventoParaDeletar(ev.id_calendario);
+                          setModalConfirmacaoAberto(true);
+                        }}
+                      >
+                        ✖
+                      </button>
+                      <button
+                        className="btn-editar"
+                        onClick={() => {
+                          setEventoEditando(ev);
+                          setFormData({
+                            data: ev.data,
+                            titulo: ev.titulo,
+                            evento: ev.evento,
+                            horario: ev.horario,
+                          });
+                          setModalEditarAberto(true);
+                        }}
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
+        {modalConfirmacaoAberto && (
+          <div className="modal-overlay">
+            <div className="modal-conteudo confirmacao">
+              <p>Tem certeza que deseja excluir este evento?</p>
+              <div className="botoes-confirmacao">
+                <button
+                  className="btn-cancelar"
+                  onClick={() => setModalConfirmacaoAberto(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="btn-confirmar"
+                  onClick={confirmarDeleteEvento}
+                >
+                  Confirmar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-
-
+        {modalEditarAberto && (
+          <div className="modal-overlay">
+            <div className="modal-conteudo">
+              <button
+                className="btn-fechar"
+                onClick={() => setModalEditarAberto(false)}
+              >
+                ×
+              </button>
+              <h2>Editar Evento</h2>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  try {
+                    await updateCalendario(
+                      eventoEditando.id_calendario,
+                      formData.data,
+                      formData.titulo,
+                      formData.evento,
+                      formData.horario
+                    );
+                    setMensagem({
+                      tipo: "sucesso",
+                      texto: "Evento atualizado com sucesso!",
+                    });
+                    setModalEditarAberto(false);
+                    carregarTodosEventos();
+                    if (selectedDate === formData.data)
+                      carregarEventos(selectedDate);
+                  } catch (error) {
+                    console.error("Erro ao editar evento:", error);
+                    setMensagem({
+                      tipo: "erro",
+                      texto: "Erro ao editar evento.",
+                    });
+                  }
+                  setTimeout(() => setMensagem(null), 1000);
+                }}
+              >
+                <div className="formulario-inputs">
+                  <input
+                    type="text"
+                    name="titulo"
+                    placeholder="Título"
+                    value={formData.titulo}
+                    onChange={(e) =>
+                      setFormData({ ...formData, titulo: e.target.value })
+                    }
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="evento"
+                    placeholder="Descrição"
+                    value={formData.evento}
+                    onChange={(e) =>
+                      setFormData({ ...formData, evento: e.target.value })
+                    }
+                    required
+                  />
+                  <input
+                    type="date"
+                    name="data"
+                    value={formData.data}
+                    onChange={(e) =>
+                      setFormData({ ...formData, data: e.target.value })
+                    }
+                    required
+                  />
+                  <input
+                    type="time"
+                    name="horario"
+                    value={formData.horario}
+                    onChange={(e) =>
+                      setFormData({ ...formData, horario: e.target.value })
+                    }
+                    required
+                  />
+                  <button className="adicionar-infos" type="submit">
+                    <strong>Salvar Alterações</strong>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-  )
-}
+export default Home;
