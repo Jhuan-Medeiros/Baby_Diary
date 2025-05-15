@@ -4,6 +4,10 @@
   font-family: "Montserrat", sans-serif;
 }
 
+.container-rotina{
+  min-height: 120vh;
+}
+
 hr {
   margin-top: 10px;
 
@@ -223,3 +227,4 @@ input[type="radio"] {
   }
 
 }
+

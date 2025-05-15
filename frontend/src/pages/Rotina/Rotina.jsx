@@ -98,7 +98,7 @@ export const Rotina = () => {
     };
 
     return (
-        <>
+        <div className="container-rotina">
             <div className="titulo">
                 <h1 id="cor-tit">Rotina do aluno</h1>
             </div>
@@ -201,6 +201,6 @@ export const Rotina = () => {
                 </div>
             )}
 
-        </>
+        </div>
     );
 };
