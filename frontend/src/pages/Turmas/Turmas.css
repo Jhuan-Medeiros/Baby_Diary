@@ -1,6 +1,6 @@
 .corpoTurmas {
   background-color: #73a0d3;
-  height: 100vh;
+  min-height: 90vh;    /* Garante altura mínima da tela */
   width: 100vw;
   display: flex;
   justify-content: space-evenly;
@@ -19,10 +19,9 @@
   flex-direction: column;
   border-radius: 20px;
   width: 70%;
-  padding: 2vh 0;
+  padding-top: 2vh;
   max-height: 65vh;
   overflow-y: auto;
-
 }
 
 
