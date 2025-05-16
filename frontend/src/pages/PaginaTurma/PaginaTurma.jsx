@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { ArrowLeft } from "lucide-react";
+import "./PaginaTurma.css";
 
 export const PaginaTurma = () => {
   const { id } = useParams();
@@ -191,96 +192,105 @@ export const PaginaTurma = () => {
   if (!turma) return <p>Carregando...</p>;
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <button
-          onClick={() => navigate("/turmas")}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Voltar
+    <div className="corpo-turma">
+      <div className="centralizar-barra-turmas">
+        <button onClick={() => navigate("/turmas")} id="voltar-button-turma">
+          <ArrowLeft color="white" size={30} />
         </button>
 
         {tipoUsuario === 1 && (
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
+          <button onClick={handleDelete} className="delete-turmas">
             Excluir Turma
           </button>
         )}
       </div>
 
-      <h1 className="text-xl font-bold mb-2">{turma.nome}</h1>
-
-      <h2 className="text-lg font-semibold mt-4">Alunos na turma:</h2>
-      <ul className="list-disc pl-5 space-y-2">
-        {turma.alunos && turma.alunos.length > 0 ? (
-          turma.alunos.map((aluno) => (
-            <li key={aluno.id} className="flex justify-between items-center">
-              <span>{aluno.nome}</span>
-              {tipoUsuario === 1 && (
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => removerAluno(aluno.id, aluno.nome)}
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                  >
-                    Remover
-                  </button>
+      <h1 className="titulo-turma">{turma.nome}</h1>
+      <div className="detalhes-turma">
+        <h2 className="subtitulo-turma">Alunos na turma:</h2>
+        <ul className="list-disc pl-5 space-y-2">
+          {turma.alunos && turma.alunos.length > 0 ? (
+            turma.alunos.map((aluno) => (
+              <li key={aluno.id} className="aluno-item">
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <img
+                    className="aluno-foto"
+                    src={
+                      aluno.imagem
+                        ? `http://localhost:3011/${aluno.imagem.replace(
+                            /\\/g,
+                            "/"
+                          )}`
+                        : "/src/assets/img/perfil-chat.png"
+                    }
+                    alt="Foto do aluno"
+                  />
+                  <span className="aluno-nome">{aluno.nome}</span>
                 </div>
-              )}
+                <div className="aluno-botoes">
                   <button
                     onClick={() => criarChatComAluno(aluno.id, aluno.nome)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                    className="btn-criar-chat"
                   >
                     Criar Chat
                   </button>
-            </li>
-          ))
-        ) : (
-          <li>Nenhum aluno cadastrado</li>
-        )}
-      </ul>
-
-      {tipoUsuario === 1 && (
-        <>
-          <button
-            onClick={togglePesquisa}
-            className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            {mostrarPesquisa ? "Fechar busca de usuários" : "Adicionar Aluno"}
-          </button>
-
-          {mostrarPesquisa && (
-            <>
-              <h2 className="text-lg font-semibold mt-4">Buscar Usuários:</h2>
-              <input
-                type="text"
-                placeholder="Buscar usuário..."
-                className="w-full px-3 py-2 mb-4 border rounded"
-                value={filtro}
-                onChange={(e) => setFiltro(e.target.value)}
-              />
-
-              <ul className="space-y-2">
-                {usuariosFiltrados.map((usuario) => (
-                  <li
-                    key={usuario.id}
-                    className="flex justify-between items-center"
-                  >
-                    <span>{usuario.nome}</span>
+                  {tipoUsuario === 1 && (
                     <button
-                      onClick={() => adicionarAluno(usuario.id)}
-                      className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                      onClick={() => removerAluno(aluno.id, aluno.nome)}
+                      className="btn-remover"
                     >
-                      Adicionar
+                      Remover
                     </button>
-                  </li>
-                ))}
-              </ul>
-            </>
+                  )}
+                </div>
+              </li>
+            ))
+          ) : (
+            <li>Nenhum aluno cadastrado</li>
           )}
-        </>
-      )}
+        </ul>
+
+        {tipoUsuario === 1 && (
+          <>
+            <button
+              onClick={togglePesquisa}
+              className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            >
+              {mostrarPesquisa ? "Fechar busca de usuários" : "Adicionar Aluno"}
+            </button>
+
+            {mostrarPesquisa && (
+              <>
+                <h2 className="text-lg font-semibold mt-4">Buscar Usuários:</h2>
+                <input
+                  type="text"
+                  placeholder="Buscar usuário..."
+                  className="w-full px-3 py-2 mb-4 border rounded"
+                  value={filtro}
+                  onChange={(e) => setFiltro(e.target.value)}
+                />
+
+                <ul className="space-y-2">
+                  {usuariosFiltrados.map((usuario) => (
+                    <li
+                      key={usuario.id}
+                      className="flex justify-between items-center"
+                    >
+                      <span>{usuario.nome}</span>
+                      <button
+                        onClick={() => adicionarAluno(usuario.id)}
+                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                      >
+                        Adicionar
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
