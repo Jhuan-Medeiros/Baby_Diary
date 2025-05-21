@@ -32,6 +32,7 @@ function calcularFeriadosNacionais(ano) {
   feriados.push(`${ano}-11-15`);
   feriados.push(`${ano}-12-25`);
 
+
   // Feriados móveis
   const pascoa = calcularPascoa(ano);
 
@@ -122,6 +123,7 @@ export const Home = () => {
       await createCalendario(formData.data, formData.titulo, formData.evento, formData.horario);
       setMensagem({ tipo: 'sucesso', texto: 'Evento adicionado com sucesso!' });
       setModalAberto(false);
+      setEventoEditando(false);
       carregarEventos(formData.data);
       setFormData({ data: '', titulo: '', evento: '', horario: '' });
     } catch (error) {
