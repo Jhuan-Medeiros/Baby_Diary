@@ -230,9 +230,13 @@ body {
    background: #4978AE;
 }
 
-.date:active {
-  background-color: #445C77;
+.date.active {
+  background-color: #4978ae;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
 }
+
 
 .date.inactive:hover {
   color: #F5FBEF;

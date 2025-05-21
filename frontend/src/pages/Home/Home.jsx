@@ -183,11 +183,12 @@ export const Home = () => {
       const dataCompleta = new Date(year, month, i).toISOString().split('T')[0];
       const isToday = new Date().toDateString() === new Date(year, month, i).toDateString();
       const isFeriado = feriados.includes(dataCompleta);
-
+      const isSelected = selectedDate === dataCompleta;
+    
       daysArray.push(
         <button
           key={`curr-${i}`}
-          className={`date ${isToday ? 'active2' : ''} ${isFeriado ? 'feriado' : ''}`}
+          className={`date ${isToday ? 'active2' : ''} ${isFeriado ? 'feriado' : ''} ${isSelected ? 'active' : ''}`}
           onClick={() => handleDateClick(i)}
           title={isFeriado ? 'Feriado' : ''}
         >
