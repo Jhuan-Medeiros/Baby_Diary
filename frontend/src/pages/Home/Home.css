@@ -88,6 +88,11 @@ body {
 }
 
 #info-chat {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px; /* ajuste conforme o layout */
   color: #f5fbef;
   font-size:  x-large;
   margin-left: 10px;
@@ -294,7 +299,8 @@ body {
 .botoes-eventos {
   display: flex;
   justify-content: center;
-  width: 100vw;
+  width: 90vw;
+  margin-bottom: 80px;
 }
 
 .btn-fechar {

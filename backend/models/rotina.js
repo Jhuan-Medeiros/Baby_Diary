@@ -8,7 +8,7 @@ const  rotina = database.define("Rotina", {
         primaryKey: true,
     },
     aluno: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     alimentacao: {
@@ -25,7 +25,7 @@ const  rotina = database.define("Rotina", {
     },
 }, {
     tableName: "rotina",
-    timestamps: false,
+    timestamps: true,
 });
 
 module.exports = rotina;

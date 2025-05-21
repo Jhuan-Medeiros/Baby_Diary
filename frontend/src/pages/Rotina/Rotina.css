@@ -174,11 +174,21 @@ input[type="radio"] {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+
 }
+
+input[type="radio"].visual-only {
+  pointer-events: none;     /* Impede cliques */
+  accent-color: #2196f3;    /* Garante que continue com cor azul (ou personalize) */
+  opacity: 1;               /* Garante que continue visível */
+  cursor: default;          /* Mostra que não é clicável */
+}
+
 
 #enviar {
   display: block;
   margin: 30px;
+  margin-bottom: 100px;
   width: 180px;
   height: 60px;
   background-color: #E4572E;
@@ -230,7 +240,7 @@ input[type="radio"] {
     border-radius: 4px;
     border: 1px solid #ccc;
     width: 200px;
-    margin: 0 auto;
+    margin: 0 auto
 }
 
 @media screen and (max-width: 600px) {

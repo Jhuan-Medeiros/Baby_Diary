@@ -5,6 +5,11 @@
     text-align: center;
   }
   
+  .chat-container h2{
+    color: #fff;
+    margin-top: 30px;
+  }
+
   .chat-list {
     display: flex;
     flex-direction: column;

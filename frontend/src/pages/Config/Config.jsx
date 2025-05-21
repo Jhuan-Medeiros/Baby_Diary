@@ -15,12 +15,10 @@ export const Config = () => {
   return (
     <div className="corpoConfig">
       <div className="botoes">
-        <button>Notificações</button>
-        <button>Preferência de tema</button>
         <button>Feedback de aplicativo</button>
         <button>Contato da escola</button>
-        <button onClick={handleLogout}>Logout</button>
         <button onClick={() => navigate("/criarUsuario")}>Criar usuário</button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom"; //
 import api from "../../services/api";
 import { useAuth } from "../../contexts/authContext";
@@ -15,6 +15,7 @@ const Chat = () => {
   const { usuario } = useAuth();
   const [imagem, setImagem] = useState(null); // Estado para a imagem
   const [mostrarModal, setMostrarModal] = useState(false); // Estado para o modal
+  const mensagensRef = useRef(null);
 
   useEffect(() => {
     const carregarMensagens = async () => {
@@ -34,6 +35,14 @@ const Chat = () => {
     carregarMensagens();
     carregarDestinatario();
   }, [id]);
+
+  useEffect(() => {
+    if (mensagensRef.current) {
+      setTimeout(() => {
+        mensagensRef.current.scrollTop = mensagensRef.current.scrollHeight;
+      }, 0);
+    }
+  }, [mensagens]);
 
   const enviarMensagem = async (e) => {
     e.preventDefault();
@@ -112,7 +121,10 @@ const Chat = () => {
       {(!destinatario || !destinatario.id) && (
         <div style={{ color: "gray", margin: 10 }}>Carregando destinatário...</div>
       )}
-      <div className="mensagens-box">
+      <div
+        className="mensagens-box"
+        ref={mensagensRef}
+      >
         {mensagens.map((m) => (
           <div
             key={m.id}

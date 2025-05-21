@@ -49,7 +49,8 @@ routes.put('/calendario/:id_calendario', calendarioController.updateCalendarioBy
 
 // Rotas de rotina
 routes.post('/rotina', rotinaController.createRotina);
-
+routes.get('/rotina/:id', rotinaController.getRotinaById);
+routes.put('/rotina/:id', rotinaController.updateRotina); 
 // Rotas de turmas
 routes.post("/turmas/criar", somenteAdmin, turmascontroller.createTurma);
 routes.get("/turmas", turmascontroller.getAllTurmas);

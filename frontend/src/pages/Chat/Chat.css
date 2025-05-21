@@ -1,42 +1,46 @@
-.chat-container {
+.chat-container,
+.conversa-container {
     background-color: #78a3d4;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-  }
-  
-  .mensagens-box {
+    padding: 0; /* Remova padding para evitar espaço extra */
+    box-sizing: border-box;
+    padding-bottom: 60px; /* espaço para o form fixo */
+}
+
+.mensagens-box {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 12px;
     padding: 10px;
-    margin-top: 6vh;
-    margin-bottom: 2vh;
-  }
-  
-  .mensagem {
+    margin-top: 80px; /* igual à altura do cabeçalho */
+    margin-bottom: 20px; /* igual à altura do form fixo */
+    box-sizing: border-box;
+}
+
+.mensagem {
     max-width: 60%;
     padding: 10px 14px;
     border-radius: 16px;
     background-color: #3b4f6d;
     color: white;
     word-wrap: break-word;
-  }
-  
-  .enviada {
+}
+
+.enviada {
     align-self: flex-end;
     background-color: #2f415c;
-  }
-  
-  .recebida {
+}
+
+.recebida {
     align-self: flex-start;
     background-color: #4e607d;
-  }
-  
-  .form-mensagem {
+}
+
+.form-mensagem {
     position: fixed;
     left: 0;
     bottom: 0;
@@ -47,29 +51,25 @@
     padding: 10px 16px;
     box-sizing: border-box;
     z-index: 100;
-  }
-  
-  .form-mensagem input {
+}
+
+.form-mensagem input {
     flex: 1;
     padding: 10px;
     border-radius: 8px;
     border: none;
-  }
-  
-  .form-mensagem button {
+}
+
+.form-mensagem button {
     padding: 10px 16px;
     border: none;
     background-color: #2f415c;
     color: white;
     border-radius: 8px;
     cursor: pointer;
-  }
+}
 
-  .conversa-container {
-    padding-bottom: 60px; /* ajuste conforme a altura da barra fixa */
-  }
-
-  .indentificador{
+.indentificador {
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -83,18 +83,21 @@
     padding-left: 4%;
     padding-top: 1vh;
     padding-bottom: 1vh;
-  }
-  #voltar-button{
+    z-index: 101;
+    height: 60px; /* altura fixa para facilitar o cálculo */
+}
+
+#voltar-button {
     background-color: transparent;
     border: none;
-  }
+}
 
-  .usuario-info {
+.usuario-info {
     display: flex;
     align-items: center;
-  }
+}
 
-  .usuario-info img {
+.usuario-info img {
     border-radius: 50%;
     margin-right: 10px;
-  }
+}

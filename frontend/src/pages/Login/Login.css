@@ -78,11 +78,11 @@ body{
 .senhaInput {
   margin: auto;
   display: flex;
-  width: 100%;
   height: 25%;
   background-color: #f5fbef;
   border-radius: 20px;
   font-size: larger;
+  width: 100%;
 }
 
 .senhaInput input {
@@ -93,6 +93,12 @@ body{
   background: transparent;
   outline: none;
   font-size: larger;
+}
+
+#senha{
+  height: 60%;
+  padding: 10px;
+  font-size: medium;
 }
 
 .senhaInput button {
@@ -153,4 +159,5 @@ body{
   border: 1px solid #ccc; /* Opcional: Define a borda do input */
   border-radius: 20px; /* Opcional: Define bordas arredondadas */
   box-sizing: border-box; /* Garante que o padding não afete o tamanho total do input */
+  height: 25%;
 }

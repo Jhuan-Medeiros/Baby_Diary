@@ -11,7 +11,7 @@ const tipos_usuarios = database.define('tipos_usuarios', {
     },
     nivel: {
         type: Sequelize.STRING,
-        AllowNUll: false
+        AllowNull: false
     },
 }, {
     timestamps: false, // Desativa createdAt e updatedAt
