@@ -98,7 +98,7 @@ const Chat = () => {
   return (
     <div className="conversa-container">
       <div className="indentificador">
-        <button onClick={() => navigate("/listaChat")} id="voltar-button">
+      <button onClick={() => navigate("/listaChat")} id="voltar-button">
           <ArrowLeft color="white" size={30} />
         </button>
         <div className="usuario-info">
