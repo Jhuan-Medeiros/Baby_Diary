@@ -212,10 +212,19 @@ input[type="radio"] {
   background-color: #e74c3c;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
+
+
+  #observacoes {
+    width: 400px;
+  }
+
+}
+
+@media screen and (max-width: 420px) {
 
   .radio-evacuacao {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   #observacoes {

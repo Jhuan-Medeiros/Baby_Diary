@@ -188,7 +188,7 @@ export const Rotina = () => {
                 <h1 id="cor-sub">Observações</h1>
             </div>
             <div className="observacoes">
-                <textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} />
+                <textarea id="observacoes" value={observacoes} onChange={(e) => setObservacoes(e.target.value)} />
             </div>
 
             <div className="enviarButao">

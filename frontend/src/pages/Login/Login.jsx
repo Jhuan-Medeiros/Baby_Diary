@@ -33,7 +33,9 @@ const Login = () => {
             Esqueceu a senha
           </Link>
         </div>
-        <button className="acessoAoSite" >Entrar</button>
+        <button className="acessoAoSite" >
+        <strong>Entrar </strong>
+          </button>
       </div>
     </div>
   );
