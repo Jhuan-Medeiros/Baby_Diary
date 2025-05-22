@@ -4,7 +4,7 @@ import NavbarProfessores from "../../components/navbarProfessores";
 
 export const Turmas = () => {
   const [showForm, setShowForm] = useState(false);
-  const [turmas, setTurmas] = useState([
+  const [turmas, setTurmas] = useState([  
     {
       nome: "Turma 1",
       alunos: Array.from({ length: 30 }, (_, i) => `Aluno ${i + 1}`),
@@ -20,6 +20,8 @@ export const Turmas = () => {
   const [modalAlunoIndex, setModalAlunoIndex] = useState(null);
   const [isAddingAluno, setIsAddingAluno] = useState(false);
   const [novoAlunoNome, setNovoAlunoNome] = useState("");
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleOpenForm = () => setShowForm(true);
   const handleCloseForm = () => {
@@ -58,7 +60,6 @@ export const Turmas = () => {
 
   const handleDeleteTurma = (index) => {
     setTurmas(turmas.filter((_, idx) => idx !== index));
-    // Remove o estado de expansão se necessário
     setExpandedTurmas((prev) => {
       const novo = { ...prev };
       delete novo[index];
@@ -84,6 +85,14 @@ export const Turmas = () => {
     );
   };
 
+  // Filtra os alunos com base no termo buscado
+  const filteredAlunos =
+    modalAlunoIndex !== null
+      ? turmas[modalAlunoIndex].alunos.filter((aluno) =>
+          aluno.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : [];
+
   return (
     <div className="corpoTurmas">
       <h1 className="tituloTurmas">Turmas</h1>
@@ -101,6 +110,7 @@ export const Turmas = () => {
                   e.stopPropagation();
                   setModalAlunoIndex(index);
                   setIsAddingAluno(false);
+                  setShowSearchModal(false);
                 }}
               >
                 ›
@@ -108,47 +118,64 @@ export const Turmas = () => {
             </button>
             {expandedTurmas[index] && (
               <>
-                <div className="listaAlunos">
-                  {turma.alunos.length > 0 ? (
-                    turma.alunos.map((aluno, idx) => (
-                      <p key={idx}>
-                        {aluno}{" "}
-                        <button
-                          className="excluirAlunoButton"
-                          onClick={() => handleDeleteAluno(index, idx)}
-                        >
-                          Excluir
-                        </button>
-                      </p>
-                    ))
-                  ) : (
-                    <p>Sem alunos</p>
-                  )}
+                <div className="turmaDetalhe">
+                  <h3 className="turmaNomeHeader">{turma.nome}</h3>
+                  <div className="listaAlunos">
+                    {turma.alunos.length > 0 ? (
+                      turma.alunos.map((aluno, idx) => (
+                        <p key={idx}>
+                          {aluno}{" "}
+                          <button
+                            className="excluirAlunoButton"
+                            onClick={() => handleDeleteAluno(index, idx)}
+                          >
+                            Remover
+                          </button>
+                        </p>
+                      ))
+                    ) : (
+                      <p>Sem alunos</p>
+                    )}
+                  </div>
                 </div>
-                <button
-                  className="adicionarAlunoButton"
-                  onClick={() => {
-                    setModalAlunoIndex(index);
-                    setIsAddingAluno(true);
-                  }}
-                >
-                  Adicionar Aluno
-                </button>
-                <button
-                  className="excluirTurmaButton"
-                  onClick={() => handleDeleteTurma(index)}
-                >
-                  Excluir Turma
-                </button>
+                <div className="turmaActions">
+                  <button
+                    className="adicionarAlunoButton"
+                    onClick={() => {
+                      setModalAlunoIndex(index);
+                      setIsAddingAluno(true);
+                      setShowSearchModal(false);
+                    }}
+                  >
+                    Adicionar Aluno
+                  </button>
+                  <button
+                    className="excluirTurmaButton"
+                    onClick={() => handleDeleteTurma(index)}
+                  >
+                    Excluir Turma
+                  </button>
+                  <button
+                    className="buscaAlunoButton"
+                    onClick={() => {
+                      setModalAlunoIndex(index);
+                      setShowSearchModal(true);
+                    }}
+                  >
+                    🔍 Buscar Aluno
+                  </button>
+                </div>
               </>
             )}
           </div>
         ))}
       </div>
 
-      <button className="botaoCriarTurma" onClick={handleOpenForm}>
-        Adicionar Turma
-      </button>
+     <div className="botaoCriarTurmaContainer">
+        <button className="botaoCriarTurma" onClick={handleOpenForm}>
+          Adicionar Turma
+        </button>
+      </div>
 
       {showForm && (
         <div className="modalCriarTurma">
@@ -168,35 +195,15 @@ export const Turmas = () => {
         </div>
       )}
 
-      {modalAlunoIndex !== null && (
+      {modalAlunoIndex !== null && !showSearchModal && (
         <div className="modalOverlay">
           <div className="modalAlunoContent">
             {!isAddingAluno ? (
               <>
                 <h2>{turmas[modalAlunoIndex].nome} - Alunos</h2>
-                <input
-                  type="text"
-                  placeholder="Buscar aluno..."
-                  className="campoBusca"
-                  onChange={(e) => {
-                    const termo = e.target.value.toLowerCase();
-                    const alunosFiltrados = turmas[modalAlunoIndex].alunos.filter(
-                      (aluno) => aluno.toLowerCase().includes(termo)
-                    );
-                    setTurmas((prev) =>
-                      prev.map((turma, idx) =>
-                        idx === modalAlunoIndex
-                          ? { ...turma, alunosFiltrados }
-                          : turma
-                      )
-                    );
-                  }}
-                />
                 <div className="scrollHorizontal">
-                  {(turmas[modalAlunoIndex].alunosFiltrados ||
-                    turmas[modalAlunoIndex].alunos).length > 0 ? (
-                    (turmas[modalAlunoIndex].alunosFiltrados ||
-                      turmas[modalAlunoIndex].alunos).map((aluno, idx) => (
+                  {turmas[modalAlunoIndex].alunos.length > 0 ? (
+                    turmas[modalAlunoIndex].alunos.map((aluno, idx) => (
                       <div key={idx} className="alunoCard">
                         {aluno}{" "}
                         <button
@@ -240,6 +247,48 @@ export const Turmas = () => {
                 </div>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {showSearchModal && modalAlunoIndex !== null && (
+        <div className="modalOverlay">
+          <div className="modalAlunoContent">
+            <h2>Buscar Aluno em {turmas[modalAlunoIndex].nome}</h2>
+            <input
+              type="text"
+              placeholder="Buscar aluno..."
+              className="campoBusca"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div className="scrollHorizontal">
+              {filteredAlunos.length > 0 ? (
+                filteredAlunos.map((aluno, idx) => (
+                  <div key={idx} className="alunoCard">
+                    {aluno}{" "}
+                    <button
+                      className="excluirAlunoButton"
+                      onClick={() => handleDeleteAluno(modalAlunoIndex, idx)}
+                    >
+                      Excluir
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p>Sem alunos encontrados</p>
+              )}
+            </div>
+            <div className="modalButtons">
+              <button
+                onClick={() => {
+                  setShowSearchModal(false);
+                  setModalAlunoIndex(null); // <- adiciona isso
+                }}
+              >
+                Fechar Busca
+              </button>
+            </div>
           </div>
         </div>
       )}
