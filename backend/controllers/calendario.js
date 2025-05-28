@@ -12,32 +12,32 @@ exports.createCalendario = async (req, res) => {
 };
 
 exports.getCalendario = async (req, res) => {
-    try{
-        const dias = await Calendario.findAll()
-        return res.status(200).send(dias);
+    try {
+        const dias = await Calendario.findAll();
+        return res.status(200).json(dias);
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).json({ message: "Erro ao buscar calendário", error: error.message });
     }
-}
+};
 
 exports.getCalendarioByDate = async (req, res) => {
     try {
-      const { data } = req.params;
-  
-      const eventos = await Calendario.findAll({
-        where: { data: data },
-        order: [['horario', 'ASC']],
-      });
-  
-      return res.status(200).json(eventos);
+        const { data } = req.params;
+
+        const eventos = await Calendario.findAll({
+            where: { data: data },
+            order: [['horario', 'ASC']],
+        });
+
+        return res.status(200).json(eventos);
     } catch (err) {
-      return res.status(500).json({ message: "Erro ao buscar eventos", error: err.message });
+        return res.status(500).json({ message: "Erro ao buscar eventos", error: err.message });
     }
-  };
+};
 
-  //NEW
+// NEW
 
-  exports.deleteCalendarioById = async (req, res) => {
+exports.deleteCalendarioById = async (req, res) => {
     try {
         const { id_calendario } = req.params;
         const evento = await Calendario.findByPk(id_calendario);
@@ -49,7 +49,7 @@ exports.getCalendarioByDate = async (req, res) => {
         await evento.destroy();
         return res.status(200).json({ message: "Evento deletado com sucesso" });
     } catch (error) {
-        return res.status(500).json({ message: "Erro ao deletar evento", error });
+        return res.status(500).json({ message: "Erro ao deletar evento", error: error.message });
     }
 };
 
@@ -68,4 +68,3 @@ exports.updateCalendarioById = async (req, res) => {
       return res.status(500).json({ message: "Erro ao atualizar evento", error });
     }
   };
-  

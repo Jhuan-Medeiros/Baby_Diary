@@ -1,31 +1,61 @@
-import React from "react";
-import "../ListaChat/ListaChat.css";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // AQUI
+import api from "../../services/api";
+import { useAuth } from "../../contexts/authContext";
+import "./ListaChat.css";
 
-const users = ["Ana", "Carlos", "Maria", "João"]; // Lista de usuários
+const ListaChat = () => {
+  const [chat, setchat] = useState([]);
+  const { usuario } = useAuth();
+  const navigate = useNavigate(); // AQUI
 
-export const ListaChat = () => {
+  useEffect(() => {
+    if (usuario) {
+      api.get(`/conversas/${usuario.id}`).then((res) => {
+        setchat(res.data);
+        localStorage.setItem("id", usuario.id);
+      });
+    }
+  }, [usuario]);
+
+  const abrirChat = (idChat) => {
+    navigate(`/conversas/${idChat}`);
+  };
+
   return (
-    <div className="corpoListaChat">
-      <div className="tituloListaChat">
-        <h1>Chats</h1>
-      </div>
-      <div className="listaChat">
-        <div className="itensChat">
-          {users.map((user, index) => (
-            <div key={index} className="user-card">
-              <img
-                src="https://s2-techtudo.glbimg.com/L9wb1xt7tjjL-Ocvos-Ju0tVmfc=/0x0:1200x800/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2023/q/l/TIdfl2SA6J16XZAy56Mw/canvaai.png"
-                alt={`Avatar de ${user}`}
-                className="user-avatar"
-              />
-              <div className="user-info">
-                <h3>{user}</h3>
-                <div>mensagens</div>
+    <div className="chat-container">
+      <h2>Chats</h2>
+      <div className="chat-list">
+        {chat.map((c) => {
+          const outroUsuario = c.Usuario1.id === usuario.id ? c.Usuario2 : c.Usuario1;
+          return (
+            <div key={c.id} className="chat-card" onClick={() => abrirChat(c.id)}>
+              <div className="chat-info" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <img
+                  src={
+                    outroUsuario.imagem
+                      ? `http://localhost:3011/${outroUsuario.imagem.replace(/\\/g, "/")}`
+                      : "src/assets/img/perfil-chat.png"
+                  }
+                  alt="Foto do usuário"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    marginRight: 8,
+                  }}
+                />
+                <div style={{ minWidth: 0 }}>
+                  <strong>{outroUsuario.nome}</strong>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
 };
+
+export default ListaChat;

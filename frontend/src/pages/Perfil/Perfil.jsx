@@ -1,25 +1,87 @@
-import React from 'react'
-import "../Perfil/Perfil.css"
+import React, { useState, useEffect } from "react";
+import "../Perfil/Perfil.css";
+import api from "../../services/api";
+import { useAuth } from "../../contexts/authContext";
 
 export const Perfil = () => {
+  const [aluno, setAluno] = useState(null);
+  const [erro, setErro] = useState("");
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [imagem, setImagem] = useState(null);
+  const { usuario } = useAuth();
 
-  const aluno = {
-    nome: "Ever San Eyes",
-    idade: 6,
-    curso: "Educação Infantil",
-    cpf: "123.456.789-00",
-    email: "ever.san@example.com",
-    dataInscricao: "31/12/2024",
-    turma: "IDEV-2",
-    telefoneResponsavel: "(14) 98765-4321",
+  useEffect(() => {
+    const fetchAluno = async () => {
+      try {
+        if (!usuario) return;
+        const response = await api.get(`/usuarios/${usuario.id}`);
+        setAluno(response.data);
+      } catch (error) {
+        setErro("Erro ao carregar os dados do usuário.");
+      }
+    };
+
+    fetchAluno();
+  }, [usuario]);
+
+  const handleImagemClick = () => {
+    setMostrarModal(true);
   };
 
+  const handleFecharModal = () => {
+    setMostrarModal(false);
+    setImagem(null);
+  };
+
+  const handleImagemSelecionada = (e) => {
+    setImagem(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!imagem) return alert("Selecione uma imagem.");
+
+    const formData = new FormData();
+    formData.append("imagem", imagem);
+
+    try {
+      const res = await api.post(
+        `/usuarios/${usuario.id}/upload`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      setAluno({ ...aluno, imagem: res.data.imagem }); 
+      handleFecharModal();
+      alert("Imagem atualizada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar imagem:", error);
+      alert("Erro ao enviar imagem.");
+    }
+  };
+
+  if (erro) return <div className="erro">{erro}</div>;
+  if (!aluno) return <div>Carregando...</div>;
+
   return (
-    <>    
+    <div className="corpoAreaPerfil">
       <div className="areaPerfil">
-        <h1>Perfil do Aluno</h1>
+        <h1>Perfil do Usuário</h1>
         <div className="fotoAluno">
-          <img src="src/assets/img/zoi.jpg" alt="Foto do aluno" />
+          <img
+            src={
+              aluno.imagem
+                ? `http://localhost:3011/${aluno.imagem.replace(/\\/g, "/")}`
+                : "src/assets/img/perfil-chat.png"
+            }
+            alt="Foto do usuário"
+            onClick={handleImagemClick}
+            style={{
+              cursor: "pointer",
+              borderRadius: "50%",
+            }}
+          />
         </div>
       </div>
 
@@ -28,17 +90,41 @@ export const Perfil = () => {
         <div className="dadosAluno">
           <div className="perfilInfo">
             <h2>{aluno.nome}</h2>
-            <p><strong>Idade:</strong> {aluno.idade} anos</p>
-            <p><strong>Curso:</strong> {aluno.curso}</p>
-            <p><strong>CPF:</strong> {aluno.cpf}</p>
-            <p><strong>Email:</strong> {aluno.email}</p>
-            <p><strong>Data de Inscrição:</strong> {aluno.dataInscricao}</p>
-            <p><strong>Turma:</strong> {aluno.turma}</p>
-            <p><strong>Telefone do Responsável:</strong> {aluno.telefoneResponsavel}</p>
+            <p>
+              <strong>CPF:</strong> {aluno.cpf}
+            </p>
+            <p>
+              <strong>Email:</strong> {aluno.email}
+            </p>
+            <p>
+              <strong>Telefone:</strong> {aluno.telefone}
+            </p>
+            <p>
+              <strong>Turma:</strong>{" "}
+              {aluno.turmas?.map((t) => t.nome).join(", ") || "Nenhuma"}
+            </p>
           </div>
         </div>
       </div>
-    </>
+
+      {/* Modal de upload */}
+      {mostrarModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h2>Enviar nova imagem</h2>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImagemSelecionada}
+            />
+            <div className="modal-botoes">
+              <button onClick={handleUpload}>Enviar</button>
+              <button onClick={handleFecharModal}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

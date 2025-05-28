@@ -1,43 +1,55 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "./contexts/authContext";
+import RotaPrivada from "./components/rotaPrivada";
 
 import ProtectedLayout from "./components/ProtectedLayout";
 import Login from "./pages/Login/Login";
 import { Home } from "./pages/Home/Home";
 import { Perfil } from "./pages/Perfil/Perfil";
 import { RecuperarSenha } from "./pages/RecuperarSenha/RecuperarSenha";
-
 import { Rotina } from "./pages/Rotina/Rotina";
 import { Turmas } from "./pages/Turmas/Turmas";
-import { ListaChat } from "./pages/ListaChat/ListaChat";
+import { PaginaTurma } from "./pages/paginaTurma/PaginaTurma";
+import ListaChat from "./pages/ListaChat/ListaChat";
 import { Config } from "./pages/Config/Config";
+import CriarUsuario from "./pages/CriarUsuario/CriarUsuario";
+import Chat from "./pages/Chat/Chat";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />, // Página inicial sem navbar
+    element: <Login />,
   },
   {
-    element: <ProtectedLayout />, // Grupo de rotas protegidas com navbar
+    path: "/recuperarSenha",
+    element: <RecuperarSenha />,
+  },
+  { path: "/criarUsuario", element: <CriarUsuario /> },
+  {
+    element: (
+      <RotaPrivada>
+        <ProtectedLayout />
+      </RotaPrivada>
+    ),
     children: [
       { path: "/home", element: <Home /> },
       { path: "/perfil", element: <Perfil /> },
       { path: "/rotina", element: <Rotina /> },
       { path: "/turmas", element: <Turmas /> },
-      { path: "/listaChat", element: <ListaChat/> },
-      { path: "/config", element: <Config/>},
+      { path: "/turmas/:id", element: <PaginaTurma /> },
+      { path: "/listaChat", element: <ListaChat /> },
+      { path: "/conversas/:id", element: <Chat /> },
+      { path: "/config", element: <Config /> },
     ],
-  },
-  {
-    path: "/recuperarSenha",
-    element: <RecuperarSenha />, // Sem navbar
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
-

@@ -1,49 +1,56 @@
 const Sequelize = require("sequelize");
-const database = require("../config/sequelize")
-const { default_type } = require ("mime");
+const database = require("../config/sequelize");
 const tipos_usuarios = require("./tipos_usuarios");
 
 const usuarios = database.define("usuarios", {
-    cpf:{
-        type: Sequelize.STRING,
-        AllowNUll: false,
-        primaryKey: true,
-        unique: true
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  cpf: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  nome: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  senha: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  id_tipo: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: tipos_usuarios,
+      key: "id_tipo",
     },
-    nome:{
-        type: Sequelize.STRING,
-        AllowNUll: false,
-    },
-    email:{
-        type: Sequelize.STRING,
-        AllowNUll: false,
-    },
-    senha:{
-        type: Sequelize.STRING,
-        AllowNUll: false,
-    },
-    id_tipo:{
-        type: Sequelize.INTEGER,
-        defaultValue: '1',
-        AllowNUll: false,
-        references: {
-            model: tipos_usuarios,
-            key: 'id_tipo'
-        }   
-    },
-    telefone:{
-        type: Sequelize.STRING,
-        AllowNUll: false,
-    }
+  },
+  telefone: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  imagem: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  }
 }, {
-  });
-
-tipos_usuarios.hasOne(usuarios, {
-    foreignKey: "id_tipo"
+  timestamps: false,
 });
 
+
+tipos_usuarios.hasOne(usuarios, {
+  foreignKey: "id_tipo",
+});
 usuarios.belongsTo(tipos_usuarios, {
-    foreignKey: "id_tipo"
+  foreignKey: "id_tipo",
 });
 
 module.exports = usuarios;

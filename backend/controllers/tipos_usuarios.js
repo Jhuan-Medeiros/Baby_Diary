@@ -9,7 +9,6 @@ exports.createTiposUsuarios = async (req, res) => {
       return res.send("Tipo de usuario ja foi cadastrado");
     }
     const Tipo = await TiposUsuarios.create(req.body);
-    console.log(Tipo);
 
     return res.send("tipo de usuario cadastrado com sucesso");
   } catch (err) {

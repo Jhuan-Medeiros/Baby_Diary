@@ -1,0 +1,103 @@
+.chat-container,
+.conversa-container {
+    background-color: #78a3d4;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0; /* Remova padding para evitar espaço extra */
+    box-sizing: border-box;
+    padding-bottom: 60px; /* espaço para o form fixo */
+}
+
+.mensagens-box {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+    margin-top: 80px; /* igual à altura do cabeçalho */
+    margin-bottom: 20px; /* igual à altura do form fixo */
+    box-sizing: border-box;
+}
+
+.mensagem {
+    max-width: 60%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background-color: #3b4f6d;
+    color: white;
+    word-wrap: break-word;
+}
+
+.enviada {
+    align-self: flex-end;
+    background-color: #2f415c;
+}
+
+.recebida {
+    align-self: flex-start;
+    background-color: #4e607d;
+}
+
+.form-mensagem {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    background: #78a3d4;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.form-mensagem input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+.form-mensagem button {
+    padding: 10px 16px;
+    border: none;
+    background-color: #2f415c;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.indentificador {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 5vw;
+    background-color: #4e607d;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 4%;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    z-index: 101;
+    height: 60px; /* altura fixa para facilitar o cálculo */
+}
+
+#voltar-button {
+    background-color: transparent;
+    border: none;
+}
+
+.usuario-info {
+    display: flex;
+    align-items: center;
+}
+
+.usuario-info img {
+    border-radius: 50%;
+    margin-right: 10px;
+}
