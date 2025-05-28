@@ -35,6 +35,7 @@ function calcularFeriadosNacionais(ano) {
   feriados.push(`${ano}-11-15`);
   feriados.push(`${ano}-12-25`);
 
+
   // Feriados móveis
   const pascoa = calcularPascoa(ano);
 
@@ -154,6 +155,7 @@ export const Home = () => {
       );
       setMensagem({ tipo: "sucesso", texto: "Evento adicionado com sucesso!" });
       setModalAberto(false);
+      setEventoEditando(false);
       carregarEventos(formData.data);
       setFormData({ data: "", titulo: "", evento: "", horario: "" });
     } catch (error) {
@@ -223,13 +225,12 @@ export const Home = () => {
         new Date().toDateString() ===
         new Date(year, month, i).toDateString();
       const isFeriado = feriados.includes(dataCompleta);
-
+      const isSelected = selectedDate === dataCompleta;
+    
       daysArray.push(
         <button
           key={`curr-${i}`}
-          className={`date ${isToday ? "active2" : ""} ${
-            isFeriado ? "feriado" : ""
-          }`}
+          className={`date ${isToday ? 'active2' : ''} ${isFeriado ? 'feriado' : ''} ${isSelected ? 'active' : ''}`}
           onClick={() => handleDateClick(i)}
           title={isFeriado ? "Feriado" : ""}
         >

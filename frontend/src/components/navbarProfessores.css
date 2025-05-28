@@ -1,6 +1,6 @@
 /*posição*/
 .navbar {
-    background-color: #f5fbef;
+    background-color: #445c77;
     bottom: 0;
     text-align: center;
     width: 100%;
@@ -10,14 +10,14 @@
 
 /*estilização*/
 .navbar a {
-    color: #333;
+    color: #F5FBEF;
     text-decoration: none;
     font-size: 22px;
     margin: 0 37px;
 }
 
 .navbar a.active {
-    color: #4978ae;
+    color: #73A0D3;
 }
 
 .icon-link {
@@ -28,6 +28,15 @@
     border-radius: 8px;
 }
 
+.icon-link img {
+    filter: invert(100%);
+    transition: filter 0.3s ease;
+  }
+  
+  .icon-link.active img {
+    filter: none; /* ícone na cor original */
+  }
+  
 
 .icon-link.active {
     color: #4978ae;

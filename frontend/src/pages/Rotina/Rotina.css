@@ -246,7 +246,7 @@ input[type="radio"].visual-only {
 @media screen and (max-width: 600px) {
 
   .radio-evacuacao {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   #observacoes {
