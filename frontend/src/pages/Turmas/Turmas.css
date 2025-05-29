@@ -11,14 +11,15 @@ body {
 /* Container Principal */
 .corpoTurmas {
   background-color: #73a0d3;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
-  padding-bottom: 5vh;
+  padding: 20px 10px 60px; /* espaço para o botão */
+  box-sizing: border-box;
 }
+
 
 /* Título Principal */
 .tituloTurmas {
@@ -52,14 +53,15 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50%;
+  width: 100%;
+  max-width: 500px;
 }
 
 .turmaButton {
   background-color: #445c77;
   color: #f5fbef;
   border: none;
-  width: 150%;
+  width: 100%; /* corrigido de 150% */
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
@@ -70,7 +72,9 @@ body {
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.1s ease;
+  box-sizing: border-box;
 }
+
 
 .turmaButton:hover {
   background-color: #3a4f65;
@@ -106,6 +110,7 @@ body {
   gap: 10px;
   padding: 15px;
   flex-direction: column;
+  margin: 5px;
 }
 
 .listaAlunos p {
@@ -126,7 +131,18 @@ body {
 .botaoCriarTurma,
 .adicionarAlunoButton,
 .buscaAlunoButton,
-.modalButtons button,
+.modalContent button,
+.modalButtons button {
+    background-color: #445c77;
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 .excluirAlunoButton,
 .excluirTurmaButton {
   background-color: #445c77;
@@ -143,7 +159,9 @@ body {
 .botaoCriarTurma:hover,
 .adicionarAlunoButton:hover,
 .buscaAlunoButton:hover,
-.modalButtons button:hover,
+.modalButtons button:hover {
+    background-color: #3a4f65;
+}
 .excluirAlunoButton:hover,
 .excluirTurmaButton:hover {
   background-color: #3a4f65;
@@ -159,6 +177,30 @@ body {
   transform: scale(0.98);
 }
 
+.modalCriarTurma .modalContent,
+.modalAlunoContent {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInScale 0.3s ease;
+}
+
+/* Animação para o pop-up */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .modalCriarTurma,
 .modalOverlay {
   position: fixed;
@@ -171,6 +213,16 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+
+
+.modalContent input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 15px;
 }
 
 .modalContent,
@@ -194,7 +246,14 @@ body {
   justify-content: center;
 }
 
-.adicionarAlunoInput,
+.adicionarAlunoInput {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
 .campoBusca {
   flex: 1;
   padding: 10px;
@@ -308,7 +367,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 20px;
   margin-top: 20px;
   background-color: #445c77;
   color: #ffffff;
@@ -319,4 +377,30 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.1s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  box-sizing: border-box;
 }
+
+
+.botaoCriarTurmaContainer {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.alunoNomeClickable {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #445c77;
+}
+
+.botaoCriarTurmaContainer {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+

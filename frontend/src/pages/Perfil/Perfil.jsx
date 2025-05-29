@@ -1,9 +1,10 @@
-import React from 'react'
-import "../Perfil/Perfil.css"
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import "../Perfil/Perfil.css";
 
 export const Perfil = () => {
-
-  const aluno = {
+  const location = useLocation();
+  const aluno = location.state?.aluno || {
     nome: "Ever San Eyes",
     idade: 6,
     curso: "Educação Infantil",
@@ -12,6 +13,7 @@ export const Perfil = () => {
     dataInscricao: "31/12/2024",
     turma: "IDEV-2",
     telefoneResponsavel: "(14) 98765-4321",
+    foto: "src/assets/img/zoi.jpg"
   };
 
   return (
@@ -19,7 +21,7 @@ export const Perfil = () => {
       <div className="areaPerfil">
         <h1>Perfil do Aluno</h1>
         <div className="fotoAluno">
-          <img src="src/assets/img/zoi.jpg" alt="Foto do aluno" />
+          <img src={aluno.foto} alt="Foto do aluno" />
         </div>
       </div>
 

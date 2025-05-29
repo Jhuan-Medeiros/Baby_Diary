@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Turmas.css";
 import NavbarProfessores from "../../components/navbarProfessores";
 
 export const Turmas = () => {
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
-  const [turmas, setTurmas] = useState([  
+  const [turmas, setTurmas] = useState([
     {
       nome: "Turma 1",
       alunos: Array.from({ length: 30 }, (_, i) => `Aluno ${i + 1}`),
@@ -22,6 +24,7 @@ export const Turmas = () => {
   const [novoAlunoNome, setNovoAlunoNome] = useState("");
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [confirmModal, setConfirmModal] = useState(null);
 
   const handleOpenForm = () => setShowForm(true);
   const handleCloseForm = () => {
@@ -85,6 +88,23 @@ export const Turmas = () => {
     );
   };
 
+  const handleConfirmDelete = () => {
+    if (confirmModal) {
+      if (confirmModal.type === 'aluno') {
+        handleDeleteAluno(confirmModal.turmaIndex, confirmModal.alunoIndex);
+        setModalAlunoIndex(null);
+        setShowSearchModal(false);
+      } else if (confirmModal.type === 'turma') {
+        handleDeleteTurma(confirmModal.turmaIndex);
+      }
+      setConfirmModal(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmModal(null);
+  };
+
   // Filtra os alunos com base no termo buscado
   const filteredAlunos =
     modalAlunoIndex !== null
@@ -124,10 +144,19 @@ export const Turmas = () => {
                     {turma.alunos.length > 0 ? (
                       turma.alunos.map((aluno, idx) => (
                         <p key={idx}>
-                          {aluno}{" "}
+                          <span
+                            className="alunoNomeClickable"
+                            onClick={() =>
+                              navigate("/perfil", { state: { aluno: { nome: aluno } } })
+                            }
+                          >
+                            {aluno}
+                          </span>{" "}
                           <button
                             className="excluirAlunoButton"
-                            onClick={() => handleDeleteAluno(index, idx)}
+                            onClick={() =>
+                              setConfirmModal({ type: 'aluno', turmaIndex: index, alunoIndex: idx })
+                            }
                           >
                             Remover
                           </button>
@@ -151,7 +180,7 @@ export const Turmas = () => {
                   </button>
                   <button
                     className="excluirTurmaButton"
-                    onClick={() => handleDeleteTurma(index)}
+                    onClick={() => setConfirmModal({ type: 'turma', turmaIndex: index })}
                   >
                     Excluir Turma
                   </button>
@@ -171,7 +200,7 @@ export const Turmas = () => {
         ))}
       </div>
 
-     <div className="botaoCriarTurmaContainer">
+      <div className="botaoCriarTurmaContainer">
         <button className="botaoCriarTurma" onClick={handleOpenForm}>
           Adicionar Turma
         </button>
@@ -205,11 +234,18 @@ export const Turmas = () => {
                   {turmas[modalAlunoIndex].alunos.length > 0 ? (
                     turmas[modalAlunoIndex].alunos.map((aluno, idx) => (
                       <div key={idx} className="alunoCard">
-                        {aluno}{" "}
+                        <span
+                          className="alunoNomeClickable"
+                          onClick={() =>
+                            navigate("/perfil", { state: { aluno: { nome: aluno } } })
+                          }
+                        >
+                          {aluno}
+                        </span>{" "}
                         <button
                           className="excluirAlunoButton"
                           onClick={() =>
-                            handleDeleteAluno(modalAlunoIndex, idx)
+                            setConfirmModal({ type: 'aluno', turmaIndex: modalAlunoIndex, alunoIndex: idx })
                           }
                         >
                           Excluir
@@ -241,7 +277,11 @@ export const Turmas = () => {
                 />
                 <div className="modalButtons">
                   <button onClick={handleConfirmAddAluno}>Adicionar</button>
-                  <button onClick={() => setIsAddingAluno(false)}>
+                  <button onClick={() => {
+                    setIsAddingAluno(false);
+                    setShowSearchModal(false);
+                    setModalAlunoIndex(null);
+                  }}>
                     Cancelar
                   </button>
                 </div>
@@ -266,10 +306,19 @@ export const Turmas = () => {
               {filteredAlunos.length > 0 ? (
                 filteredAlunos.map((aluno, idx) => (
                   <div key={idx} className="alunoCard">
-                    {aluno}{" "}
+                    <span
+                      className="alunoNomeClickable"
+                      onClick={() =>
+                        navigate("/perfil", { state: { aluno: { nome: aluno } } })
+                      }
+                    >
+                      {aluno}
+                    </span>{" "}
                     <button
                       className="excluirAlunoButton"
-                      onClick={() => handleDeleteAluno(modalAlunoIndex, idx)}
+                      onClick={() =>
+                        setConfirmModal({ type: 'aluno', turmaIndex: modalAlunoIndex, alunoIndex: idx })
+                      }
                     >
                       Excluir
                     </button>
@@ -283,11 +332,28 @@ export const Turmas = () => {
               <button
                 onClick={() => {
                   setShowSearchModal(false);
-                  setModalAlunoIndex(null); // <- adiciona isso
+                  setModalAlunoIndex(null);
                 }}
               >
                 Fechar Busca
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmModal && (
+        <div className="modalOverlay">
+          <div className="modalContent">
+            <h2>Confirmar Exclusão</h2>
+            <p>
+              {confirmModal.type === 'aluno'
+                ? "Deseja remover este aluno?"
+                : "Deseja excluir esta turma?"}
+            </p>
+            <div className="modalButtons">
+              <button onClick={handleConfirmDelete}>Confirmar</button>
+              <button onClick={handleCancelDelete}>Cancelar</button>
             </div>
           </div>
         </div>
