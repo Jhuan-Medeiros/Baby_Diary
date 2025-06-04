@@ -29,7 +29,7 @@
   background-color: #445c77;
   color: #f5fbef;
   border: none;
-  width: 90%; /* ou 80%, como preferir */
+  width: 100%; /* ou 80%, como preferir */
   height: auto;
   padding: 1vh 2vw;
   display: flex;
@@ -39,6 +39,7 @@
   font-size: large;
   margin-bottom: 2vh;
   border-radius: 10px;
+  min-height: 100px;  
 }
 
 .listaDeTurmas button::after {
@@ -46,7 +47,10 @@
   content: "▶"; /* Setinha */
   color: #f5fbef;
   font-size: 1.5vh;
+  cursor: pointer;
 }
+
+
 
 .botaoCriarTurma {
   background-color: #445c77;

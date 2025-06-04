@@ -24,7 +24,7 @@ const ListaChat = () => {
 
   return (
     <div className="chat-container">
-      <h2>Chats</h2>
+      <h2 class="alinha-tit">Chats</h2>
       <div className="chat-list">
         {chat.map((c) => {
           const outroUsuario = c.Usuario1.id === usuario.id ? c.Usuario2 : c.Usuario1;
