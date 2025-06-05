@@ -183,7 +183,7 @@ export const Turmas = () => {
                     onClick={() => setConfirmModal({ type: 'turma', turmaIndex: index })}
                   >
                     Excluir Turma
-                  </button>
+                 + </button>
                   <button
                     className="buscaAlunoButton"
                     onClick={() => {
